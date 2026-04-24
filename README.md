@@ -18,6 +18,9 @@ The package includes a reusable `SKILL.md`, reference rules, and a starter vault
 ```text
 .
 ├── SKILL.md
+├── adapters/
+│   ├── hermes.md
+│   └── openclaw.md
 ├── references/
 │   ├── lint-checklist.md
 │   ├── page-types.md
@@ -50,6 +53,53 @@ Use it explicitly in a prompt:
 用 $obsidian-llm-wiki 查询 A2A 和 MCP 的关系
 用 $obsidian-llm-wiki lint 我的 vault
 ```
+
+## Use With Hermes
+
+For Hermes or another agent that does not load Codex skills directly, use the adapter:
+
+```text
+adapters/hermes.md
+```
+
+Give Hermes these files as operating context:
+
+- `SKILL.md`
+- `references/schema.md`
+- `references/page-types.md`
+- `references/lint-checklist.md`
+- `starter-vault/System/Schema/`
+
+Typical Hermes-style prompts:
+
+```text
+Use the Obsidian LLM Wiki workflow and ingest this article: https://example.com/article
+Use the Obsidian LLM Wiki workflow and capture the reusable conclusions from this conversation.
+Use the Obsidian LLM Wiki workflow and answer this from the vault: ...
+Use the Obsidian LLM Wiki workflow and lint this vault.
+```
+
+## Use With OpenClaw
+
+For OpenClaw, use the adapter:
+
+```text
+adapters/openclaw.md
+```
+
+Recommended slash-command shape:
+
+```text
+/wiki ingest <url-or-source>
+/wiki capture
+/wiki capture [[target page]]
+/wiki capture synthesis
+/wiki query <question>
+/wiki lint
+/wiki help
+```
+
+Each command should route into the same shared `ingest / capture / query / lint` workflows defined by this skill and `System/Schema/`.
 
 ## Add The Starter Vault Skeleton
 
@@ -211,11 +261,12 @@ aliases: []
 
 Tags should describe the topic, not the folder or workflow state. Prefer lowercase English `kebab-case` tags.
 
-## Notes For Hermes Or Other Agents
+## Notes For Other Agents
 
 This skill is agent-agnostic. For agents that do not support Codex skills directly, point them at:
 
 - `SKILL.md`
+- `adapters/hermes.md` or `adapters/openclaw.md` if relevant
 - `references/schema.md`
 - `references/page-types.md`
 - `references/lint-checklist.md`
