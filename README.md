@@ -19,6 +19,7 @@ The package includes a reusable `SKILL.md`, reference rules, and a starter vault
 .
 ├── SKILL.md
 ├── adapters/
+│   ├── claude-code.md
 │   ├── hermes.md
 │   └── openclaw.md
 ├── references/
@@ -52,6 +53,32 @@ Use it explicitly in a prompt:
 用 $obsiwiki 把刚才这段讨论沉淀进知识库
 用 $obsiwiki 查询 A2A 和 MCP 的关系
 用 $obsiwiki lint 我的 vault
+```
+
+## Use With Claude Code
+
+For Claude Code, use the adapter:
+
+```text
+adapters/claude-code.md
+```
+
+Recommended setup: copy the starter vault files, then create a `CLAUDE.md` file at the vault root that points Claude Code to the local schema:
+
+```text
+System/Schema/vault-schema.md
+System/Schema/workflows.md
+System/Schema/page-contracts.md
+System/Agents/claude-code.md
+```
+
+Typical Claude Code prompts:
+
+```text
+Use Obsiwiki to ingest this article into the vault: https://example.com/article
+Use Obsiwiki to capture the reusable conclusions from this conversation.
+Use Obsiwiki to answer this from the vault: ...
+Use Obsiwiki to lint this vault.
 ```
 
 ## Use With Hermes
@@ -148,7 +175,7 @@ wiki/
 
 System/
 ├── Schema/          source of truth for vault rules and workflows
-└── Agents/          adapter notes for Codex, Hermes, OpenClaw, or other agents
+└── Agents/          adapter notes for Codex, Claude Code, Hermes, OpenClaw, or other agents
 ```
 
 Folder intent:
@@ -266,7 +293,7 @@ Tags should describe the topic, not the folder or workflow state. Prefer lowerca
 This skill is agent-agnostic. For agents that do not support Codex skills directly, point them at:
 
 - `SKILL.md`
-- `adapters/hermes.md` or `adapters/openclaw.md` if relevant
+- `adapters/claude-code.md`, `adapters/hermes.md`, or `adapters/openclaw.md` if relevant
 - `references/schema.md`
 - `references/page-types.md`
 - `references/lint-checklist.md`
