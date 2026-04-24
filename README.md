@@ -57,10 +57,16 @@ Clone or copy this repository into your Codex skills directory:
 
 ```bash
 mkdir -p ~/.codex/skills
-git clone <repo-url> ~/.codex/skills/obsiwiki
+git clone https://github.com/TengShao/Obsiwiki ~/.codex/skills/obsiwiki
 ```
 
 Restart Codex after installing the skill.
+
+Agent-friendly install prompt:
+
+```text
+Read https://github.com/TengShao/Obsiwiki and install Obsiwiki for Codex by cloning it into ~/.codex/skills/obsiwiki. After installation, remind me to restart Codex.
+```
 
 Use it explicitly in a prompt:
 
