@@ -10,17 +10,17 @@ aliases: []
 
 Recommended slash entry:
 
-- `/wiki`
+- `/obsiwiki`
 
 Suggested subcommands:
 
-- `/wiki ingest <url>`
-- `/wiki capture`
-- `/wiki capture [[target page]]`
-- `/wiki capture synthesis`
-- `/wiki query <question>`
-- `/wiki lint`
-- `/wiki help`
+- `/obsiwiki ingest <url-or-source>`
+- `/obsiwiki capture`
+- `/obsiwiki capture <target-page>`
+- `/obsiwiki capture synthesis`
+- `/obsiwiki query <question>`
+- `/obsiwiki lint`
+- `/obsiwiki help`
 
 Rules:
 

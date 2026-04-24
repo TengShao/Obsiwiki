@@ -8,7 +8,7 @@ aliases: []
 
 # Codex Adapter
 
-Use the skill explicitly:
+Use the same canonical prompts as other agents. In Codex, `$obsiwiki` can also be used when you want to explicitly invoke the skill:
 
 ```text
 $obsiwiki
@@ -16,10 +16,10 @@ $obsiwiki
 
 Typical requests:
 
-- `用 $obsiwiki 处理这个链接：https://...`
-- `用 $obsiwiki 把刚才这段讨论沉淀进知识库`
-- `用 $obsiwiki 查询 A2A 和 MCP 的关系`
-- `用 $obsiwiki lint 我的 vault`
+- `Use Obsiwiki to ingest this source: https://...`
+- `Use Obsiwiki to capture reusable conclusions from this conversation.`
+- `Use Obsiwiki to answer this from the vault: ...`
+- `Use Obsiwiki to lint this vault.`
 
 Codex rules:
 

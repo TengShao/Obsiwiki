@@ -43,10 +43,10 @@ Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/kar
 
 | Agent | How to load Obsiwiki | Typical usage |
 | --- | --- | --- |
-| Codex | Install this repo under `~/.codex/skills/obsiwiki` and restart Codex. | `Use $obsiwiki to ingest this article: https://example.com/article` |
-| Claude Code | Add the starter vault schema and create a vault-root `CLAUDE.md` that points to `System/Schema/` and `System/Agents/claude-code.md`. | `Use Obsiwiki to lint this vault.` |
-| Hermes | Give Hermes `SKILL.md`, `references/`, and `System/Schema/` as operating context. | `Use the Obsiwiki workflow and capture the reusable conclusions from this conversation.` |
-| OpenClaw | Expose the workflow through `/wiki` slash commands using `adapters/openclaw.md`. | `/wiki query <question>` |
+| Codex | Install this repo under `~/.codex/skills/obsiwiki` and restart Codex. | `Use Obsiwiki to ingest this source: https://example.com/article` |
+| Claude Code | Add the starter vault schema and create a vault-root `CLAUDE.md` that points to `System/Schema/` and `System/Agents/claude-code.md`. | `Use Obsiwiki to ingest this source: https://example.com/article` |
+| Hermes | Give Hermes `SKILL.md`, `references/`, and `System/Schema/` as operating context. | `Use Obsiwiki to ingest this source: https://example.com/article` |
+| OpenClaw | Expose the workflow through `/obsiwiki` slash commands using `adapters/openclaw.md`. | `/obsiwiki ingest https://example.com/article` |
 
 Common workflow verbs:
 
@@ -54,6 +54,15 @@ Common workflow verbs:
 - `capture`: extract reusable conclusions from a conversation and update the best target page.
 - `query`: answer from `wiki/index.md`, maps, and formal wiki pages.
 - `lint`: check for orphan pages, missing sources, duplicates, stale pages, and asset placement issues.
+
+Canonical workflow prompts:
+
+```text
+Use Obsiwiki to ingest this source: https://example.com/article
+Use Obsiwiki to capture reusable conclusions from this conversation.
+Use Obsiwiki to answer this from the vault: <question>
+Use Obsiwiki to lint this vault.
+```
 
 ## Install For Codex
 
@@ -72,13 +81,13 @@ Agent-friendly install prompt:
 Read https://github.com/TengShao/Obsiwiki and install Obsiwiki for Codex by cloning it into ~/.codex/skills/obsiwiki. After installation, remind me to restart Codex.
 ```
 
-Use it explicitly in a prompt:
+Use the same canonical prompts as other agents. In Codex, `$obsiwiki` can also be used when you want to explicitly invoke the skill.
 
 ```text
-Use $obsiwiki to process this link: https://example.com/article
-Use $obsiwiki to capture the reusable conclusions from this discussion.
-Use $obsiwiki to answer this from the vault: What is the relationship between A2A and MCP?
-Use $obsiwiki to lint my vault.
+Use Obsiwiki to ingest this source: https://example.com/article
+Use Obsiwiki to capture reusable conclusions from this conversation.
+Use Obsiwiki to answer this from the vault: What is the relationship between A2A and MCP?
+Use Obsiwiki to lint this vault.
 ```
 
 ## Use With Claude Code
@@ -101,8 +110,8 @@ System/Agents/claude-code.md
 Typical Claude Code prompts:
 
 ```text
-Use Obsiwiki to ingest this article into the vault: https://example.com/article
-Use Obsiwiki to capture the reusable conclusions from this conversation.
+Use Obsiwiki to ingest this source: https://example.com/article
+Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
 ```
@@ -126,10 +135,10 @@ Give Hermes these files as operating context:
 Typical Hermes-style prompts:
 
 ```text
-Use the Obsiwiki workflow and ingest this article: https://example.com/article
-Use the Obsiwiki workflow and capture the reusable conclusions from this conversation.
-Use the Obsiwiki workflow and answer this from the vault: ...
-Use the Obsiwiki workflow and lint this vault.
+Use Obsiwiki to ingest this source: https://example.com/article
+Use Obsiwiki to capture reusable conclusions from this conversation.
+Use Obsiwiki to answer this from the vault: ...
+Use Obsiwiki to lint this vault.
 ```
 
 ## Use With OpenClaw
@@ -143,13 +152,13 @@ adapters/openclaw.md
 Recommended slash-command shape:
 
 ```text
-/wiki ingest <url-or-source>
-/wiki capture
-/wiki capture [[target page]]
-/wiki capture synthesis
-/wiki query <question>
-/wiki lint
-/wiki help
+/obsiwiki ingest <url-or-source>
+/obsiwiki capture
+/obsiwiki capture <target-page>
+/obsiwiki capture synthesis
+/obsiwiki query <question>
+/obsiwiki lint
+/obsiwiki help
 ```
 
 Each command should route into the same shared `ingest / capture / query / lint` workflows defined by this skill and `System/Schema/`.
@@ -230,7 +239,7 @@ Expected behavior:
 Example:
 
 ```text
-Use $obsiwiki to ingest this article: https://example.com/article
+Use Obsiwiki to ingest this source: https://example.com/article
 ```
 
 ### Capture
@@ -248,7 +257,7 @@ Expected behavior:
 Example:
 
 ```text
-Use $obsiwiki to capture the conclusions from our discussion about team AI workflows.
+Use Obsiwiki to capture reusable conclusions from this conversation.
 ```
 
 ### Query
@@ -265,7 +274,7 @@ Expected behavior:
 Example:
 
 ```text
-Use $obsiwiki to answer this from the vault: What does my knowledge base say about the relationship between prompt engineering and UXD?
+Use Obsiwiki to answer this from the vault: What does my knowledge base say about the relationship between prompt engineering and UXD?
 ```
 
 ### Lint
@@ -284,7 +293,7 @@ Expected behavior:
 Example:
 
 ```text
-Use $obsiwiki to lint my vault.
+Use Obsiwiki to lint this vault.
 ```
 
 ## Page Types
@@ -325,13 +334,13 @@ This skill is agent-agnostic. For agents that do not support Codex skills direct
 - `references/lint-checklist.md`
 - `starter-vault/System/Schema/`
 
-Then use commands such as:
+Then use the same canonical prompts:
 
 ```text
-/wiki ingest <url>
-/wiki capture
-/wiki query <question>
-/wiki lint
+Use Obsiwiki to ingest this source: https://example.com/article
+Use Obsiwiki to capture reusable conclusions from this conversation.
+Use Obsiwiki to answer this from the vault: <question>
+Use Obsiwiki to lint this vault.
 ```
 
 ## Privacy

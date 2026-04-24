@@ -27,14 +27,13 @@ If the target vault already contains `System/Schema/`, prefer the vault-local sc
 - Do not save full chat transcripts by default.
 - Prefer updating existing pages over creating duplicates.
 
-## Recommended Commands
+## Recommended Prompts
 
 ```text
-/wiki ingest <url-or-source>
-/wiki capture
-/wiki capture <target-page>
-/wiki query <question>
-/wiki lint
+Use Obsiwiki to ingest this source: https://example.com/article
+Use Obsiwiki to capture reusable conclusions from this conversation.
+Use Obsiwiki to answer this from the vault: ...
+Use Obsiwiki to lint this vault.
 ```
 
 ## Prompt Template

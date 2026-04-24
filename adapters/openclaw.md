@@ -7,24 +7,24 @@ Use this adapter when OpenClaw should expose Obsiwiki as a slash-command workflo
 Recommended top-level command:
 
 ```text
-/wiki
+/obsiwiki
 ```
 
 Suggested subcommands:
 
 ```text
-/wiki ingest <url-or-source>
-/wiki capture
-/wiki capture [[target page]]
-/wiki capture synthesis
-/wiki query <question>
-/wiki lint
-/wiki help
+/obsiwiki ingest <url-or-source>
+/obsiwiki capture
+/obsiwiki capture <target-page>
+/obsiwiki capture synthesis
+/obsiwiki query <question>
+/obsiwiki lint
+/obsiwiki help
 ```
 
 ## Command Semantics
 
-### `/wiki ingest <url-or-source>`
+### `/obsiwiki ingest <url-or-source>`
 
 Use when the user gives a URL, article, paper, transcript, meeting note, or raw note.
 
@@ -37,7 +37,7 @@ Expected behavior:
 - attach new or updated pages to at least one `wiki/maps/` page
 - update `wiki/index.md` and `wiki/log.md`
 
-### `/wiki capture`
+### `/obsiwiki capture`
 
 Use when a conversation produced reusable knowledge.
 
@@ -48,7 +48,7 @@ Expected behavior:
 - suggest the best target page
 - write only after confirmation unless the user requested automatic execution
 
-### `/wiki query <question>`
+### `/obsiwiki query <question>`
 
 Use when the user asks a question that should be answered from the vault.
 
@@ -59,7 +59,7 @@ Expected behavior:
 - read only the necessary formal pages
 - suggest a `synthesis` update if the answer is broadly reusable
 
-### `/wiki lint`
+### `/obsiwiki lint`
 
 Use for vault health checks.
 
@@ -69,7 +69,7 @@ Expected behavior:
 - flag formal pages not covered by maps or index
 - flag source pages without formal links
 - flag duplicate or near-duplicate topics
-- flag missing `last_updated`, missing sources, or missing `关联连接`
+- flag missing `last_updated`, missing sources, or missing `Related Links`
 - flag attachment placement issues
 
 ## Rules
