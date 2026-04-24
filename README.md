@@ -90,6 +90,37 @@ Use Obsiwiki to answer this from the vault: What is the relationship between A2A
 Use Obsiwiki to lint this vault.
 ```
 
+## Update Installed Copies
+
+For Codex, update the installed skill/plugin copy under the new skill name:
+
+```bash
+cd ~/.codex/skills/obsiwiki
+git pull
+```
+
+Restart Codex after updating so the refreshed `SKILL.md` and references are loaded.
+
+If the Codex copy was installed by copying files instead of cloning with Git, update your source checkout first, then sync it into the Codex skills directory:
+
+```bash
+cd /path/to/Obsiwiki
+git pull
+mkdir -p ~/.codex/skills/obsiwiki
+rsync -a --delete --exclude .git ./ ~/.codex/skills/obsiwiki/
+```
+
+For Hermes, Claude Code, OpenClaw, or another agent that loads Obsiwiki as context rather than as a Codex skill, update the source files and make the agent reload the relevant context:
+
+- `SKILL.md`
+- `references/schema.md`
+- `references/page-types.md`
+- `references/lint-checklist.md`
+- `starter-vault/System/Schema/` or the vault-local `System/Schema/`
+- the relevant adapter under `adapters/`
+
+If the target vault already has a customized `System/Schema/`, reconcile it with the latest schema instead of blindly replacing user-edited files.
+
 ## Use With Claude Code
 
 For Claude Code, use the adapter:
