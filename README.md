@@ -43,7 +43,7 @@ Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/kar
 
 | Agent | How to load Obsiwiki | Typical usage |
 | --- | --- | --- |
-| Codex | Install this repo under `~/.codex/skills/obsiwiki` and restart Codex. | `用 $obsiwiki ingest 这篇文章：https://example.com/article` |
+| Codex | Install this repo under `~/.codex/skills/obsiwiki` and restart Codex. | `Use $obsiwiki to ingest this article: https://example.com/article` |
 | Claude Code | Add the starter vault schema and create a vault-root `CLAUDE.md` that points to `System/Schema/` and `System/Agents/claude-code.md`. | `Use Obsiwiki to lint this vault.` |
 | Hermes | Give Hermes `SKILL.md`, `references/`, and `System/Schema/` as operating context. | `Use the Obsiwiki workflow and capture the reusable conclusions from this conversation.` |
 | OpenClaw | Expose the workflow through `/wiki` slash commands using `adapters/openclaw.md`. | `/wiki query <question>` |
@@ -75,10 +75,10 @@ Read https://github.com/TengShao/Obsiwiki and install Obsiwiki for Codex by clon
 Use it explicitly in a prompt:
 
 ```text
-用 $obsiwiki 处理这个链接：https://example.com/article
-用 $obsiwiki 把刚才这段讨论沉淀进知识库
-用 $obsiwiki 查询 A2A 和 MCP 的关系
-用 $obsiwiki lint 我的 vault
+Use $obsiwiki to process this link: https://example.com/article
+Use $obsiwiki to capture the reusable conclusions from this discussion.
+Use $obsiwiki to answer this from the vault: What is the relationship between A2A and MCP?
+Use $obsiwiki to lint my vault.
 ```
 
 ## Use With Claude Code
@@ -230,7 +230,7 @@ Expected behavior:
 Example:
 
 ```text
-用 $obsiwiki ingest 这篇文章：https://example.com/article
+Use $obsiwiki to ingest this article: https://example.com/article
 ```
 
 ### Capture
@@ -248,7 +248,7 @@ Expected behavior:
 Example:
 
 ```text
-用 $obsiwiki capture 刚才关于团队 AI 工作流的结论
+Use $obsiwiki to capture the conclusions from our discussion about team AI workflows.
 ```
 
 ### Query
@@ -265,7 +265,7 @@ Expected behavior:
 Example:
 
 ```text
-用 $obsiwiki query：我的知识库里对 prompt engineering 和 UXD 的关系有什么判断？
+Use $obsiwiki to answer this from the vault: What does my knowledge base say about the relationship between prompt engineering and UXD?
 ```
 
 ### Lint
@@ -277,14 +277,14 @@ Expected behavior:
 - flag wiki pages not covered by maps or index
 - flag source pages without formal links
 - flag duplicate or near-duplicate topics
-- flag missing `last_updated`, missing sources, or missing `关联连接`
+- flag missing `last_updated`, missing sources, or missing `Related Links`
 - flag raw attachment placement problems
 - flag wiki pages that should promote raw-only assets into `assets/wiki/`
 
 Example:
 
 ```text
-用 $obsiwiki lint 我的 vault
+Use $obsiwiki to lint my vault.
 ```
 
 ## Page Types
