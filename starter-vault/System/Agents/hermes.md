@@ -29,4 +29,5 @@ Recommended behavior:
 - Use suggest-and-confirm behavior for `capture`.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
 - Use `wiki/maps/` as the main anti-orphan mechanism.
-- Keep `System/Schema/` as the source of truth.
+- Follow the installed Obsiwiki schema by default.
+- If this vault contains `System/Schema/`, treat it as the vault-local source of truth.

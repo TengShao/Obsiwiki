@@ -22,6 +22,7 @@ The package includes a reusable `SKILL.md`, reference rules, and a starter vault
 - [Install For OpenClaw](#install-for-openclaw)
 - [Add The Starter Vault Skeleton](#add-the-starter-vault-skeleton)
 - [Vault Folder Structure](#vault-folder-structure)
+- [Schema Precedence](#schema-precedence)
 - [Core Workflows](#core-workflows)
 - [Page Types](#page-types)
 - [Minimal Frontmatter](#minimal-frontmatter)
@@ -105,14 +106,14 @@ Use Obsiwiki to lint this vault.
 
 ## Install For Claude Code
 
-Ask Claude Code to install Obsiwiki from this repository. It should read this README, choose the correct Claude-accessible instruction, skill, or project context location, copy the necessary source files there, and point the target vault at the local schema.
+Ask Claude Code to install Obsiwiki from this repository. It should read this README, choose the correct Claude-accessible instruction, skill, or project context location, copy the necessary source files there, and use the schema precedence rules below.
 
 Agent-friendly install prompt:
 
 ```text
 Read https://github.com/TengShao/Obsiwiki and install Obsiwiki for Claude Code.
 
-Decide where Claude Code should keep reusable project instructions or skills in this environment, copy the necessary Obsiwiki files there, and set up the target vault so Claude Code reads the local schema and adapters/claude-code.md.
+Decide where Claude Code should keep reusable project instructions or skills in this environment, copy the necessary Obsiwiki files there, and set up the target vault so Claude Code reads adapters/claude-code.md and follows Obsiwiki schema precedence.
 
 After installation, tell me which files you copied and where.
 ```
@@ -123,7 +124,7 @@ Claude Code should use the adapter:
 adapters/claude-code.md
 ```
 
-Recommended setup: copy the starter vault files, then create a `CLAUDE.md` file at the vault root that points Claude Code to the local schema:
+Recommended vault-local setup: copy the starter vault files, then create a `CLAUDE.md` file at the vault root that points Claude Code to the vault-local schema:
 
 ```text
 System/Schema/vault-schema.md
@@ -258,7 +259,7 @@ wiki/
 └── log.md           append-only maintenance log
 
 System/
-├── Schema/          source of truth for vault rules and workflows
+├── Schema/          optional vault-local source of truth for rules and workflows
 └── Agents/          adapter notes for Codex, Claude Code, Hermes, OpenClaw, or other agents
 ```
 
@@ -268,7 +269,15 @@ Folder intent:
 - `assets/` keeps binary files out of note folders.
 - `wiki/` is the durable knowledge layer agents should query and update.
 - `wiki/maps/` is the main anti-orphan mechanism.
-- `System/Schema/` is the source of truth; agent-specific files should adapt it, not fork it.
+- `System/Schema/`, when present, is the vault-local source of truth; agent-specific files should adapt it, not fork it.
+
+## Schema Precedence
+
+Use the installed Obsiwiki `references/` and `starter-vault/System/Schema/` as the default schema.
+
+If the target vault contains `System/Schema/`, treat that vault-local schema as the source of truth. Use the installed schema only for comparison, update suggestions, and migrations. Do not silently overwrite vault-local schema customizations.
+
+Agent adapters translate the same schema for each agent. They must not fork directory semantics, page contracts, or workflow behavior.
 
 ## Core Workflows
 

@@ -75,6 +75,7 @@ Expected behavior:
 ## Rules
 
 - Commands route into the shared `ingest / capture / query / lint` workflows.
-- Directory semantics and page contracts come from `System/Schema/`.
-- Do not maintain private OpenClaw rules that conflict with the schema.
+- Directory semantics and page contracts come from the installed Obsiwiki schema by default.
+- If the target vault contains `System/Schema/`, treat that vault-local schema as the source of truth.
+- Do not maintain private OpenClaw rules that conflict with the active Obsiwiki schema.
 - Prefer updating existing pages over creating duplicates.

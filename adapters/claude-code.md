@@ -2,7 +2,7 @@
 
 Use this adapter when Claude Code should maintain an Obsidian vault with Obsiwiki.
 
-Claude Code works best when the vault contains a local `CLAUDE.md` or an equivalent instruction file that points it to the Obsiwiki rules and schema.
+Claude Code works best when the vault contains a local `CLAUDE.md` or an equivalent instruction file that points it to the Obsiwiki rules and schema precedence.
 
 ## Context To Load
 
@@ -16,7 +16,7 @@ Point Claude Code at these files:
 - `starter-vault/System/Schema/workflows.md`
 - `starter-vault/System/Schema/page-contracts.md`
 
-If the target vault already contains `System/Schema/`, prefer the vault-local schema over the starter files.
+Use the installed Obsiwiki schema as the default. If the target vault contains `System/Schema/`, prefer that vault-local schema over the installed starter files.
 
 ## Recommended Vault Instruction
 
@@ -39,7 +39,7 @@ Core rules:
 - Keep original source material in raw/.
 - Keep binary files and media in assets/.
 - Keep durable knowledge pages in wiki/.
-- Treat System/Schema/ as the source of truth.
+- Treat System/Schema/ as the vault-local source of truth when present.
 - Use wiki/maps/ as the main anti-orphan mechanism.
 - Prefer updating existing wiki pages over creating duplicates.
 - Do not save full chat transcripts by default.
@@ -68,5 +68,5 @@ Use Obsiwiki to lint this vault.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
 - Use `wiki/maps/` as the main anti-orphan mechanism.
 - Update `wiki/log.md` for meaningful ingest, capture, lint, and synthesis changes.
-- Keep `System/Schema/` as the source of truth.
-- Do not create Claude-specific rules that conflict with `System/Schema/`.
+- Keep `System/Schema/` as the vault-local source of truth when present.
+- Do not create Claude-specific rules that conflict with the active Obsiwiki schema.

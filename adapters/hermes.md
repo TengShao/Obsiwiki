@@ -14,12 +14,12 @@ Point Hermes at these files:
 - `starter-vault/System/Schema/workflows.md`
 - `starter-vault/System/Schema/page-contracts.md`
 
-If the target vault already contains `System/Schema/`, prefer the vault-local schema over the starter files.
+Use the installed Obsiwiki schema as the default. If the target vault contains `System/Schema/`, prefer that vault-local schema over the installed starter files.
 
 ## Operating Rules
 
 - Treat the vault as an agent-maintained LLM Wiki, not a folder of isolated notes.
-- Use `System/Schema/` as the source of truth.
+- Use `System/Schema/` as the vault-local source of truth when present.
 - Use draft-first behavior for `ingest`.
 - Use suggest-and-confirm behavior for `capture`.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
@@ -46,7 +46,7 @@ Read:
 - references/schema.md
 - references/page-types.md
 - references/lint-checklist.md
-- System/Schema/
+- System/Schema/ if present, otherwise the installed Obsiwiki schema
 
 Maintain this vault through four workflows:
 - ingest: save raw sources, create source digests, update maps/index/log
@@ -54,5 +54,5 @@ Maintain this vault through four workflows:
 - query: answer from wiki/index.md, maps, concepts, entities, sources, syntheses
 - lint: find orphan pages, missing sources, duplicates, stale pages, and asset issues
 
-Keep raw sources in raw/, binary assets in assets/, durable knowledge in wiki/, and workflow rules in System/Schema/.
+Keep raw sources in raw/, binary assets in assets/, durable knowledge in wiki/, and workflow rules in the active Obsiwiki schema.
 ```

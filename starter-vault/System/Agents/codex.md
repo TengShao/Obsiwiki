@@ -23,7 +23,8 @@ Typical requests:
 
 Codex rules:
 
-- Follow `System/Schema/`.
+- Follow the installed Obsiwiki schema by default.
+- If this vault contains `System/Schema/`, treat it as the vault-local source of truth.
 - Use draft-first behavior for `ingest`.
 - Use suggest-and-confirm behavior for `capture`.
 - Do not save full conversation transcripts by default.

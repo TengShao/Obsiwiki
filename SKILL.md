@@ -18,8 +18,16 @@ Read these references as needed:
 1. `raw/` stores original text sources.
 2. `assets/` stores binary files, screenshots, PDFs, and reusable visuals.
 3. `wiki/` stores durable knowledge pages.
-4. `System/Schema/` is the source of truth for workflows and page contracts.
+4. `System/Schema/`, when present in the target vault, is the vault-local source of truth for workflows and page contracts.
 5. `Work/Projects/Opinions/Journal/Archive/` store applied outputs and personal writing when the vault uses those folders.
+
+## Schema Precedence
+
+Use the installed Obsiwiki `references/` and `starter-vault/System/Schema/` as the default schema.
+
+If the target vault contains `System/Schema/`, treat that vault-local schema as the source of truth. Use the installed schema only for comparison, update suggestions, and migrations. Do not silently overwrite vault-local schema customizations.
+
+Agent adapters translate the same schema for each agent. They must not fork directory semantics, page contracts, or workflow behavior.
 
 ## Workflow Selection
 
