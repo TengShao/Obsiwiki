@@ -35,6 +35,22 @@ The package includes a reusable `SKILL.md`, reference rules, and a starter vault
     └── wiki/
 ```
 
+## Agent Usage Quick Reference
+
+| Agent | How to load Obsiwiki | Typical usage |
+| --- | --- | --- |
+| Codex | Install this repo under `~/.codex/skills/obsiwiki` and restart Codex. | `用 $obsiwiki ingest 这篇文章：https://example.com/article` |
+| Claude Code | Add the starter vault schema and create a vault-root `CLAUDE.md` that points to `System/Schema/` and `System/Agents/claude-code.md`. | `Use Obsiwiki to lint this vault.` |
+| Hermes | Give Hermes `SKILL.md`, `references/`, and `System/Schema/` as operating context. | `Use the Obsiwiki workflow and capture the reusable conclusions from this conversation.` |
+| OpenClaw | Expose the workflow through `/wiki` slash commands using `adapters/openclaw.md`. | `/wiki query <question>` |
+
+Common workflow verbs:
+
+- `ingest`: save a source into `raw/`, create a digest in `wiki/sources/`, and update maps/index/log.
+- `capture`: extract reusable conclusions from a conversation and update the best target page.
+- `query`: answer from `wiki/index.md`, maps, and formal wiki pages.
+- `lint`: check for orphan pages, missing sources, duplicates, stale pages, and asset placement issues.
+
 ## Install For Codex
 
 Clone or copy this repository into your Codex skills directory:
