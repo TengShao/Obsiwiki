@@ -70,6 +70,45 @@ System/     schema, workflow, page contracts, and agent adapters
 
 If your vault already has notes, do not bulk move them first. Let an agent use the lint workflow to suggest incremental changes.
 
+## Vault Folder Structure
+
+The starter vault uses four main layers:
+
+```text
+raw/
+├── articles/        web articles, excerpts, tutorials, and practical guides
+├── papers/          papers, PDFs, reports, and research material
+├── transcripts/     transcripts and long-form conversations
+└── meeting-notes/   meetings, interviews, and field notes
+
+assets/
+├── raw/             files belonging to one raw source, grouped by source slug
+├── wiki/            reusable long-lived knowledge assets
+├── projects/        project-specific assets
+└── shared/          assets reused across topics
+
+wiki/
+├── concepts/        durable concepts, protocols, frameworks, and methods
+├── entities/        tools, products, companies, people, and named systems
+├── sources/         one-to-one digests of raw sources
+├── syntheses/       integrated analysis across sources or conversations
+├── maps/            topic maps / MOCs that keep pages connected
+├── index.md         top-level navigation entry
+└── log.md           append-only maintenance log
+
+System/
+├── Schema/          source of truth for vault rules and workflows
+└── Agents/          adapter notes for Codex, Hermes, OpenClaw, or other agents
+```
+
+Folder intent:
+
+- `raw/` keeps source material close to its original form.
+- `assets/` keeps binary files out of note folders.
+- `wiki/` is the durable knowledge layer agents should query and update.
+- `wiki/maps/` is the main anti-orphan mechanism.
+- `System/Schema/` is the source of truth; agent-specific files should adapt it, not fork it.
+
 ## Core Workflows
 
 ### Ingest
