@@ -1,0 +1,196 @@
+# Obsidian LLM Wiki Skill
+
+`obsidian-llm-wiki` is a Codex skill for maintaining an Obsidian vault as an agent-friendly LLM Wiki.
+
+It gives agents a shared operating model for:
+
+- ingesting links, articles, papers, transcripts, meeting notes, and raw notes
+- preserving source material in `raw/`
+- compiling durable knowledge pages in `wiki/`
+- capturing reusable conclusions from conversations
+- answering questions from existing wiki pages
+- linting the vault for orphan pages, missing sources, duplicate topics, stale pages, and asset placement issues
+
+The package includes a reusable `SKILL.md`, reference rules, and a starter vault skeleton. It does not include personal notes or private knowledge content.
+
+## Repository Layout
+
+```text
+.
+├── SKILL.md
+├── references/
+│   ├── lint-checklist.md
+│   ├── page-types.md
+│   └── schema.md
+└── starter-vault/
+    ├── System/
+    │   ├── Agents/
+    │   └── Schema/
+    ├── assets/
+    ├── raw/
+    └── wiki/
+```
+
+## Install For Codex
+
+Clone or copy this repository into your Codex skills directory:
+
+```bash
+mkdir -p ~/.codex/skills
+git clone <repo-url> ~/.codex/skills/obsidian-llm-wiki
+```
+
+Restart Codex after installing the skill.
+
+Use it explicitly in a prompt:
+
+```text
+用 $obsidian-llm-wiki 处理这个链接：https://example.com/article
+用 $obsidian-llm-wiki 把刚才这段讨论沉淀进知识库
+用 $obsidian-llm-wiki 查询 A2A 和 MCP 的关系
+用 $obsidian-llm-wiki lint 我的 vault
+```
+
+## Add The Starter Vault Skeleton
+
+If you are starting from a new or lightly structured Obsidian vault, copy the starter files into the vault root:
+
+```bash
+cp -R starter-vault/* /path/to/your/obsidian-vault/
+```
+
+The starter vault creates this knowledge architecture:
+
+```text
+raw/        original source material
+assets/     binary files, screenshots, PDFs, reusable visuals
+wiki/       durable knowledge pages for agent query and synthesis
+System/     schema, workflow, page contracts, and agent adapters
+```
+
+If your vault already has notes, do not bulk move them first. Let an agent use the lint workflow to suggest incremental changes.
+
+## Core Workflows
+
+### Ingest
+
+Use when you give the agent a URL, article, PDF, screenshot pack, transcript, meeting note, or raw note.
+
+Expected behavior:
+
+1. Save or summarize the raw source under `raw/`.
+2. Save attachments under `assets/raw/<source-slug>/`.
+3. Create or update a one-to-one digest under `wiki/sources/`.
+4. Update existing `wiki/concepts/`, `wiki/entities/`, or `wiki/syntheses/` when useful.
+5. Attach the new or updated knowledge to at least one `wiki/maps/` page.
+6. Update `wiki/index.md` and append to `wiki/log.md` after confirmed changes.
+
+Example:
+
+```text
+用 $obsidian-llm-wiki ingest 这篇文章：https://example.com/article
+```
+
+### Capture
+
+Use when a conversation produced a reusable conclusion, decision, definition, tradeoff, or workflow.
+
+Expected behavior:
+
+1. Extract only reusable knowledge.
+2. Avoid saving the full chat transcript by default.
+3. Suggest the best target page.
+4. Update the target page after confirmation.
+5. Create a `wiki/syntheses/` page only when the answer spans multiple topics or sources.
+
+Example:
+
+```text
+用 $obsidian-llm-wiki capture 刚才关于团队 AI 工作流的结论
+```
+
+### Query
+
+Use when you want the agent to answer from the vault.
+
+Expected behavior:
+
+1. Start from `wiki/index.md`.
+2. Follow relevant `wiki/maps/`.
+3. Read only the necessary `concepts`, `entities`, `sources`, and `syntheses`.
+4. Suggest a new or updated `synthesis` only when the answer is broadly reusable.
+
+Example:
+
+```text
+用 $obsidian-llm-wiki query：我的知识库里对 prompt engineering 和 UXD 的关系有什么判断？
+```
+
+### Lint
+
+Use when you want a vault health check.
+
+Expected behavior:
+
+- flag wiki pages not covered by maps or index
+- flag source pages without formal links
+- flag duplicate or near-duplicate topics
+- flag missing `last_updated`, missing sources, or missing `关联连接`
+- flag raw attachment placement problems
+- flag wiki pages that should promote raw-only assets into `assets/wiki/`
+
+Example:
+
+```text
+用 $obsidian-llm-wiki lint 我的 vault
+```
+
+## Page Types
+
+Formal wiki pages use these `type` values:
+
+- `concept`: durable concept, protocol, framework, or method
+- `entity`: tool, product, company, person, or named system
+- `source`: one-to-one digest of a raw source
+- `synthesis`: cross-source or cross-discussion integrated page
+- `map`: topic map / MOC
+
+## Minimal Frontmatter
+
+Formal wiki pages should include:
+
+```yaml
+---
+title:
+type:
+tags: []
+sources: []
+last_updated: YYYY-MM-DD
+aliases: []
+---
+```
+
+Tags should describe the topic, not the folder or workflow state. Prefer lowercase English `kebab-case` tags.
+
+## Notes For Hermes Or Other Agents
+
+This skill is agent-agnostic. For agents that do not support Codex skills directly, point them at:
+
+- `SKILL.md`
+- `references/schema.md`
+- `references/page-types.md`
+- `references/lint-checklist.md`
+- `starter-vault/System/Schema/`
+
+Then use commands such as:
+
+```text
+/wiki ingest <url>
+/wiki capture
+/wiki query <question>
+/wiki lint
+```
+
+## Privacy
+
+This repository intentionally contains only reusable rules and empty starter structure. Do not publish your personal `raw/`, `wiki/`, `Projects/`, `Work/`, `Opinions/`, or `Journal/` content unless you have reviewed it for private or sensitive information.
