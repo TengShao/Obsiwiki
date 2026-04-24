@@ -13,6 +13,22 @@ It gives agents a shared operating model for:
 
 The package includes a reusable `SKILL.md`, reference rules, and a starter vault skeleton. It does not include personal notes or private knowledge content.
 
+## Contents
+
+- [Agent Usage Quick Reference](#agent-usage-quick-reference)
+- [Install For Codex](#install-for-codex)
+- [Install For Claude Code](#install-for-claude-code)
+- [Install For Hermes](#install-for-hermes)
+- [Install For OpenClaw](#install-for-openclaw)
+- [Add The Starter Vault Skeleton](#add-the-starter-vault-skeleton)
+- [Vault Folder Structure](#vault-folder-structure)
+- [Core Workflows](#core-workflows)
+- [Page Types](#page-types)
+- [Minimal Frontmatter](#minimal-frontmatter)
+- [Notes For Other Agents](#notes-for-other-agents)
+- [Privacy](#privacy)
+- [Update Skill](#update-skill)
+
 ## Acknowledgements
 
 Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) idea file. Thanks to Karpathy for articulating the pattern of using LLM agents to incrementally maintain a persistent, interlinked wiki over raw source material.
@@ -43,10 +59,10 @@ Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/kar
 
 | Agent | How to load Obsiwiki | Typical usage |
 | --- | --- | --- |
-| Codex | Install this repo under `~/.codex/skills/obsiwiki` and restart Codex. | `Use Obsiwiki to ingest this source: https://example.com/article` |
-| Claude Code | Add the starter vault schema and create a vault-root `CLAUDE.md` that points to `System/Schema/` and `System/Agents/claude-code.md`. | `Use Obsiwiki to ingest this source: https://example.com/article` |
-| Hermes | Give Hermes `SKILL.md`, `references/`, and `System/Schema/` as operating context. | `Use Obsiwiki to ingest this source: https://example.com/article` |
-| OpenClaw | Expose the workflow through `/obsiwiki` slash commands using `adapters/openclaw.md`. | `/obsiwiki ingest https://example.com/article` |
+| Codex | Ask Codex to read this README, install the needed files where it keeps skills, and restart Codex. | `Use Obsiwiki to ingest this source: https://example.com/article` |
+| Claude Code | Ask Claude Code to read this README, install the needed files where it keeps project instructions or skills, and use `adapters/claude-code.md`. | `Use Obsiwiki to ingest this source: https://example.com/article` |
+| Hermes | Ask Hermes to read this README, install the needed files where it keeps skills/plugins/context, and use `adapters/hermes.md`. | `Use Obsiwiki to ingest this source: https://example.com/article` |
+| OpenClaw | Ask OpenClaw to read this README, install the needed files where it keeps commands/plugins/skills, and expose `/obsiwiki` commands. | `/obsiwiki ingest https://example.com/article` |
 
 Common workflow verbs:
 
@@ -66,19 +82,16 @@ Use Obsiwiki to lint this vault.
 
 ## Install For Codex
 
-Clone or copy this repository into your Codex skills directory:
-
-```bash
-mkdir -p ~/.codex/skills
-git clone https://github.com/TengShao/Obsiwiki ~/.codex/skills/obsiwiki
-```
-
-Restart Codex after installing the skill.
+Ask Codex to install Obsiwiki from this repository. It should read this README, decide where Codex stores skills in the current environment, copy or clone the necessary files there, and tell you how to reload the skill.
 
 Agent-friendly install prompt:
 
 ```text
-Read https://github.com/TengShao/Obsiwiki and install Obsiwiki for Codex by cloning it into ~/.codex/skills/obsiwiki. After installation, remind me to restart Codex.
+Read https://github.com/TengShao/Obsiwiki and install Obsiwiki for Codex.
+
+Decide where Codex should keep reusable skills in this environment, copy or clone the necessary Obsiwiki files there, and make sure the installed skill is named obsiwiki.
+
+After installation, tell me which files you installed, where you installed them, and how to restart or reload Codex so the skill is picked up.
 ```
 
 Use the same canonical prompts as other agents. In Codex, `$obsiwiki` can also be used when you want to explicitly invoke the skill.
@@ -90,40 +103,21 @@ Use Obsiwiki to answer this from the vault: What is the relationship between A2A
 Use Obsiwiki to lint this vault.
 ```
 
-## Update Installed Copies
+## Install For Claude Code
 
-For Codex, update the installed skill/plugin copy under the new skill name:
+Ask Claude Code to install Obsiwiki from this repository. It should read this README, choose the correct Claude-accessible instruction, skill, or project context location, copy the necessary source files there, and point the target vault at the local schema.
 
-```bash
-cd ~/.codex/skills/obsiwiki
-git pull
+Agent-friendly install prompt:
+
+```text
+Read https://github.com/TengShao/Obsiwiki and install Obsiwiki for Claude Code.
+
+Decide where Claude Code should keep reusable project instructions or skills in this environment, copy the necessary Obsiwiki files there, and set up the target vault so Claude Code reads the local schema and adapters/claude-code.md.
+
+After installation, tell me which files you copied and where.
 ```
 
-Restart Codex after updating so the refreshed `SKILL.md` and references are loaded.
-
-If the Codex copy was installed by copying files instead of cloning with Git, update your source checkout first, then sync it into the Codex skills directory:
-
-```bash
-cd /path/to/Obsiwiki
-git pull
-mkdir -p ~/.codex/skills/obsiwiki
-rsync -a --delete --exclude .git ./ ~/.codex/skills/obsiwiki/
-```
-
-For Hermes, Claude Code, OpenClaw, or another agent that loads Obsiwiki as context rather than as a Codex skill, update the source files and make the agent reload the relevant context:
-
-- `SKILL.md`
-- `references/schema.md`
-- `references/page-types.md`
-- `references/lint-checklist.md`
-- `starter-vault/System/Schema/` or the vault-local `System/Schema/`
-- the relevant adapter under `adapters/`
-
-If the target vault already has a customized `System/Schema/`, reconcile it with the latest schema instead of blindly replacing user-edited files.
-
-## Use With Claude Code
-
-For Claude Code, use the adapter:
+Claude Code should use the adapter:
 
 ```text
 adapters/claude-code.md
@@ -147,9 +141,21 @@ Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
 ```
 
-## Use With Hermes
+## Install For Hermes
 
-For Hermes or another agent that does not load Codex skills directly, use the adapter:
+Ask Hermes to install Obsiwiki from this repository. It should read this README, decide where Hermes stores reusable skills, plugins, or long-lived context in the current environment, and copy the necessary source files there.
+
+Agent-friendly install prompt:
+
+```text
+Read https://github.com/TengShao/Obsiwiki and install Obsiwiki for Hermes.
+
+Decide where Hermes should keep reusable skills, plugins, or context in this environment, copy the necessary Obsiwiki files there, and configure Hermes to load adapters/hermes.md together with the Obsiwiki references and schema.
+
+After installation, tell me which files you copied and where.
+```
+
+Hermes should use the adapter:
 
 ```text
 adapters/hermes.md
@@ -172,9 +178,21 @@ Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
 ```
 
-## Use With OpenClaw
+## Install For OpenClaw
 
-For OpenClaw, use the adapter:
+Ask OpenClaw to install Obsiwiki from this repository. It should read this README, decide where OpenClaw stores slash commands, plugins, or skills in the current environment, copy the necessary source files there, and expose the Obsiwiki command workflow.
+
+Agent-friendly install prompt:
+
+```text
+Read https://github.com/TengShao/Obsiwiki and install Obsiwiki for OpenClaw.
+
+Decide where OpenClaw should keep reusable slash commands, plugins, or skills in this environment, copy the necessary Obsiwiki files there, and expose the /obsiwiki command workflow using adapters/openclaw.md.
+
+After installation, tell me which files you copied and where.
+```
+
+OpenClaw should use the adapter:
 
 ```text
 adapters/openclaw.md
@@ -377,3 +395,26 @@ Use Obsiwiki to lint this vault.
 ## Privacy
 
 This repository intentionally contains only reusable rules and empty starter structure. Do not publish your personal `raw/`, `wiki/`, `Projects/`, `Work/`, `Opinions/`, or `Journal/` content unless you have reviewed it for private or sensitive information.
+
+## Update Skill
+
+Ask the target agent to read this README, find its existing Obsiwiki install location, and refresh the source files from the latest repository version.
+
+For an agent-friendly update prompt, use:
+
+```text
+Read https://github.com/TengShao/Obsiwiki and update the existing Obsiwiki installation for this agent.
+
+Find where Obsiwiki was installed in this environment, refresh the copied or cloned source files from the latest repository version, preserve any vault-local System/Schema/ customizations, and tell me what changed.
+```
+
+Make sure the agent reloads the refreshed files:
+
+- `SKILL.md`
+- `references/schema.md`
+- `references/page-types.md`
+- `references/lint-checklist.md`
+- `starter-vault/System/Schema/` or the vault-local `System/Schema/`
+- the relevant adapter under `adapters/`
+
+If the target vault already has a customized `System/Schema/`, reconcile it with the latest schema instead of blindly replacing user-edited files.
