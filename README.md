@@ -1,6 +1,6 @@
 # Obsiwiki
 
-`Obsiwiki` is a Codex skill for maintaining an Obsidian vault as an agent-friendly LLM Wiki.
+`Obsiwiki` is an agent-agnostic workflow and skill package for maintaining an Obsidian vault as an LLM Wiki.
 
 It gives agents a shared operating model for:
 
