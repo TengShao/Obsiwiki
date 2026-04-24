@@ -11,15 +11,15 @@ aliases: []
 Use the skill explicitly:
 
 ```text
-$obsidian-llm-wiki
+$obsiwiki
 ```
 
 Typical requests:
 
-- `用 $obsidian-llm-wiki 处理这个链接：https://...`
-- `用 $obsidian-llm-wiki 把刚才这段讨论沉淀进知识库`
-- `用 $obsidian-llm-wiki 查询 A2A 和 MCP 的关系`
-- `用 $obsidian-llm-wiki lint 我的 vault`
+- `用 $obsiwiki 处理这个链接：https://...`
+- `用 $obsiwiki 把刚才这段讨论沉淀进知识库`
+- `用 $obsiwiki 查询 A2A 和 MCP 的关系`
+- `用 $obsiwiki lint 我的 vault`
 
 Codex rules:
 

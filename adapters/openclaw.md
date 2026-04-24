@@ -1,6 +1,6 @@
 # OpenClaw Adapter
 
-Use this adapter when OpenClaw should expose the Obsidian LLM Wiki as a slash-command workflow.
+Use this adapter when OpenClaw should expose Obsiwiki as a slash-command workflow.
 
 ## Entry Point
 

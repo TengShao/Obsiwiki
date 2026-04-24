@@ -1,9 +1,9 @@
 ---
-name: obsidian-llm-wiki
-description: Maintain an Obsidian vault as an agent-agnostic LLM Wiki. Use when Codex or another agent needs to ingest external links or raw notes into raw/wiki, capture valuable discussion outcomes into formal notes, answer questions from wiki pages, maintain index and map pages, manage assets for raw or wiki content, or lint the vault for orphans, duplicate topics, missing links, missing sources, and stale pages.
+name: obsiwiki
+description: Maintain an Obsidian vault as an agent-agnostic LLM Wiki. Use Obsiwiki when Codex or another agent needs to ingest external links or raw notes into raw/wiki, capture valuable discussion outcomes into formal notes, answer questions from wiki pages, maintain index and map pages, manage assets for raw or wiki content, or lint the vault for orphans, duplicate topics, missing links, missing sources, and stale pages.
 ---
 
-# Obsidian LLM Wiki
+# Obsiwiki
 
 Treat the vault as a compiled knowledge system rather than a pile of isolated notes.
 

@@ -1,6 +1,6 @@
 # Hermes Adapter
 
-Use this adapter when Hermes or another non-Codex agent should maintain the vault with the same LLM Wiki rules.
+Use this adapter when Hermes or another non-Codex agent should maintain the vault with the same Obsiwiki rules.
 
 ## Context To Load
 
@@ -40,7 +40,7 @@ If the target vault already contains `System/Schema/`, prefer the vault-local sc
 ## Prompt Template
 
 ```text
-Use the Obsidian LLM Wiki workflow.
+Use the Obsiwiki workflow.
 
 Read:
 - SKILL.md

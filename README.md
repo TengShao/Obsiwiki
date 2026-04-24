@@ -1,6 +1,6 @@
-# Obsidian LLM Wiki Skill
+# Obsiwiki
 
-`obsidian-llm-wiki` is a Codex skill for maintaining an Obsidian vault as an agent-friendly LLM Wiki.
+`Obsiwiki` is a Codex skill for maintaining an Obsidian vault as an agent-friendly LLM Wiki.
 
 It gives agents a shared operating model for:
 
@@ -40,7 +40,7 @@ Clone or copy this repository into your Codex skills directory:
 
 ```bash
 mkdir -p ~/.codex/skills
-git clone <repo-url> ~/.codex/skills/obsidian-llm-wiki
+git clone <repo-url> ~/.codex/skills/obsiwiki
 ```
 
 Restart Codex after installing the skill.
@@ -48,10 +48,10 @@ Restart Codex after installing the skill.
 Use it explicitly in a prompt:
 
 ```text
-用 $obsidian-llm-wiki 处理这个链接：https://example.com/article
-用 $obsidian-llm-wiki 把刚才这段讨论沉淀进知识库
-用 $obsidian-llm-wiki 查询 A2A 和 MCP 的关系
-用 $obsidian-llm-wiki lint 我的 vault
+用 $obsiwiki 处理这个链接：https://example.com/article
+用 $obsiwiki 把刚才这段讨论沉淀进知识库
+用 $obsiwiki 查询 A2A 和 MCP 的关系
+用 $obsiwiki lint 我的 vault
 ```
 
 ## Use With Hermes
@@ -73,10 +73,10 @@ Give Hermes these files as operating context:
 Typical Hermes-style prompts:
 
 ```text
-Use the Obsidian LLM Wiki workflow and ingest this article: https://example.com/article
-Use the Obsidian LLM Wiki workflow and capture the reusable conclusions from this conversation.
-Use the Obsidian LLM Wiki workflow and answer this from the vault: ...
-Use the Obsidian LLM Wiki workflow and lint this vault.
+Use the Obsiwiki workflow and ingest this article: https://example.com/article
+Use the Obsiwiki workflow and capture the reusable conclusions from this conversation.
+Use the Obsiwiki workflow and answer this from the vault: ...
+Use the Obsiwiki workflow and lint this vault.
 ```
 
 ## Use With OpenClaw
@@ -177,7 +177,7 @@ Expected behavior:
 Example:
 
 ```text
-用 $obsidian-llm-wiki ingest 这篇文章：https://example.com/article
+用 $obsiwiki ingest 这篇文章：https://example.com/article
 ```
 
 ### Capture
@@ -195,7 +195,7 @@ Expected behavior:
 Example:
 
 ```text
-用 $obsidian-llm-wiki capture 刚才关于团队 AI 工作流的结论
+用 $obsiwiki capture 刚才关于团队 AI 工作流的结论
 ```
 
 ### Query
@@ -212,7 +212,7 @@ Expected behavior:
 Example:
 
 ```text
-用 $obsidian-llm-wiki query：我的知识库里对 prompt engineering 和 UXD 的关系有什么判断？
+用 $obsiwiki query：我的知识库里对 prompt engineering 和 UXD 的关系有什么判断？
 ```
 
 ### Lint
@@ -231,7 +231,7 @@ Expected behavior:
 Example:
 
 ```text
-用 $obsidian-llm-wiki lint 我的 vault
+用 $obsiwiki lint 我的 vault
 ```
 
 ## Page Types
