@@ -1,5 +1,7 @@
 # Obsiwiki
 
+Language: English | [简体中文](README.zh-CN.md)
+
 `Obsiwiki` is an agent-agnostic workflow and skill package for maintaining an Obsidian vault as an LLM Wiki.
 
 It gives agents a shared operating model for:
