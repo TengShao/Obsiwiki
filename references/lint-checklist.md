@@ -2,6 +2,8 @@
 
 Check these first:
 
+- Is the file under `System/`? If yes, exclude it from ordinary content lint.
+- For `System/`, only check configuration health: key schema files are readable, agent adapters follow `System/Schema/`, and vault-local schema customizations are not silently overwritten.
 - Is the page completely isolated?
 - Is it at least attached to one map or the index?
 - Does it have a clear type and `last_updated`?

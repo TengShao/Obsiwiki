@@ -68,6 +68,8 @@ Use for vault health checks and structural cleanup.
 
 Check for:
 
+- exclude `System/` files from ordinary content lint
+- lightweight `System/` configuration health: key schema files are readable, `System/Agents/` follows `System/Schema/`, and vault-local schema customizations are preserved
 - completely isolated pages
 - formal wiki pages not covered by maps or index
 - `sources/` pages that do not point to a concept, entity, or map

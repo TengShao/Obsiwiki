@@ -63,6 +63,8 @@ Choose one of four workflows:
 
 ## Lint Rules
 
+- Do not treat `System/` files as ordinary wiki content. Exclude `System/Schema/` and `System/Agents/` from orphan, map coverage, source, `last_updated`, and `关联连接` checks.
+- For `System/`, run only lightweight configuration checks: verify key schema files are readable, confirm `System/Agents/` does not redefine directory semantics, and compare vault-local schema with installed defaults only when useful.
 - Flag wiki pages not covered by `maps/` or `index`.
 - Flag `sources/` pages without links to a concept, entity, or map.
 - Flag duplicate or near-duplicate topics.

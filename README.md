@@ -324,6 +324,8 @@ Use when you want a vault health check.
 
 Expected behavior:
 
+- exclude `System/` from ordinary content lint; do not require schema or agent files to be covered by maps, sources, `last_updated`, or `Related Links`
+- run only lightweight configuration checks for `System/`: schema files are readable, agent adapters follow `System/Schema/`, and vault-local schema customizations are preserved
 - flag wiki pages not covered by maps or index
 - flag source pages without formal links
 - flag duplicate or near-duplicate topics
@@ -733,6 +735,8 @@ Use Obsiwiki to answer this from the vault: What does my knowledge base say abou
 
 预期行为：
 
+- 将 `System/` 排除在普通内容 lint 之外；不要要求 schema 或 agent 文件被 maps、sources、`last_updated` 或 `Related Links` 覆盖
+- 对 `System/` 只做轻量配置检查：schema 文件可读、agent 适配遵循 `System/Schema/`、知识库本地 schema 自定义不被静默覆盖
 - 标记未被 maps 或 index 覆盖的 wiki 页面
 - 标记没有正式链接的来源页面
 - 标记重复或近似重复主题
