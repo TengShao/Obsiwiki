@@ -50,6 +50,7 @@ Supported workflows:
 - capture: extract reusable conclusions, ask before writing, update target pages
 - query: answer from wiki/index.md, maps, concepts, entities, sources, syntheses
 - lint: find orphan pages, missing sources, duplicates, stale pages, and asset issues
+- review: summarize recent additions, weekly changes, topic clusters, and next actions without writing
 ```
 
 ## Recommended Prompts
@@ -59,6 +60,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## Operating Rules
@@ -66,6 +69,7 @@ Use Obsiwiki to lint this vault.
 - Use draft-first behavior for `ingest`.
 - Use suggest-and-confirm behavior for `capture`.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
+- Keep `review` and weekly reports read-only by default; use the last 7 days unless the user specifies a range, and use `this week` for weekly reports.
 - Use `wiki/maps/` as the main anti-orphan mechanism.
 - Update `wiki/log.md` for meaningful ingest, capture, lint, and synthesis changes.
 - Keep `System/Schema/` as the vault-local source of truth when present.

@@ -2,13 +2,13 @@
 title: Workflows
 type: schema
 tags: []
-last_updated: 2026-04-24
+last_updated: 2026-04-28
 aliases: []
 ---
 
 # Workflows
 
-This vault supports four primary workflows: `ingest`, `capture`, `query`, and `lint`.
+This vault supports five primary workflows: `ingest`, `capture`, `query`, `lint`, and `review`.
 
 ## Ingest
 
@@ -61,6 +61,33 @@ Steps:
 2. Read relevant `concepts`, `entities`, `sources`, and `syntheses`.
 3. Answer from formal wiki pages when possible.
 4. If the answer becomes broadly reusable, suggest updating or creating a `synthesis`.
+
+## Review
+
+Use when the user wants a read-only review of recent additions, recent updates, or this week's knowledge base changes.
+
+Default range: the last 7 days unless the user specifies a range.
+
+Supported ranges include `yesterday`, `this week`, `this month`, `last 14 days`, `since 2026-04-01`, and `2026-04-01 to 2026-04-15`.
+
+Treat a weekly knowledge base report as a `review` with the `this week` range.
+
+Steps:
+
+1. Resolve the requested time range.
+2. Read `wiki/log.md` first to identify recent ingest, capture, lint, and synthesis activity.
+3. Use page frontmatter `last_updated` to find additions or updates missing from the log.
+4. Use file modification time only as a fallback, and state that it is a fallback when it affects the answer.
+5. Read only the relevant `wiki/` pages needed to explain what changed.
+6. Answer with:
+   - time range
+   - new sources and pages
+   - notable updates
+   - topic clusters
+   - open organization questions
+   - suggested next `ingest`, `capture`, or `lint` actions
+
+Do not write to the vault by default. If the user wants to save a weekly report or durable summary, switch to `capture` or propose a `wiki/syntheses/` update and ask for confirmation before writing.
 
 ## Lint
 

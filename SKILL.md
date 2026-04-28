@@ -1,6 +1,6 @@
 ---
 name: obsiwiki
-description: Maintain an Obsidian vault as an agent-agnostic LLM Wiki. Use Obsiwiki when Codex or another agent needs to ingest external links or raw notes into raw/wiki, capture valuable discussion outcomes into formal notes, answer questions from wiki pages, maintain index and map pages, manage assets for raw or wiki content, or lint the vault for orphans, duplicate topics, missing links, missing sources, and stale pages.
+description: Maintain an Obsidian vault as an agent-agnostic LLM Wiki. Use Obsiwiki when Codex or another agent needs to ingest external links or raw notes into raw/wiki, capture valuable discussion outcomes into formal notes, answer questions from wiki pages, review recent additions or weekly knowledge base changes, maintain index and map pages, manage assets for raw or wiki content, or lint the vault for orphans, duplicate topics, missing links, missing sources, and stale pages.
 ---
 
 # Obsiwiki
@@ -31,12 +31,13 @@ Agent adapters translate the same schema for each agent. They must not fork dire
 
 ## Workflow Selection
 
-Choose one of four workflows:
+Choose one of five workflows:
 
 - `ingest`: when the user gives a URL, article, paper, transcript, meeting note, or raw note
 - `capture`: when a discussion has produced a stable conclusion worth storing
 - `query`: when the user asks a question that should be answered from existing wiki pages
 - `lint`: when the user wants a vault health check or structural cleanup
+- `review`: when the user wants a read-only review of recent additions, recent updates, or this week's knowledge base changes
 
 ## Ingest Rules
 
@@ -60,6 +61,15 @@ Choose one of four workflows:
 - Start with `wiki/index.md` and related `wiki/maps/`.
 - Read only the pages needed for the answer.
 - If a cross-topic answer becomes broadly reusable, suggest updating or creating a `synthesis`.
+
+## Review Rules
+
+- Default to the last 7 days when the user does not specify a range.
+- Accept natural-language ranges such as `yesterday`, `this week`, `this month`, `last 14 days`, `since 2026-04-01`, or `2026-04-01 to 2026-04-15`.
+- Treat a weekly knowledge base report as a `review` with the `this week` range.
+- Determine recent additions from `wiki/log.md` first, page frontmatter `last_updated` second, and file modification time only as a fallback.
+- Structure the answer around time range, new sources and pages, notable updates, topic clusters, open organization questions, and suggested next `ingest`, `capture`, or `lint` actions.
+- Keep `review` read-only by default. If the user wants to save a weekly report or durable summary, switch to `capture` or propose a `wiki/syntheses/` update and ask for confirmation before writing.
 
 ## Lint Rules
 

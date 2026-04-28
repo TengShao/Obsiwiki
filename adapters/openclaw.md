@@ -19,6 +19,9 @@ Suggested subcommands:
 /obsiwiki capture synthesis
 /obsiwiki query <question>
 /obsiwiki lint
+/obsiwiki review
+/obsiwiki review <range>
+/obsiwiki weekly
 /obsiwiki help
 ```
 
@@ -72,9 +75,29 @@ Expected behavior:
 - flag missing `last_updated`, missing sources, or missing `Related Links`
 - flag attachment placement issues
 
+### `/obsiwiki review`
+
+Use when the user wants a read-only review of recent additions, recent updates, or this week's knowledge base changes.
+
+Expected behavior:
+
+- default to the last 7 days when no range is provided
+- support ranges such as `yesterday`, `this week`, `this month`, `last 14 days`, `since 2026-04-01`, and `2026-04-01 to 2026-04-15`
+- read `wiki/log.md` first, page frontmatter `last_updated` second, and file modification time only as a fallback
+- summarize the time range, new sources and pages, notable updates, topic clusters, open organization questions, and suggested next `ingest`, `capture`, or `lint` actions
+- do not write to the vault by default
+
+### `/obsiwiki review <range>`
+
+Same as `/obsiwiki review`, but use the provided time range.
+
+### `/obsiwiki weekly`
+
+Generate this week's knowledge base report as a `review` with the `this week` range. Do not save the report unless the user asks to switch to `capture` or confirms a `wiki/syntheses/` update.
+
 ## Rules
 
-- Commands route into the shared `ingest / capture / query / lint` workflows.
+- Commands route into the shared `ingest / capture / query / lint / review` workflows.
 - Directory semantics and page contracts come from the installed Obsiwiki schema by default.
 - If the target vault contains `System/Schema/`, treat that vault-local schema as the source of truth.
 - Do not maintain private OpenClaw rules that conflict with the active Obsiwiki schema.

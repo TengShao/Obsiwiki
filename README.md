@@ -11,6 +11,7 @@ It gives agents a shared operating model for:
 - compiling durable knowledge pages in `wiki/`
 - capturing reusable conclusions from conversations
 - answering questions from existing wiki pages
+- reviewing recent additions and weekly knowledge base changes
 - linting the vault for orphan pages, missing sources, duplicate topics, stale pages, and asset placement issues
 
 ## Contents
@@ -70,6 +71,7 @@ Common workflow verbs:
 - `capture`: extract reusable conclusions from a conversation and update the best target page.
 - `query`: answer from `wiki/index.md`, maps, and formal wiki pages.
 - `lint`: check for orphan pages, missing sources, duplicates, stale pages, and asset placement issues.
+- `review`: summarize recent additions, notable updates, topic clusters, and next actions without writing to the vault.
 
 Canonical workflow prompts:
 
@@ -78,6 +80,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: <question>
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## Install For Codex
@@ -99,6 +103,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: What is the relationship between A2A and MCP?
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## Install For Claude Code
@@ -135,6 +141,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## Install For Hermes
@@ -162,6 +170,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## Install For OpenClaw
@@ -191,10 +201,12 @@ Recommended slash-command shape:
 /obsiwiki capture synthesis
 /obsiwiki query <question>
 /obsiwiki lint
+/obsiwiki review [range]
+/obsiwiki weekly
 /obsiwiki help
 ```
 
-Each command should route into the same shared `ingest / capture / query / lint` workflows defined by this skill and `System/Schema/`.
+Each command should route into the same shared `ingest / capture / query / lint / review` workflows defined by this skill and `System/Schema/`.
 
 ## Add The Starter Vault Skeleton
 
@@ -337,6 +349,37 @@ Example:
 Use Obsiwiki to lint this vault.
 ```
 
+### Review
+
+Use when you want a read-only review of recent additions, recent updates, or this week's knowledge base changes.
+
+Default range: the last 7 days unless you specify a range.
+
+Expected behavior:
+
+1. Resolve ranges such as `yesterday`, `this week`, `this month`, `last 14 days`, `since 2026-04-01`, or `2026-04-01 to 2026-04-15`.
+2. Read `wiki/log.md` first, page frontmatter `last_updated` second, and file modification time only as a fallback.
+3. Summarize the time range, new sources and pages, notable updates, topic clusters, open organization questions, and suggested next `ingest`, `capture`, or `lint` actions.
+4. Keep the review read-only by default.
+5. If you want to save a weekly report or durable summary, ask the agent to switch to `capture` or propose a `wiki/syntheses/` update and confirm before writing.
+
+Examples:
+
+```text
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to review recent additions from yesterday.
+Use Obsiwiki to review recent additions from this week.
+Use Obsiwiki to review recent additions from this month.
+Use Obsiwiki to review recent additions since 2026-04-01.
+Use Obsiwiki to generate this week's knowledge base report.
+```
+
+Weekly reports are prompt-triggered, not a built-in scheduler. If you want an automatic weekly report, ask the agent to help set up cron or another system automation that regularly sends:
+
+```text
+Use Obsiwiki to generate this week's knowledge base report.
+```
+
 ## Page Types
 
 Formal wiki pages use these `type` values:
@@ -382,6 +425,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: <question>
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## Update Skill
@@ -393,7 +438,7 @@ For an agent-friendly update prompt, use:
 ```text
 Read https://github.com/TengShao/Obsiwiki and update the existing Obsiwiki installation for this agent.
 
-Find where Obsiwiki was installed in this environment, refresh the copied or cloned source files from the latest repository version, preserve any vault-local System/Schema/ customizations, and tell me what changed.
+Find where Obsiwiki was installed in this environment, refresh the copied or cloned source files from the latest repository version, preserve any vault-local System/Schema/ customizations, make sure review and weekly report prompts are included in the skill, schema, adapters, and README, and tell me what changed.
 ```
 
 Make sure the agent reloads the refreshed files:
@@ -404,6 +449,7 @@ Make sure the agent reloads the refreshed files:
 - `references/lint-checklist.md`
 - `starter-vault/System/Schema/` or the vault-local `System/Schema/`
 - the relevant adapter under `adapters/`
+- `README.md`, including the canonical `review` and weekly report prompts
 
 If the target vault already has a customized `System/Schema/`, compare it with the latest schema and manually merge the useful changes. Do not overwrite user-edited files directly.
 
@@ -420,6 +466,7 @@ If the target vault already has a customized `System/Schema/`, compare it with t
 - 将稳定知识编译到 `wiki/`
 - 将对话中形成的可复用结论沉淀到知识库
 - 基于已有 wiki 页面回答问题
+- 回顾近期新增内容和本周知识库变化
 - 对知识库做健康检查，发现孤立页面、缺失来源、重复主题、过期页面和附件放置问题
 
 ## 目录
@@ -479,6 +526,7 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 - `capture`：从对话中提取可复用结论，并更新最合适的目标页面。
 - `query`：从 `wiki/index.md`、maps 和正式 wiki 页面中回答问题。
 - `lint`：检查孤立页面、缺失来源、重复主题、过期页面和附件放置问题。
+- `review`：只读总结近期新增内容、显著更新、主题聚类和后续行动建议。
 
 常用提示：
 
@@ -487,6 +535,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: <question>
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## 为 Codex 安装
@@ -508,6 +558,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: What is the relationship between A2A and MCP?
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## 为 Claude Code 安装
@@ -544,6 +596,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## 为 Hermes 安装
@@ -571,6 +625,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## 为 OpenClaw 安装
@@ -600,10 +656,12 @@ adapters/openclaw.md
 /obsiwiki capture synthesis
 /obsiwiki query <question>
 /obsiwiki lint
+/obsiwiki review [range]
+/obsiwiki weekly
 /obsiwiki help
 ```
 
-每个命令都应该进入同一套由 Obsiwiki 和当前生效 schema 定义的 `ingest / capture / query / lint` 工作流。
+每个命令都应该进入同一套由 Obsiwiki 和当前生效 schema 定义的 `ingest / capture / query / lint / review` 工作流。
 
 ## 添加 Starter 知识库骨架
 
@@ -746,6 +804,37 @@ Use Obsiwiki to answer this from the vault: What does my knowledge base say abou
 Use Obsiwiki to lint this vault.
 ```
 
+### Review
+
+当你希望 Agent 只读回顾近期新增内容、显著更新或本周知识库变化时使用。
+
+默认范围：如果没有指定范围，则使用最近 7 天。
+
+预期行为：
+
+1. 解析 `昨天`、`本周`、`本月`、`last 14 days`、`since 2026-04-01` 或 `2026-04-01 to 2026-04-15` 等范围。
+2. 优先读取 `wiki/log.md`，其次使用页面 frontmatter 的 `last_updated`，最后才用文件修改时间兜底。
+3. 总结时间范围、新增来源与页面、显著更新、主题聚类、值得继续整理的问题，以及下次 `ingest`、`capture` 或 `lint` 建议。
+4. 默认保持只读，不写入知识库。
+5. 如果你希望保存周报或长期摘要，请让 Agent 转入 `capture`，或建议更新 `wiki/syntheses/`，并在写入前确认。
+
+示例：
+
+```text
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to review recent additions from yesterday.
+Use Obsiwiki to review recent additions from this week.
+Use Obsiwiki to review recent additions from this month.
+Use Obsiwiki to review recent additions since 2026-04-01.
+Use Obsiwiki to generate this week's knowledge base report.
+```
+
+周报由提示词触发，不是内置调度器。如果你想自动生成周报，可以让 Agent 帮你建立 cron 或其它系统自动化，定期发送：
+
+```text
+Use Obsiwiki to generate this week's knowledge base report.
+```
+
 ## 页面类型
 
 正式 wiki 页面使用这些 `type` 值：
@@ -791,6 +880,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: <question>
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## 更新 Skill
@@ -802,7 +893,7 @@ Use Obsiwiki to lint this vault.
 ```text
 Read https://github.com/TengShao/Obsiwiki and update the existing Obsiwiki installation for this agent.
 
-Find where Obsiwiki was installed in this environment, refresh the copied or cloned source files from the latest repository version, preserve any vault-local System/Schema/ customizations, and tell me what changed.
+Find where Obsiwiki was installed in this environment, refresh the copied or cloned source files from the latest repository version, preserve any vault-local System/Schema/ customizations, make sure review and weekly report prompts are included in the skill, schema, adapters, and README, and tell me what changed.
 ```
 
 确保 Agent 重新加载刷新后的文件：
@@ -813,5 +904,6 @@ Find where Obsiwiki was installed in this environment, refresh the copied or clo
 - `references/lint-checklist.md`
 - `starter-vault/System/Schema/` 或知识库本地 `System/Schema/`
 - 位于 `adapters/` 的相关适配文件
+- `README.md`，包括规范的 `review` 和周报提示词
 
 如果目标知识库已经有自定义的 `System/Schema/`，更新时请先对比差异，再手动合并需要的变化；不要直接覆盖用户编辑过的文件。

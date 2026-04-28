@@ -23,6 +23,7 @@ Use the installed Obsiwiki schema as the default. If the target vault contains `
 - Use draft-first behavior for `ingest`.
 - Use suggest-and-confirm behavior for `capture`.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
+- Keep `review` and weekly reports read-only by default; use the last 7 days unless the user specifies a range, and use `this week` for weekly reports.
 - Use `wiki/maps/` as the main anti-orphan mechanism.
 - Do not save full chat transcripts by default.
 - Prefer updating existing pages over creating duplicates.
@@ -34,6 +35,8 @@ Use Obsiwiki to ingest this source: https://example.com/article
 Use Obsiwiki to capture reusable conclusions from this conversation.
 Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
+Use Obsiwiki to review recent additions to this vault.
+Use Obsiwiki to generate this week's knowledge base report.
 ```
 
 ## Prompt Template
@@ -48,11 +51,12 @@ Read:
 - references/lint-checklist.md
 - System/Schema/ if present, otherwise the installed Obsiwiki schema
 
-Maintain this vault through four workflows:
+Maintain this vault through five workflows:
 - ingest: save raw sources, create source digests, update maps/index/log
 - capture: extract reusable conclusions, ask before writing, update target pages
 - query: answer from wiki/index.md, maps, concepts, entities, sources, syntheses
 - lint: find orphan pages, missing sources, duplicates, stale pages, and asset issues
+- review: summarize recent additions, weekly changes, topic clusters, and next actions without writing
 
 Keep raw sources in raw/, binary assets in assets/, durable knowledge in wiki/, and workflow rules in the active Obsiwiki schema.
 ```

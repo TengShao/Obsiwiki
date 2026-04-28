@@ -2,7 +2,7 @@
 title: Page Contracts
 type: schema
 tags: []
-last_updated: 2026-04-24
+last_updated: 2026-04-28
 aliases: []
 ---
 
@@ -22,6 +22,7 @@ aliases: []
   - `capture`
   - `lint`
   - major `query -> synthesis` updates
+- `review` and weekly reports are read-only by default and should not append log entries unless the user confirms a follow-up `capture` or `synthesis` write.
 
 ## `wiki/concepts/`
 
