@@ -32,6 +32,7 @@ Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/kar
 .
 ├── SKILL.md
 ├── adapters/
+│   ├── codex.md
 │   ├── claude-code.md
 │   ├── hermes.md
 │   └── openclaw.md
@@ -53,8 +54,8 @@ Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/kar
 
 | Agent | Typical usage |
 | --- | --- |
-| Codex | `/Obsiwiki ingest https://example.com/article` |
-| Claude Code / Hermes / OpenClaw | `/Obsiwiki ingest https://example.com/article` |
+| Codex | `$obsiwiki ingest https://example.com/article` |
+| Claude Code / Hermes / OpenClaw | `/obsiwiki ingest https://example.com/article` |
 
 Common workflow verbs:
 
@@ -67,13 +68,13 @@ Common workflow verbs:
 Canonical workflow prompts:
 
 ```text
-/Obsiwiki ingest this source: https://example.com/article
-/Obsiwiki capture reusable conclusions from this conversation.
-/Obsiwiki answer this from the vault: <question>
-/Obsiwiki lint this vault.
-/Obsiwiki review recent additions to this vault.
-/Obsiwiki generate this week's knowledge base report.
-/Obsiwiki set up scheduled maintenance for this vault.
+/obsiwiki ingest this source: https://example.com/article
+/obsiwiki capture reusable conclusions from this conversation.
+/obsiwiki answer this from the vault: <question>
+/obsiwiki lint this vault.
+/obsiwiki review recent additions to this vault.
+/obsiwiki generate this week's knowledge base report.
+/obsiwiki set up scheduled maintenance for this vault.
 ```
 
 ## Install Skill
@@ -99,7 +100,7 @@ Report which files you installed, where they were installed, and how to reload t
 After installation, call Obsiwiki in the way your agent supports, for example:
 
 ```text
-/Obsiwiki ingest https://example.com/article
+/obsiwiki ingest https://example.com/article
 ```
 
 ## Update Skill
@@ -113,7 +114,7 @@ Inspect the latest repository and decide which installed Obsiwiki files need ref
 
 Find the current Obsiwiki skill installation and refresh it from the latest repository version. If any vault-local System/Schema/ files are involved, preserve local customizations.
 
-After refreshing the skill, compare the latest default schema, value guidance, and support pages with the target vault if it has System/Schema/. Do not overwrite the vault. Report schema/workflow changes separately from value-guidance additions such as System/Schema/purpose.md and support-page additions such as wiki/overview.md and wiki/review.md. If System/Schema/purpose.md is missing, ask whether to initialize one from the starter template or draft one for this vault. Ask me whether to merge any suggested vault-local migration.
+After refreshing the skill, compare the latest default schema, value guidance, and support pages with the target vault if it has System/Schema/. Do not overwrite the vault. Report schema/workflow changes separately from value-guidance additions such as System/Schema/purpose.md and support-page additions such as wiki/overview.md and wiki/review.md. If System/Schema/purpose.md is missing, ask whether to initialize one from the starter template or draft one for this vault. If wiki/overview.md or wiki/review.md is missing, ask whether to initialize those support pages from the starter templates before depending on them. Ask me whether to merge any suggested vault-local migration.
 
 Report what changed and how to reload the agent.
 ```
@@ -137,7 +138,7 @@ Expected behavior:
 Example:
 
 ```text
-/Obsiwiki ingest this source: https://example.com/article
+/obsiwiki ingest this source: https://example.com/article
 ```
 
 ### Capture
@@ -157,7 +158,7 @@ Expected behavior:
 Example:
 
 ```text
-/Obsiwiki capture reusable conclusions from this conversation.
+/obsiwiki capture reusable conclusions from this conversation.
 ```
 
 ### Query
@@ -174,7 +175,7 @@ Expected behavior:
 Example:
 
 ```text
-/Obsiwiki answer this from the vault: What does my knowledge base say about the relationship between prompt engineering and UXD?
+/obsiwiki answer this from the vault: What does my knowledge base say about the relationship between prompt engineering and UXD?
 ```
 
 ### Lint
@@ -198,7 +199,7 @@ Expected behavior:
 Example:
 
 ```text
-/Obsiwiki lint this vault.
+/obsiwiki lint this vault.
 ```
 
 ### Review
@@ -220,12 +221,12 @@ Expected behavior:
 Examples:
 
 ```text
-/Obsiwiki review recent additions to this vault.
-/Obsiwiki review recent additions from yesterday.
-/Obsiwiki review recent additions from this week.
-/Obsiwiki review recent additions from this month.
-/Obsiwiki review recent additions since 2026-04-01.
-/Obsiwiki generate this week's knowledge base report.
+/obsiwiki review recent additions to this vault.
+/obsiwiki review recent additions from yesterday.
+/obsiwiki review recent additions from this week.
+/obsiwiki review recent additions from this month.
+/obsiwiki review recent additions since 2026-04-01.
+/obsiwiki generate this week's knowledge base report.
 ```
 
 ### Scheduled Maintenance
@@ -251,7 +252,7 @@ Review recent additions to this vault and lint this vault. Keep the run read-onl
 Example:
 
 ```text
-/Obsiwiki set up scheduled maintenance for this vault.
+/obsiwiki set up scheduled maintenance for this vault.
 ```
 
 
@@ -284,9 +285,8 @@ wiki/
 └── review.md        backlog for human judgment and later agent follow-up
 
 System/
-├── Schema/          optional vault-local authority for rules, workflows, and value guidance
-│   └── purpose.md   value judgment guidance for agents
-└── Agents/          adapter notes for Codex, Claude Code, Hermes, OpenClaw, or other agents
+└── Schema/          vault-local authority for rules, workflows, and value guidance
+    └── purpose.md   value judgment guidance for agents
 ```
 
 Folder intent:
@@ -299,6 +299,7 @@ Folder intent:
 - `wiki/overview.md` is a compressed state view for agents and humans.
 - `wiki/review.md` records uncertain issues that need human judgment or later follow-up.
 - `System/Schema/`, when present, is the vault-local authority; agent-specific files should follow it instead of defining separate rules.
+- `System/Agents/` is optional; use it only when an agent needs vault-local adapter notes.
 
 ---
 
@@ -334,6 +335,7 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 .
 ├── SKILL.md
 ├── adapters/
+│   ├── codex.md
 │   ├── claude-code.md
 │   ├── hermes.md
 │   └── openclaw.md
@@ -355,8 +357,8 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 
 | Agent | 典型用法 |
 | --- | --- |
-| Codex | `/Obsiwiki ingest https://example.com/article` |
-| Claude Code / Hermes / OpenClaw | `/Obsiwiki ingest https://example.com/article` |
+| Codex | `$obsiwiki ingest https://example.com/article` |
+| Claude Code / Hermes / OpenClaw | `/obsiwiki ingest https://example.com/article` |
 
 常用工作流：
 
@@ -369,13 +371,13 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 常用提示：
 
 ```text
-/Obsiwiki ingest this source: https://example.com/article
-/Obsiwiki capture reusable conclusions from this conversation.
-/Obsiwiki answer this from the vault: <question>
-/Obsiwiki lint this vault.
-/Obsiwiki review recent additions to this vault.
-/Obsiwiki generate this week's knowledge base report.
-/Obsiwiki set up scheduled maintenance for this vault.
+/obsiwiki ingest this source: https://example.com/article
+/obsiwiki capture reusable conclusions from this conversation.
+/obsiwiki answer this from the vault: <question>
+/obsiwiki lint this vault.
+/obsiwiki review recent additions to this vault.
+/obsiwiki generate this week's knowledge base report.
+/obsiwiki set up scheduled maintenance for this vault.
 ```
 
 ## 安装 Skill
@@ -401,7 +403,7 @@ Report which files you installed, where they were installed, and how to reload t
 安装后，用你的 Agent 支持的方式调用 Obsiwiki，比如：
 
 ```text
-/Obsiwiki ingest https://example.com/article
+/obsiwiki ingest https://example.com/article
 ```
 
 ## 更新 Skill
@@ -415,7 +417,7 @@ Inspect the latest repository and decide which installed Obsiwiki files need ref
 
 Find the current Obsiwiki skill installation and refresh it from the latest repository version. If any vault-local System/Schema/ files are involved, preserve local customizations.
 
-After refreshing the skill, compare the latest default schema, value guidance, and support pages with the target vault if it has System/Schema/. Do not overwrite the vault. Report schema/workflow changes separately from value-guidance additions such as System/Schema/purpose.md and support-page additions such as wiki/overview.md and wiki/review.md. If System/Schema/purpose.md is missing, ask whether to initialize one from the starter template or draft one for this vault. Ask me whether to merge any suggested vault-local migration.
+After refreshing the skill, compare the latest default schema, value guidance, and support pages with the target vault if it has System/Schema/. Do not overwrite the vault. Report schema/workflow changes separately from value-guidance additions such as System/Schema/purpose.md and support-page additions such as wiki/overview.md and wiki/review.md. If System/Schema/purpose.md is missing, ask whether to initialize one from the starter template or draft one for this vault. If wiki/overview.md or wiki/review.md is missing, ask whether to initialize those support pages from the starter templates before depending on them. Ask me whether to merge any suggested vault-local migration.
 
 Report what changed and how to reload the agent.
 ```
@@ -439,7 +441,7 @@ Report what changed and how to reload the agent.
 示例：
 
 ```text
-/Obsiwiki ingest this source: https://example.com/article
+/obsiwiki ingest this source: https://example.com/article
 ```
 
 ### Capture
@@ -459,7 +461,7 @@ Report what changed and how to reload the agent.
 示例：
 
 ```text
-/Obsiwiki capture reusable conclusions from this conversation.
+/obsiwiki capture reusable conclusions from this conversation.
 ```
 
 ### Query
@@ -476,7 +478,7 @@ Report what changed and how to reload the agent.
 示例：
 
 ```text
-/Obsiwiki answer this from the vault: What does my knowledge base say about the relationship between prompt engineering and UXD?
+/obsiwiki answer this from the vault: What does my knowledge base say about the relationship between prompt engineering and UXD?
 ```
 
 ### Lint
@@ -500,7 +502,7 @@ Report what changed and how to reload the agent.
 示例：
 
 ```text
-/Obsiwiki lint this vault.
+/obsiwiki lint this vault.
 ```
 
 ### Review
@@ -522,12 +524,12 @@ Report what changed and how to reload the agent.
 示例：
 
 ```text
-/Obsiwiki review recent additions to this vault.
-/Obsiwiki review recent additions from yesterday.
-/Obsiwiki review recent additions from this week.
-/Obsiwiki review recent additions from this month.
-/Obsiwiki review recent additions since 2026-04-01.
-/Obsiwiki generate this week's knowledge base report.
+/obsiwiki review recent additions to this vault.
+/obsiwiki review recent additions from yesterday.
+/obsiwiki review recent additions from this week.
+/obsiwiki review recent additions from this month.
+/obsiwiki review recent additions since 2026-04-01.
+/obsiwiki generate this week's knowledge base report.
 ```
 
 ### Scheduled Maintenance
@@ -553,7 +555,7 @@ Review recent additions to this vault and lint this vault. Keep the run read-onl
 示例：
 
 ```text
-/Obsiwiki set up scheduled maintenance for this vault.
+/obsiwiki set up scheduled maintenance for this vault.
 ```
 
 
@@ -586,9 +588,8 @@ wiki/
 └── review.md        需要人类判断或后续 Agent 跟进的待处理事项
 
 System/
-├── Schema/          可选的知识库本地规则、工作流和价值判断指南
-│   └── purpose.md   面向 Agent 的价值判断指南
-└── Agents/          Codex、Claude Code、Hermes、OpenClaw 或其它 Agent 的适配说明
+└── Schema/          知识库本地规则、工作流和价值判断指南
+    └── purpose.md   面向 Agent 的价值判断指南
 ```
 
 目录意图：
@@ -601,3 +602,4 @@ System/
 - `wiki/overview.md` 是给 Agent 和人看的知识库状态压缩视图。
 - `wiki/review.md` 记录需要人类判断或后续跟进的不确定事项。
 - `System/Schema/` 存在时，是知识库本地的权威规则来源；各 Agent 的适配文件应该遵循它，而不是另立一套规则。
+- `System/Agents/` 是可选目录；只有当某个 Agent 需要读取知识库本地适配说明时才需要。

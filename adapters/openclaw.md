@@ -26,6 +26,8 @@ Suggested subcommands:
 /obsiwiki help
 ```
 
+Do not install `adapters/` into the local OpenClaw command directory. Read adapters from the repository as reference notes.
+
 ## Command Semantics
 
 ### `/obsiwiki ingest <url-or-source>`
@@ -75,9 +77,13 @@ Expected behavior:
 - flag source pages without formal links
 - flag duplicate or near-duplicate topics
 - flag missing `last_updated`, missing sources, or missing `Related Links`
-- flag attachment placement issues
+- flag raw-source attachment placement issues
+- flag wiki pages that should promote reusable assets from `raw/` into `assets/wiki/`
+- flag stale or missing value guidance and support pages such as `System/Schema/purpose.md`, `wiki/overview.md`, or `wiki/review.md` when expected by the active schema
 - flag graph health issues: clusters without maps, source clusters without concepts, concepts without sources, stale syntheses, overloaded maps, duplicate clusters, and bridge candidates
 - add or propose `wiki/review.md` items when graph health issues require interpretation
+- exclude `System/` from ordinary content lint
+- run only lightweight configuration checks for `System/`, such as required schema files and broken internal links within schema docs
 
 ### `/obsiwiki review`
 

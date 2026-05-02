@@ -15,8 +15,13 @@ Point Claude Code at these files:
 - `starter-vault/System/Schema/vault-schema.md`
 - `starter-vault/System/Schema/workflows.md`
 - `starter-vault/System/Schema/page-contracts.md`
+- `starter-vault/System/Schema/purpose.md`
+- `starter-vault/wiki/overview.md`
+- `starter-vault/wiki/review.md`
 
 Use the installed Obsiwiki schema as the default. If the target vault contains `System/Schema/`, prefer that vault-local schema over the installed starter files.
+
+Do not install `adapters/` into the local Claude Code instruction directory. Read adapters from the repository as reference notes.
 
 ## Update Behavior
 
@@ -42,7 +47,9 @@ Read these files before modifying the vault:
 - System/Schema/vault-schema.md
 - System/Schema/workflows.md
 - System/Schema/page-contracts.md
-- System/Agents/claude-code.md
+- System/Schema/purpose.md
+
+If this vault has System/Agents/claude-code.md, read it as optional vault-local adapter notes.
 
 Core rules:
 
@@ -70,13 +77,13 @@ Supported workflows:
 ## Recommended Prompts
 
 ```text
-Use Obsiwiki to ingest this source: https://example.com/article
-Use Obsiwiki to capture reusable conclusions from this conversation.
-Use Obsiwiki to answer this from the vault: ...
-Use Obsiwiki to lint this vault.
-Use Obsiwiki to review recent additions to this vault.
-Use Obsiwiki to generate this week's knowledge base report.
-Use Obsiwiki to set up scheduled maintenance for this vault.
+/obsiwiki ingest this source: https://example.com/article
+/obsiwiki capture reusable conclusions from this conversation.
+/obsiwiki answer this from the vault: ...
+/obsiwiki lint this vault.
+/obsiwiki review recent additions to this vault.
+/obsiwiki generate this week's knowledge base report.
+/obsiwiki set up scheduled maintenance for this vault.
 ```
 
 ## Operating Rules

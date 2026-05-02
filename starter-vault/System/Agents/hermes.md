@@ -2,29 +2,30 @@
 title: Hermes Adapter
 type: agent-adapter
 tags: []
-last_updated: 2026-04-28
+last_updated: 2026-05-03
 aliases: []
 ---
 
 # Hermes Adapter
 
-Point Hermes or another agent at:
+Inside this vault, point Hermes or another agent at:
 
-- `SKILL.md`
-- `references/schema.md`
-- `references/page-types.md`
-- `references/lint-checklist.md`
 - `System/Schema/`
+- `wiki/index.md`
+- `wiki/overview.md` when present
+- `wiki/review.md` when present
+
+If Hermes also has an installed Obsiwiki skill or repository access, use `SKILL.md`, `references/schema.md`, `references/page-types.md`, and `references/lint-checklist.md` as external defaults. The vault-local `System/Schema/` still takes precedence.
 
 Typical requests:
 
-- `Use Obsiwiki to ingest this source: https://...`
-- `Use Obsiwiki to capture reusable conclusions from this conversation.`
-- `Use Obsiwiki to answer this from the vault: ...`
-- `Use Obsiwiki to lint this vault.`
-- `Use Obsiwiki to review recent additions to this vault.`
-- `Use Obsiwiki to generate this week's knowledge base report.`
-- `Use Obsiwiki to set up scheduled maintenance for this vault.`
+- `/obsiwiki ingest this source: https://...`
+- `/obsiwiki capture reusable conclusions from this conversation.`
+- `/obsiwiki answer this from the vault: ...`
+- `/obsiwiki lint this vault.`
+- `/obsiwiki review recent additions to this vault.`
+- `/obsiwiki generate this week's knowledge base report.`
+- `/obsiwiki set up scheduled maintenance for this vault.`
 
 Recommended behavior:
 

@@ -2,7 +2,7 @@
 title: Claude Code Adapter
 type: agent-adapter
 tags: []
-last_updated: 2026-04-28
+last_updated: 2026-05-03
 aliases: []
 ---
 
@@ -17,17 +17,18 @@ Create a `CLAUDE.md` file at the vault root that points Claude Code to:
 - `System/Schema/vault-schema.md`
 - `System/Schema/workflows.md`
 - `System/Schema/page-contracts.md`
-- `System/Agents/claude-code.md`
+- `System/Schema/purpose.md`
+- `System/Agents/claude-code.md` when this optional local adapter note exists
 
 ## Typical Requests
 
-- `Use Obsiwiki to ingest this source: https://...`
-- `Use Obsiwiki to capture reusable conclusions from this conversation.`
-- `Use Obsiwiki to answer this from the vault: ...`
-- `Use Obsiwiki to lint this vault.`
-- `Use Obsiwiki to review recent additions to this vault.`
-- `Use Obsiwiki to generate this week's knowledge base report.`
-- `Use Obsiwiki to set up scheduled maintenance for this vault.`
+- `/obsiwiki ingest this source: https://...`
+- `/obsiwiki capture reusable conclusions from this conversation.`
+- `/obsiwiki answer this from the vault: ...`
+- `/obsiwiki lint this vault.`
+- `/obsiwiki review recent additions to this vault.`
+- `/obsiwiki generate this week's knowledge base report.`
+- `/obsiwiki set up scheduled maintenance for this vault.`
 
 ## Claude Code Rules
 

@@ -2,13 +2,13 @@
 title: Codex Adapter
 type: agent-adapter
 tags: []
-last_updated: 2026-04-28
+last_updated: 2026-05-03
 aliases: []
 ---
 
 # Codex Adapter
 
-Use the same canonical prompts as other agents. In Codex, `$obsiwiki` can also be used when you want to explicitly invoke the skill:
+In Codex, use `$obsiwiki` when you want to explicitly invoke the installed skill:
 
 ```text
 $obsiwiki
@@ -16,13 +16,13 @@ $obsiwiki
 
 Typical requests:
 
-- `Use Obsiwiki to ingest this source: https://...`
-- `Use Obsiwiki to capture reusable conclusions from this conversation.`
-- `Use Obsiwiki to answer this from the vault: ...`
-- `Use Obsiwiki to lint this vault.`
-- `Use Obsiwiki to review recent additions to this vault.`
-- `Use Obsiwiki to generate this week's knowledge base report.`
-- `Use Obsiwiki to set up scheduled maintenance for this vault.`
+- `$obsiwiki ingest this source: https://...`
+- `$obsiwiki capture reusable conclusions from this conversation.`
+- `$obsiwiki answer this from the vault: ...`
+- `$obsiwiki lint this vault.`
+- `$obsiwiki review recent additions to this vault.`
+- `$obsiwiki generate this week's knowledge base report.`
+- `$obsiwiki set up scheduled maintenance for this vault.`
 
 Codex rules:
 

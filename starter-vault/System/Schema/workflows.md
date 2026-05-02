@@ -122,7 +122,7 @@ Steps:
 Default maintenance prompt:
 
 ```text
-Use Obsiwiki to review recent additions to this vault and lint this vault. Keep the run read-only by default. Summarize recent additions, notable updates, open review items, overview drift, lint issues, graph health issues, and suggested next actions. Propose any durable writes for user confirmation.
+/obsiwiki review recent additions to this vault and lint this vault. Keep the run read-only by default. Summarize recent additions, notable updates, open review items, overview drift, lint issues, graph health issues, and suggested next actions. Propose any durable writes for user confirmation.
 ```
 
 ## Lint

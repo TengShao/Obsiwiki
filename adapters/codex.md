@@ -1,10 +1,12 @@
-# Hermes Adapter
+# Codex Adapter
 
-Use this adapter when Hermes or another non-Codex agent should maintain the vault with the same Obsiwiki rules.
+Use this adapter when Codex should maintain an Obsidian vault with Obsiwiki.
+
+Codex normally loads Obsiwiki through the installed skill named `obsiwiki`. Use `$obsiwiki` when you want to invoke the skill explicitly.
 
 ## Context To Load
 
-Point Hermes at these files:
+Codex should use:
 
 - `SKILL.md`
 - `references/schema.md`
@@ -19,7 +21,7 @@ Point Hermes at these files:
 
 Use the installed Obsiwiki schema as the default. If the target vault contains `System/Schema/`, prefer that vault-local schema over the installed starter files.
 
-Do not install `adapters/` into the local Hermes skill directory. Read adapters from the repository as reference notes.
+Do not install `adapters/` into the local Codex skill directory. Read adapters from the repository as reference notes.
 
 ## Update Behavior
 
@@ -33,8 +35,8 @@ When updating the installed Obsiwiki skill, refresh the skill files first. Then,
 
 ## Operating Rules
 
-- Treat the vault as an agent-maintained LLM Wiki, not a folder of isolated notes.
-- Use `System/Schema/` as the vault-local source of truth when present.
+- Treat the installed `SKILL.md` as the main Codex skill body.
+- Treat `System/Schema/` as the vault-local source of truth when present.
 - Use two-stage draft-first behavior for `ingest`: source analysis first, proposed wiki changes second.
 - Use suggest-and-confirm behavior for `capture`.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
@@ -43,41 +45,5 @@ When updating the installed Obsiwiki skill, refresh the skill files first. Then,
 - Use `wiki/overview.md` as the compressed knowledge base state.
 - Use `wiki/review.md` for uncertain value, duplicate, source, stale synthesis, or graph health decisions.
 - For scheduled maintenance, ask whether the user wants recurring review and lint, let them choose the cadence, default to Monday 09:00 in their locale, and keep the job read-only unless they confirm writes.
-- Use `wiki/maps/` as the main anti-orphan mechanism.
 - Do not save full chat transcripts by default.
 - Prefer updating existing pages over creating duplicates.
-
-## Recommended Prompts
-
-```text
-/obsiwiki ingest this source: https://example.com/article
-/obsiwiki capture reusable conclusions from this conversation.
-/obsiwiki answer this from the vault: ...
-/obsiwiki lint this vault.
-/obsiwiki review recent additions to this vault.
-/obsiwiki generate this week's knowledge base report.
-/obsiwiki set up scheduled maintenance for this vault.
-```
-
-## Prompt Template
-
-```text
-Use the Obsiwiki workflow.
-
-Read:
-- SKILL.md
-- references/schema.md
-- references/page-types.md
-- references/lint-checklist.md
-- System/Schema/ if present, otherwise the installed Obsiwiki schema
-
-Maintain this vault through these workflows:
-- ingest: analyze source first, then propose raw/source/page/map/index/log changes
-- capture: extract reusable conclusions, ask before writing, update target pages
-- query: answer from wiki/index.md, maps, concepts, entities, sources, syntheses
-- lint: find orphan pages, missing sources, duplicates, stale pages, asset issues, and graph health issues
-- review: summarize recent additions, weekly changes, topic clusters, open review items, overview drift, and next actions without writing
-- scheduled maintenance: guide creation of a recurring review/lint job; default to Monday 09:00 unless the user chooses another schedule
-
-Keep raw sources in raw/, binary assets in assets/, durable knowledge in wiki/, value judgment in `System/Schema/purpose.md`, review backlog in wiki/review.md, and workflow rules in the active Obsiwiki schema.
-```
