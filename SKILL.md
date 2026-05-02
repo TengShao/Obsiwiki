@@ -39,7 +39,9 @@ When updating an installed Obsiwiki skill, refresh the agent skill files first, 
 - Separate schema/workflow differences from value-guidance and support-page additions.
 - Treat `System/Schema/purpose.md` as vault-local value guidance; treat `wiki/overview.md` and `wiki/review.md` as support pages.
 - If the target vault is missing `System/Schema/purpose.md`, ask whether to initialize one from the starter template or create a vault-specific draft. Do not create it silently.
-- If the target vault is missing `wiki/overview.md` or `wiki/review.md`, ask whether to initialize those support pages before depending on them.
+- If the target vault is missing `wiki/overview.md` or `wiki/review.md`, scan `wiki/index.md`, `wiki/maps/`, `wiki/log.md`, and recent formal page updates, then ask whether to initialize those support pages before depending on them.
+- Initialize `wiki/overview.md` as a current-state summary based on the scan. Initialize `wiki/review.md` as a backlog, adding any duplicate-topic, missing-source, stale-synthesis, unclear-value, or graph-health issues found during the scan.
+- Do not modify other schema or wiki pages during support-page initialization unless the user explicitly confirms those extra writes.
 - If the latest default schema adds workflow behavior such as two-stage `ingest`, scheduled maintenance, or graph-health lint, report that the vault-local schema must opt into it before the behavior is active for that vault.
 - Ask the user before merging any schema, value-guidance, or support-page changes into the vault.
 - A skill update is not complete until the agent reports either "no vault-local migration needed" or a reviewable migration proposal.

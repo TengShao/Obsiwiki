@@ -103,6 +103,19 @@ Steps:
 
 Do not write to the vault by default. If the user wants to save a weekly report or durable summary, switch to `capture` or propose a `wiki/syntheses/` update and ask for confirmation before writing.
 
+## Support Page Initialization
+
+Use when the active schema references `wiki/overview.md` or `wiki/review.md`, but one or both support pages are missing.
+
+Steps:
+
+1. Scan `wiki/index.md`, relevant `wiki/maps/`, `wiki/log.md`, and recent formal page updates.
+2. Draft `wiki/overview.md` as the current compressed state of the knowledge base.
+3. Draft `wiki/review.md` as the review backlog.
+4. Add any duplicate-topic, missing-source, stale-synthesis, unclear-value, or graph-health issues found during the scan to the `wiki/review.md` draft.
+5. Ask the user to confirm before writing either support page.
+6. Do not modify other schema or wiki pages during support-page initialization unless the user explicitly confirms those extra writes.
+
 ## Scheduled Maintenance
 
 Use when the user asks for automation, recurring maintenance, scheduled review, scheduled lint, weekly review, or cron setup.
