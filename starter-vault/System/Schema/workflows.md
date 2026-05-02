@@ -21,7 +21,7 @@ Default mode: draft first, then confirm.
 Stage 1: source analysis. Do not write files in this stage.
 
 1. Read title, author, publication date, URL, and body where available.
-2. Consult `purpose.md` when present.
+2. Consult `System/Schema/purpose.md` when present.
 3. Identify the core thesis, reusable claims, important entities, concepts, and examples.
 4. Search for related `concepts`, `entities`, `syntheses`, maps, and review items.
 5. Identify possible duplicates, conflicts, missing sources, or synthesis candidates.
@@ -49,7 +49,7 @@ Steps:
 2. Present a structured draft:
    - core conclusion
    - suggested target page
-   - value assessment against `purpose.md` when present
+   - value assessment against `System/Schema/purpose.md` when present
    - possible conflicts with existing knowledge
    - whether a `synthesis` page is warranted
    - whether a `wiki/review.md` item is needed
@@ -142,7 +142,7 @@ Check for:
 - maps that only list raw/source pages without durable concepts or syntheses
 - raw pages with attachments that are not stored under `assets/raw/`
 - wiki pages that depend on raw-only assets that should be promoted to `assets/wiki/`
-- missing or stale `purpose.md`, `wiki/overview.md`, or `wiki/review.md` when those support files are expected by the active schema
+- missing or stale value guidance or support pages such as `System/Schema/purpose.md`, `wiki/overview.md`, or `wiki/review.md` when those files are expected by the active schema
 - graph health issues:
   - cluster without map: several related pages are not covered by a coherent map
   - source cluster without concept: multiple sources point to the same durable idea but no concept page exists

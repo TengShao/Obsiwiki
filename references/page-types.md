@@ -19,5 +19,5 @@ Routing hints:
 - one navigation hub -> `wiki/maps/`
 - one current-state summary -> `wiki/overview.md`
 - one uncertain issue or human decision -> `wiki/review.md`
-- one value judgment guide -> `purpose.md`
+- one value judgment guide -> `System/Schema/purpose.md`
 - one maintenance log -> `wiki/log.md`

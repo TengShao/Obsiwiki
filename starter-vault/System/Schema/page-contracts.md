@@ -24,12 +24,12 @@ aliases: []
   - major `query -> synthesis` updates
 - `review` and weekly reports are read-only by default and should not append log entries unless the user confirms a follow-up `capture` or `synthesis` write.
 
-## `purpose.md`
+## `System/Schema/purpose.md`
 
 - Vault-level value judgment guide for agents.
 - Lists the vault mission, active themes, value criteria, low-value content, and agent decision rule.
 - Agents should consult it before promoting material into `wiki/`.
-- `purpose.md` can be multi-topic. It should not force the vault into a single theme.
+- `System/Schema/purpose.md` can be multi-topic. It should not force the vault into a single theme.
 - When value is unclear, agents should suggest or create a review item instead of silently promoting the material.
 
 ## `wiki/overview.md`

@@ -35,7 +35,7 @@ Use when the user gives a URL, article, paper, transcript, meeting note, or raw 
 Expected behavior:
 
 - analyze the source first without writing files
-- consult `purpose.md` when present and state a value assessment
+- consult `System/Schema/purpose.md` when present and state a value assessment
 - propose `raw/`, `assets/raw/<source-slug>/`, `wiki/sources/<source-slug>.md`, concept/entity/synthesis, map, index, and log changes
 - use `wiki/review.md` when an issue needs human judgment
 - write after confirmation unless the user requested automatic execution
@@ -48,7 +48,7 @@ Expected behavior:
 
 - extract conclusions, decisions, definitions, tradeoffs, and workflows
 - avoid saving full chat transcripts by default
-- consult `purpose.md` when present and state why the conclusion is worth preserving
+- consult `System/Schema/purpose.md` when present and state why the conclusion is worth preserving
 - suggest the best target page
 - use `wiki/review.md` when a valuable conclusion still needs human judgment
 - write only after confirmation unless the user requested automatic execution
@@ -121,4 +121,14 @@ Expected behavior:
 - If the target vault contains `System/Schema/`, treat that vault-local schema as the source of truth.
 - Do not maintain private OpenClaw rules that conflict with the active Obsiwiki schema.
 - Prefer updating existing pages over creating duplicates.
-- Consult `purpose.md` before promoting material into durable wiki content when present.
+- Consult `System/Schema/purpose.md` before promoting material into durable wiki content when present.
+
+## Update Behavior
+
+When updating the installed Obsiwiki skill, refresh the skill files first. Then, if the target vault has `System/Schema/`, compare the latest default schema, value guidance, and support pages with the vault-local files.
+
+- Do not overwrite vault-local schema during a skill update.
+- Report schema/workflow differences separately from value-guidance additions such as `System/Schema/purpose.md` and support-page additions such as `wiki/overview.md` and `wiki/review.md`.
+- If `System/Schema/purpose.md` is missing, ask whether to initialize one from the starter template or draft one for this vault. Do not create it silently.
+- If `wiki/overview.md` or `wiki/review.md` is missing, ask whether to initialize those support pages before depending on them.
+- If new workflow behavior exists only in the installed defaults, such as two-stage `ingest`, scheduled maintenance, or graph-health lint, ask the user whether to merge it into the vault-local schema before using it as active vault behavior.

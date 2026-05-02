@@ -18,7 +18,7 @@ Read these references as needed:
 1. `raw/` stores original text sources.
 2. `assets/` stores binary files, screenshots, PDFs, and reusable visuals.
 3. `wiki/` stores durable knowledge pages.
-4. `purpose.md`, when present, tells agents how to judge what is worth preserving.
+4. `System/Schema/purpose.md`, when present, tells agents how to judge what is worth preserving.
 5. `System/Schema/`, when present in the target vault, is the vault-local source of truth for workflows and page contracts.
 6. `Work/Projects/Opinions/Journal/Archive/` store applied outputs and personal writing when the vault uses those folders.
 
@@ -29,6 +29,20 @@ Use the installed Obsiwiki `references/` and `starter-vault/System/Schema/` as t
 If the target vault contains `System/Schema/`, treat that vault-local schema as the source of truth. Use the installed schema only for comparison, update suggestions, and migrations. Do not silently overwrite vault-local schema customizations.
 
 Agent adapters translate the same schema for each agent. They must not fork directory semantics, page contracts, or workflow behavior.
+
+## Update And Migration Rules
+
+When updating an installed Obsiwiki skill, refresh the agent skill files first, then check whether the target vault needs an explicit migration proposal.
+
+- If the target vault has `System/Schema/`, compare it with the latest installed `starter-vault/System/Schema/`.
+- Do not overwrite vault-local schema files during a skill update.
+- Separate schema/workflow differences from value-guidance and support-page additions.
+- Treat `System/Schema/purpose.md` as vault-local value guidance; treat `wiki/overview.md` and `wiki/review.md` as support pages.
+- If the target vault is missing `System/Schema/purpose.md`, ask whether to initialize one from the starter template or create a vault-specific draft. Do not create it silently.
+- If the target vault is missing `wiki/overview.md` or `wiki/review.md`, ask whether to initialize those support pages before depending on them.
+- If the latest default schema adds workflow behavior such as two-stage `ingest`, scheduled maintenance, or graph-health lint, report that the vault-local schema must opt into it before the behavior is active for that vault.
+- Ask the user before merging any schema, value-guidance, or support-page changes into the vault.
+- A skill update is not complete until the agent reports either "no vault-local migration needed" or a reviewable migration proposal.
 
 ## Workflow Selection
 
@@ -46,7 +60,7 @@ Scheduled maintenance is orchestration around `review` and `lint`, not a separat
 
 - Use a two-stage flow: source analysis first, proposed wiki changes second.
 - During source analysis, do not write files. Identify the source thesis, reusable claims, entities, concepts, related pages, possible duplicates, conflicts, and synthesis candidates.
-- Consult `purpose.md` when present and include a short value assessment.
+- Consult `System/Schema/purpose.md` when present and include a short value assessment.
 - During proposed changes, name the `raw/`, `assets/raw/<source-slug>/`, `wiki/sources/`, concept/entity/synthesis, map, index, and log updates.
 - Prefer updating an existing `concept`, `entity`, or `synthesis` page over creating duplicates.
 - If an issue needs human judgment, propose or add a structured item in `wiki/review.md` instead of forcing a decision.
@@ -56,7 +70,7 @@ Scheduled maintenance is orchestration around `review` and `lint`, not a separat
 
 - Do not store full chat transcripts by default.
 - Extract only reusable conclusions, decisions, definitions, tradeoffs, or workflows.
-- Consult `purpose.md` when present and include a short value assessment.
+- Consult `System/Schema/purpose.md` when present and include a short value assessment.
 - Suggest the best target page.
 - Default to updating the target page directly after confirmation.
 - Only create a `synthesis` page when the outcome spans multiple pages or the target is still ambiguous.

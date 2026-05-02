@@ -40,10 +40,10 @@ Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/kar
 │   ├── page-types.md
 │   └── schema.md
 └── starter-vault/
-    ├── purpose.md
     ├── System/
     │   ├── Agents/
     │   └── Schema/
+    │       └── purpose.md
     ├── assets/
     ├── raw/
     └── wiki/
@@ -113,6 +113,8 @@ Inspect the latest repository and decide which installed Obsiwiki files need ref
 
 Find the current Obsiwiki skill installation and refresh it from the latest repository version. If any vault-local System/Schema/ files are involved, preserve local customizations.
 
+After refreshing the skill, compare the latest default schema, value guidance, and support pages with the target vault if it has System/Schema/. Do not overwrite the vault. Report schema/workflow changes separately from value-guidance additions such as System/Schema/purpose.md and support-page additions such as wiki/overview.md and wiki/review.md. If System/Schema/purpose.md is missing, ask whether to initialize one from the starter template or draft one for this vault. Ask me whether to merge any suggested vault-local migration.
+
 Report what changed and how to reload the agent.
 ```
 
@@ -125,7 +127,7 @@ Use `ingest` to turn a URL, article, PDF, screenshot pack, transcript, meeting n
 Expected behavior:
 
 1. Run source analysis first without writing files.
-2. Consult `purpose.md` when present and state a short value assessment.
+2. Consult `System/Schema/purpose.md` when present and state a short value assessment.
 3. Identify the source thesis, reusable claims, important entities, concepts, related pages, possible duplicates, conflicts, and synthesis candidates.
 4. Propose wiki changes second: `raw/`, `assets/raw/<source-slug>/`, `wiki/sources/`, concept/entity/synthesis updates, maps, index, and log.
 5. Prefer updating existing `wiki/concepts/`, `wiki/entities/`, or `wiki/syntheses/` over creating duplicates.
@@ -146,7 +148,7 @@ Expected behavior:
 
 1. Extract only reusable knowledge.
 2. Avoid saving the full chat transcript by default.
-3. Consult `purpose.md` when present and state why the conclusion is worth preserving.
+3. Consult `System/Schema/purpose.md` when present and state why the conclusion is worth preserving.
 4. Suggest the best target page.
 5. Update the target page after confirmation.
 6. Create a `wiki/syntheses/` page only when the answer spans multiple topics or sources.
@@ -187,7 +189,7 @@ Expected behavior:
 - flag missing `last_updated`, missing sources, or missing `Related Links`
 - flag raw-source attachment placement problems
 - flag wiki pages that should promote assets that still live only under `raw/` into `assets/wiki/`
-- flag stale or missing support pages such as `purpose.md`, `wiki/overview.md`, or `wiki/review.md` when expected by the active schema
+- flag stale or missing value guidance or support pages such as `System/Schema/purpose.md`, `wiki/overview.md`, or `wiki/review.md` when expected by the active schema
 - flag graph health issues: clusters without maps, source clusters without concepts, concepts without sources, stale syntheses, overloaded maps, duplicate clusters, and bridge candidates
 - add or propose `wiki/review.md` items when graph health issues require interpretation
 - exclude `System/` from ordinary content lint; do not require schema or agent files to be covered by maps, sources, `last_updated`, or `Related Links`
@@ -255,11 +257,9 @@ Example:
 
 ## Vault Folder Structure
 
-The starter vault uses five main layers:
+The starter vault uses four main layers plus vault-local guidance under `System/Schema/`:
 
 ```text
-purpose.md              value judgment guidance for agents
-
 raw/
 ├── articles/        web articles, excerpts, tutorials, and practical guides
 ├── papers/          papers, PDFs, reports, and research material
@@ -284,7 +284,8 @@ wiki/
 └── review.md        backlog for human judgment and later agent follow-up
 
 System/
-├── Schema/          optional vault-local authority for rules and workflows
+├── Schema/          optional vault-local authority for rules, workflows, and value guidance
+│   └── purpose.md   value judgment guidance for agents
 └── Agents/          adapter notes for Codex, Claude Code, Hermes, OpenClaw, or other agents
 ```
 
@@ -292,7 +293,7 @@ Folder intent:
 
 - `raw/` keeps source material close to its original form.
 - `assets/` keeps attachments and media files out of note folders.
-- `purpose.md` tells agents how to judge what is worth preserving.
+- `System/Schema/purpose.md` tells agents how to judge what is worth preserving.
 - `wiki/` is the durable knowledge layer agents should query and update.
 - `wiki/maps/` is the main anti-orphan mechanism.
 - `wiki/overview.md` is a compressed state view for agents and humans.
@@ -341,10 +342,10 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 │   ├── page-types.md
 │   └── schema.md
 └── starter-vault/
-    ├── purpose.md
     ├── System/
     │   ├── Agents/
     │   └── Schema/
+    │       └── purpose.md
     ├── assets/
     ├── raw/
     └── wiki/
@@ -414,6 +415,8 @@ Inspect the latest repository and decide which installed Obsiwiki files need ref
 
 Find the current Obsiwiki skill installation and refresh it from the latest repository version. If any vault-local System/Schema/ files are involved, preserve local customizations.
 
+After refreshing the skill, compare the latest default schema, value guidance, and support pages with the target vault if it has System/Schema/. Do not overwrite the vault. Report schema/workflow changes separately from value-guidance additions such as System/Schema/purpose.md and support-page additions such as wiki/overview.md and wiki/review.md. If System/Schema/purpose.md is missing, ask whether to initialize one from the starter template or draft one for this vault. Ask me whether to merge any suggested vault-local migration.
+
 Report what changed and how to reload the agent.
 ```
 
@@ -426,7 +429,7 @@ Report what changed and how to reload the agent.
 预期行为：
 
 1. 先做 source analysis，不写文件。
-2. 如果存在 `purpose.md`，先读取并给出简短 value assessment。
+2. 如果存在 `System/Schema/purpose.md`，先读取并给出简短 value assessment。
 3. 识别来源的核心 thesis、可复用 claim、重要实体、概念、相关页面、可能重复、冲突和 synthesis 候选。
 4. 再提出 wiki changes：`raw/`、`assets/raw/<source-slug>/`、`wiki/sources/`、concept/entity/synthesis 更新、maps、index 和 log。
 5. 优先更新已有的 `wiki/concepts/`、`wiki/entities/` 或 `wiki/syntheses/`，而不是创建重复页面。
@@ -447,7 +450,7 @@ Report what changed and how to reload the agent.
 
 1. 只提取可复用知识。
 2. 默认不保存完整聊天记录。
-3. 如果存在 `purpose.md`，说明这个结论为什么值得沉淀。
+3. 如果存在 `System/Schema/purpose.md`，说明这个结论为什么值得沉淀。
 4. 建议最合适的目标页面。
 5. 确认后更新目标页面。
 6. 仅当答案跨多个主题或来源时，才创建 `wiki/syntheses/` 页面。
@@ -488,7 +491,7 @@ Report what changed and how to reload the agent.
 - 标记缺失 `last_updated`、缺失 sources 或缺失 `Related Links`
 - 标记原始来源附件的放置问题
 - 标记只保存在 raw 层、但应提升到 `assets/wiki/` 的附件
-- 当当前 schema 需要时，标记缺失或过期的支持页面，例如 `purpose.md`、`wiki/overview.md` 或 `wiki/review.md`
+- 当当前 schema 需要时，标记缺失或过期的价值判断指南或支持页面，例如 `System/Schema/purpose.md`、`wiki/overview.md` 或 `wiki/review.md`
 - 标记知识图谱健康问题：没有 map 覆盖的页面聚类、多个 source 指向同一主题但没有 concept、没有来源支撑的 concept、过期 synthesis、只堆链接的 map、疑似重复页面聚类、两个 map 之间可能需要 synthesis 或交叉链接
 - 当 graph health 问题需要解释判断时，新增或建议 `wiki/review.md` item，而不是把它当成确定性失败
 - 将 `System/` 排除在普通内容 lint 之外；不要要求 schema 或 agent 文件被 maps、sources、`last_updated` 或 `Related Links` 覆盖
@@ -556,11 +559,9 @@ Review recent additions to this vault and lint this vault. Keep the run read-onl
 
 ## 知识库目录结构
 
-starter 知识库使用五个主要层次：
+starter 知识库使用四个主要层次，并在 `System/Schema/` 下保存知识库本地价值判断指南：
 
 ```text
-purpose.md              面向 Agent 的价值判断指南
-
 raw/
 ├── articles/        网页文章、摘录、教程和实践指南
 ├── papers/          论文、PDF、报告和研究材料
@@ -585,7 +586,8 @@ wiki/
 └── review.md        需要人类判断或后续 Agent 跟进的待处理事项
 
 System/
-├── Schema/          可选的知识库本地规则和工作流权威来源
+├── Schema/          可选的知识库本地规则、工作流和价值判断指南
+│   └── purpose.md   面向 Agent 的价值判断指南
 └── Agents/          Codex、Claude Code、Hermes、OpenClaw 或其它 Agent 的适配说明
 ```
 
@@ -593,7 +595,7 @@ System/
 
 - `raw/` 尽量保留来源材料的原始形态。
 - `assets/` 避免图片、PDF、截图等附件散落在笔记目录里。
-- `purpose.md` 告诉 Agent 如何判断哪些内容值得沉淀。
+- `System/Schema/purpose.md` 告诉 Agent 如何判断哪些内容值得沉淀。
 - `wiki/` 是 Agent 应该查询和更新的稳定知识层。
 - `wiki/maps/` 是主要的防孤立页面机制。
 - `wiki/overview.md` 是给 Agent 和人看的知识库状态压缩视图。

@@ -12,7 +12,7 @@ Check these first:
 - Is a `synthesis` page linked from a map and multiple formal pages?
 - Are raw attachments stored in `assets/raw/`?
 - Should any raw-only asset be promoted to `assets/wiki/`?
-- Does `purpose.md` exist when the active schema expects value judgment guidance?
+- Does `System/Schema/purpose.md` exist when the active schema expects value judgment guidance?
 - Is `wiki/overview.md` stale relative to recent review or major knowledge base changes?
 - Are unresolved duplicate, missing-source, stale-synthesis, or unclear-value questions captured in `wiki/review.md`?
 
