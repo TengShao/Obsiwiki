@@ -1,6 +1,6 @@
 ---
 name: obsiwiki
-description: Maintain an Obsidian vault as an agent-agnostic LLM Wiki. Use Obsiwiki when Codex or another agent needs to ingest external links or raw notes into raw/wiki, capture valuable discussion outcomes into formal notes, answer questions from wiki pages, review recent additions or weekly knowledge base changes, maintain index and map pages, manage assets for raw or wiki content, or lint the vault for orphans, duplicate topics, missing links, missing sources, and stale pages.
+description: Maintain an Obsidian vault as an agent-agnostic LLM Wiki. Use Obsiwiki when Codex or another agent needs to ingest external links or raw notes into raw/wiki, capture valuable discussion outcomes into formal notes, answer questions from wiki pages, review recent additions or weekly knowledge base changes, guide scheduled review/lint maintenance, maintain index and map pages, manage assets for raw or wiki content, or lint the vault for orphans, duplicate topics, missing links, missing sources, and stale pages.
 ---
 
 # Obsiwiki
@@ -40,6 +40,8 @@ Choose one of five workflows:
 - `lint`: when the user wants a vault health check or structural cleanup
 - `review`: when the user wants a read-only review of recent additions, recent updates, or this week's knowledge base changes
 
+Scheduled maintenance is orchestration around `review` and `lint`, not a separate content workflow.
+
 ## Ingest Rules
 
 - Use a two-stage flow: source analysis first, proposed wiki changes second.
@@ -76,6 +78,17 @@ Choose one of five workflows:
 - Propose `wiki/overview.md` updates when the review changes the compressed picture of the knowledge base.
 - Propose or add `wiki/review.md` items for unresolved organization, source, duplicate, stale synthesis, or graph health questions.
 - Keep `review` read-only by default. If the user wants to save a weekly report or durable summary, switch to `capture` or propose a `wiki/syntheses/` update and ask for confirmation before writing.
+
+## Scheduled Maintenance Rules
+
+- When the user asks for automation, recurring maintenance, scheduled review, scheduled lint, weekly review, or cron setup, guide them to create a scheduled maintenance job for `review` and `lint`.
+- After a manual `review` or `lint`, ask whether the user wants to create a recurring scheduled maintenance task when that would be useful and no current schedule is known.
+- Let the user choose the cadence and time. Default to every Monday at 09:00 in the user's locale.
+- Ask whether `review` and `lint` should run as one combined job or as separate jobs.
+- Confirm the target vault path, output destination, and whether the scheduled task may write follow-up changes.
+- Keep scheduled review and scheduled lint read-only by default. The job should propose `capture`, `synthesis`, `overview`, or `wiki/review.md` updates for user confirmation instead of silently writing durable content.
+- Use the host agent's native scheduler when available; otherwise guide the user through cron or the environment's preferred automation mechanism.
+- Show the final schedule and maintenance prompt before creating or modifying the scheduled task.
 
 ## Lint Rules
 

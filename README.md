@@ -75,6 +75,8 @@ Common workflow verbs:
 - `lint`: check for orphan pages, missing sources, duplicates, stale pages, asset placement issues, and graph health issues.
 - `review`: summarize recent additions, notable updates, topic clusters, open review items, overview drift, and next actions without writing to the vault by default.
 
+Scheduled maintenance is orchestration around `review` and `lint`: agents should ask whether to create a recurring job, let the user choose the cadence, and default to Monday 09:00 when the user has no preference.
+
 Canonical workflow prompts:
 
 ```text
@@ -84,6 +86,7 @@ Use Obsiwiki to answer this from the vault: <question>
 Use Obsiwiki to lint this vault.
 Use Obsiwiki to review recent additions to this vault.
 Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## Install For Codex
@@ -107,6 +110,7 @@ Use Obsiwiki to answer this from the vault: What is the relationship between A2A
 Use Obsiwiki to lint this vault.
 Use Obsiwiki to review recent additions to this vault.
 Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## Install For Claude Code
@@ -145,6 +149,7 @@ Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
 Use Obsiwiki to review recent additions to this vault.
 Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## Install For Hermes
@@ -174,6 +179,7 @@ Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
 Use Obsiwiki to review recent additions to this vault.
 Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## Install For OpenClaw
@@ -205,6 +211,7 @@ Recommended slash-command shape:
 /obsiwiki lint
 /obsiwiki review [range]
 /obsiwiki weekly
+/obsiwiki schedule
 /obsiwiki help
 ```
 
@@ -394,10 +401,30 @@ Use Obsiwiki to review recent additions since 2026-04-01.
 Use Obsiwiki to generate this week's knowledge base report.
 ```
 
-Weekly reports are prompt-triggered, not a built-in scheduler. If you want an automatic weekly report, ask the agent to help set up cron or another system automation that regularly sends:
+### Scheduled Maintenance
+
+Use when you want the agent to help create a cron task or another recurring automation for periodic `review` and `lint`.
+
+Expected behavior:
+
+1. Ask whether the user wants to create scheduled maintenance for recent-update review and periodic lint.
+2. Let the user choose the cadence and time. Default to every Monday at 09:00 in the user's locale.
+3. Confirm whether review and lint should run as one combined job or separate jobs.
+4. Confirm the target vault path, output destination, and whether the automation is allowed to write follow-up changes.
+5. Keep scheduled review and scheduled lint read-only by default. If the job finds durable updates, it should propose `capture`, `synthesis`, `overview`, or `review.md` changes rather than silently writing them.
+6. Use the host agent's native scheduler when available; otherwise guide the user through cron or the environment's preferred automation mechanism.
+7. Show the final schedule and maintenance prompt before creating or modifying the scheduled task.
+
+Default maintenance prompt:
 
 ```text
-Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to review recent additions to this vault and lint this vault. Keep the run read-only by default. Summarize recent additions, notable updates, open review items, overview drift, lint issues, graph health issues, and suggested next actions. Propose any durable writes for user confirmation.
+```
+
+Example:
+
+```text
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## Page Types
@@ -451,6 +478,7 @@ Use Obsiwiki to answer this from the vault: <question>
 Use Obsiwiki to lint this vault.
 Use Obsiwiki to review recent additions to this vault.
 Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## Update Skill
@@ -554,6 +582,8 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 - `lint`：检查孤立页面、缺失来源、重复主题、过期页面、附件放置问题和知识图谱健康问题。
 - `review`：默认只读总结近期新增内容、显著更新、主题聚类、待处理 review item、overview 漂移和后续行动建议。
 
+Scheduled maintenance 是围绕 `review` 和 `lint` 的调度引导：Agent 应询问是否创建周期性任务，让用户选择周期，并在用户没有偏好时默认使用每周一 09:00。
+
 常用提示：
 
 ```text
@@ -563,6 +593,7 @@ Use Obsiwiki to answer this from the vault: <question>
 Use Obsiwiki to lint this vault.
 Use Obsiwiki to review recent additions to this vault.
 Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## 为 Codex 安装
@@ -586,6 +617,7 @@ Use Obsiwiki to answer this from the vault: What is the relationship between A2A
 Use Obsiwiki to lint this vault.
 Use Obsiwiki to review recent additions to this vault.
 Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## 为 Claude Code 安装
@@ -624,6 +656,7 @@ Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
 Use Obsiwiki to review recent additions to this vault.
 Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## 为 Hermes 安装
@@ -653,6 +686,7 @@ Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
 Use Obsiwiki to review recent additions to this vault.
 Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## 为 OpenClaw 安装
@@ -684,6 +718,7 @@ adapters/openclaw.md
 /obsiwiki lint
 /obsiwiki review [range]
 /obsiwiki weekly
+/obsiwiki schedule
 /obsiwiki help
 ```
 
@@ -873,10 +908,30 @@ Use Obsiwiki to review recent additions since 2026-04-01.
 Use Obsiwiki to generate this week's knowledge base report.
 ```
 
-周报由提示词触发，不是内置调度器。如果你想自动生成周报，可以让 Agent 帮你建立 cron 或其它系统自动化，定期发送：
+### Scheduled Maintenance
+
+当你希望 Agent 帮你创建 cron 任务或其它周期性自动化，用来定期执行 `review` 和 `lint` 时使用。
+
+预期行为：
+
+1. 询问用户是否需要为近期更新 review 和定期 lint 创建 scheduled maintenance。
+2. 让用户选择周期和时间。默认使用用户本地时区的每周一 09:00。
+3. 确认 review 和 lint 是作为一个组合任务运行，还是拆成两个任务运行。
+4. 确认目标知识库路径、输出位置，以及该自动化是否允许写入后续修改。
+5. 定期 review 和定期 lint 默认只读。如果任务发现值得长期保存的更新，应建议 `capture`、`synthesis`、`overview` 或 `review.md` 修改，而不是静默写入。
+6. 优先使用当前 Agent 或宿主环境的原生调度能力；否则引导用户使用 cron 或该环境推荐的自动化机制。
+7. 在创建或修改定时任务前，展示最终 schedule 和 maintenance prompt。
+
+默认 maintenance prompt：
 
 ```text
-Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to review recent additions to this vault and lint this vault. Keep the run read-only by default. Summarize recent additions, notable updates, open review items, overview drift, lint issues, graph health issues, and suggested next actions. Propose any durable writes for user confirmation.
+```
+
+示例：
+
+```text
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## 页面类型

@@ -22,6 +22,7 @@ Suggested subcommands:
 /obsiwiki review
 /obsiwiki review <range>
 /obsiwiki weekly
+/obsiwiki schedule
 /obsiwiki help
 ```
 
@@ -99,6 +100,19 @@ Same as `/obsiwiki review`, but use the provided time range.
 ### `/obsiwiki weekly`
 
 Generate this week's knowledge base report as a `review` with the `this week` range. Do not save the report unless the user asks to switch to `capture` or confirms a `wiki/syntheses/` update.
+
+### `/obsiwiki schedule`
+
+Guide the user through creating a cron task or recurring automation for recent-update review and periodic lint.
+
+Expected behavior:
+
+- ask whether the user wants recurring review and lint
+- let the user choose the cadence and time; default to Monday 09:00 in the user's locale
+- ask whether review and lint should run as one combined job or separate jobs
+- confirm the target vault path, output destination, and whether the scheduled job may write changes
+- keep the scheduled job read-only by default
+- show the final schedule and maintenance prompt before creating or modifying the task
 
 ## Rules
 

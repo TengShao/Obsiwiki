@@ -10,6 +10,8 @@ aliases: []
 
 This vault supports five primary workflows: `ingest`, `capture`, `query`, `lint`, and `review`.
 
+Scheduled maintenance is orchestration around `review` and `lint`, not a separate content workflow.
+
 ## Ingest
 
 Use when the user provides a URL, article, PDF, screenshot pack, transcript, meeting note, or raw note.
@@ -100,6 +102,28 @@ Steps:
 8. When uncertain issues need follow-up, propose structured items for `wiki/review.md`.
 
 Do not write to the vault by default. If the user wants to save a weekly report or durable summary, switch to `capture` or propose a `wiki/syntheses/` update and ask for confirmation before writing.
+
+## Scheduled Maintenance
+
+Use when the user asks for automation, recurring maintenance, scheduled review, scheduled lint, weekly review, or cron setup.
+
+Default schedule: every Monday at 09:00 in the user's locale.
+
+Steps:
+
+1. Ask whether the user wants to create scheduled maintenance for recent-update review and periodic lint.
+2. Let the user choose the cadence and time. Offer the default schedule when the user has no preference.
+3. Ask whether `review` and `lint` should run as one combined job or as separate jobs.
+4. Confirm the target vault path and output destination.
+5. Confirm whether the scheduled task may write follow-up changes. Default to read-only.
+6. Use the host agent's native scheduler when available; otherwise guide the user through cron or the environment's preferred automation mechanism.
+7. Show the final schedule and maintenance prompt before creating or modifying the scheduled task.
+
+Default maintenance prompt:
+
+```text
+Use Obsiwiki to review recent additions to this vault and lint this vault. Keep the run read-only by default. Summarize recent additions, notable updates, open review items, overview drift, lint issues, graph health issues, and suggested next actions. Propose any durable writes for user confirmation.
+```
 
 ## Lint
 

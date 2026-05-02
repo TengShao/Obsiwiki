@@ -54,6 +54,7 @@ Supported workflows:
 - query: answer from wiki/index.md, maps, concepts, entities, sources, syntheses
 - lint: find orphan pages, missing sources, duplicates, stale pages, asset issues, and graph health issues
 - review: summarize recent additions, weekly changes, topic clusters, open review items, overview drift, and next actions without writing
+- scheduled maintenance: guide creation of a recurring review/lint job; default to Monday 09:00 unless the user chooses another schedule
 ```
 
 ## Recommended Prompts
@@ -65,6 +66,7 @@ Use Obsiwiki to answer this from the vault: ...
 Use Obsiwiki to lint this vault.
 Use Obsiwiki to review recent additions to this vault.
 Use Obsiwiki to generate this week's knowledge base report.
+Use Obsiwiki to set up scheduled maintenance for this vault.
 ```
 
 ## Operating Rules
@@ -75,6 +77,7 @@ Use Obsiwiki to generate this week's knowledge base report.
 - Keep `review` and weekly reports read-only by default; use the last 7 days unless the user specifies a range, and use `this week` for weekly reports.
 - Consult `purpose.md` before promoting material into durable wiki content when present.
 - Use `wiki/review.md` for uncertain value, duplicate, source, stale synthesis, or graph health decisions.
+- For scheduled maintenance, ask whether the user wants recurring review and lint, let them choose the cadence, default to Monday 09:00 in their locale, and keep the job read-only unless they confirm writes.
 - Use `wiki/maps/` as the main anti-orphan mechanism.
 - Update `wiki/log.md` for meaningful ingest, capture, lint, and synthesis changes.
 - Keep `System/Schema/` as the vault-local source of truth when present.

@@ -24,6 +24,7 @@ Typical requests:
 - `Use Obsiwiki to lint this vault.`
 - `Use Obsiwiki to review recent additions to this vault.`
 - `Use Obsiwiki to generate this week's knowledge base report.`
+- `Use Obsiwiki to set up scheduled maintenance for this vault.`
 
 Recommended behavior:
 
@@ -33,6 +34,7 @@ Recommended behavior:
 - Consult `purpose.md` before promoting material into durable wiki content when present.
 - Use `wiki/overview.md` as the compressed knowledge base state.
 - Use `wiki/review.md` for uncertain value, duplicate, source, stale synthesis, or graph health decisions.
+- For scheduled maintenance, ask whether the user wants recurring review and lint, let them choose the cadence, default to Monday 09:00 in their locale, and keep the job read-only unless they confirm writes.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
 - Use `wiki/maps/` as the main anti-orphan mechanism.
 - Follow the installed Obsiwiki schema by default.

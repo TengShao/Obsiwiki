@@ -23,6 +23,7 @@ Suggested subcommands:
 - `/obsiwiki review`
 - `/obsiwiki review <range>`
 - `/obsiwiki weekly`
+- `/obsiwiki schedule`
 - `/obsiwiki help`
 
 Rules:
@@ -33,6 +34,7 @@ Rules:
 - Consult `purpose.md` before promoting material into durable wiki content when present.
 - Use `wiki/overview.md` as the compressed knowledge base state.
 - Use `wiki/review.md` for uncertain value, duplicate, source, stale synthesis, or graph health decisions.
+- For `/obsiwiki schedule`, ask whether the user wants recurring review and lint, let them choose the cadence, default to Monday 09:00 in their locale, and keep the job read-only unless they confirm writes.
 - Directory semantics and page contracts come from the installed Obsiwiki schema by default.
 - If this vault contains `System/Schema/`, treat it as the vault-local source of truth.
 - Do not maintain private OpenClaw rules that conflict with the active Obsiwiki schema.
