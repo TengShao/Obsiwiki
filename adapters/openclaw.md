@@ -33,12 +33,11 @@ Use when the user gives a URL, article, paper, transcript, meeting note, or raw 
 
 Expected behavior:
 
-- preserve source material in `raw/`
-- store attachments in `assets/raw/<source-slug>/`
-- create or update `wiki/sources/<source-slug>.md`
-- update related `concept`, `entity`, or `synthesis` pages where useful
-- attach new or updated pages to at least one `wiki/maps/` page
-- update `wiki/index.md` and `wiki/log.md`
+- analyze the source first without writing files
+- consult `purpose.md` when present and state a value assessment
+- propose `raw/`, `assets/raw/<source-slug>/`, `wiki/sources/<source-slug>.md`, concept/entity/synthesis, map, index, and log changes
+- use `wiki/review.md` when an issue needs human judgment
+- write after confirmation unless the user requested automatic execution
 
 ### `/obsiwiki capture`
 
@@ -48,7 +47,9 @@ Expected behavior:
 
 - extract conclusions, decisions, definitions, tradeoffs, and workflows
 - avoid saving full chat transcripts by default
+- consult `purpose.md` when present and state why the conclusion is worth preserving
 - suggest the best target page
+- use `wiki/review.md` when a valuable conclusion still needs human judgment
 - write only after confirmation unless the user requested automatic execution
 
 ### `/obsiwiki query <question>`
@@ -74,6 +75,8 @@ Expected behavior:
 - flag duplicate or near-duplicate topics
 - flag missing `last_updated`, missing sources, or missing `Related Links`
 - flag attachment placement issues
+- flag graph health issues: clusters without maps, source clusters without concepts, concepts without sources, stale syntheses, overloaded maps, duplicate clusters, and bridge candidates
+- add or propose `wiki/review.md` items when graph health issues require interpretation
 
 ### `/obsiwiki review`
 
@@ -84,7 +87,9 @@ Expected behavior:
 - default to the last 7 days when no range is provided
 - support ranges such as `yesterday`, `this week`, `this month`, `last 14 days`, `since 2026-04-01`, and `2026-04-01 to 2026-04-15`
 - read `wiki/log.md` first, page frontmatter `last_updated` second, and file modification time only as a fallback
-- summarize the time range, new sources and pages, notable updates, topic clusters, open organization questions, and suggested next `ingest`, `capture`, or `lint` actions
+- summarize the time range, new sources and pages, notable updates, topic clusters, open organization questions, open review items, overview drift, and suggested next `ingest`, `capture`, or `lint` actions
+- propose `wiki/overview.md` updates when the review changes the compressed picture of the knowledge base
+- propose `wiki/review.md` items for unresolved duplicate, source, stale synthesis, unclear value, or graph health questions
 - do not write to the vault by default
 
 ### `/obsiwiki review <range>`
@@ -102,3 +107,4 @@ Generate this week's knowledge base report as a `review` with the `this week` ra
 - If the target vault contains `System/Schema/`, treat that vault-local schema as the source of truth.
 - Do not maintain private OpenClaw rules that conflict with the active Obsiwiki schema.
 - Prefer updating existing pages over creating duplicates.
+- Consult `purpose.md` before promoting material into durable wiki content when present.

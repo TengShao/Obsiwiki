@@ -9,10 +9,11 @@ It gives agents a shared operating model for:
 - ingesting links, articles, papers, transcripts, meeting notes, and unprocessed notes
 - preserving source material in `raw/`
 - compiling durable knowledge pages in `wiki/`
+- guiding agent value judgment with `purpose.md`
 - capturing reusable conclusions from conversations
 - answering questions from existing wiki pages
 - reviewing recent additions and weekly knowledge base changes
-- linting the vault for orphan pages, missing sources, duplicate topics, stale pages, and asset placement issues
+- linting the vault for orphan pages, missing sources, duplicate topics, stale pages, asset placement issues, and graph health issues
 
 ## Contents
 
@@ -48,6 +49,7 @@ Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/kar
 │   ├── page-types.md
 │   └── schema.md
 └── starter-vault/
+    ├── purpose.md
     ├── System/
     │   ├── Agents/
     │   └── Schema/
@@ -70,8 +72,8 @@ Common workflow verbs:
 - `ingest`: save a source into `raw/`, create a source summary in `wiki/sources/`, and update maps/index/log.
 - `capture`: extract reusable conclusions from a conversation and update the best target page.
 - `query`: answer from `wiki/index.md`, maps, and formal wiki pages.
-- `lint`: check for orphan pages, missing sources, duplicates, stale pages, and asset placement issues.
-- `review`: summarize recent additions, notable updates, topic clusters, and next actions without writing to the vault.
+- `lint`: check for orphan pages, missing sources, duplicates, stale pages, asset placement issues, and graph health issues.
+- `review`: summarize recent additions, notable updates, topic clusters, open review items, overview drift, and next actions without writing to the vault by default.
 
 Canonical workflow prompts:
 
@@ -221,6 +223,7 @@ The starter vault creates this knowledge architecture:
 ```text
 raw/        original source material
 assets/     attachments, screenshots, PDFs, reusable visuals
+purpose.md  value judgment guidance for agents
 wiki/       durable knowledge pages for agent query and synthesis
 System/     schema, workflow, page contracts, and agent adapters
 ```
@@ -229,9 +232,11 @@ If your vault already has notes, do not bulk move them first. Let an agent use t
 
 ## Vault Folder Structure
 
-The starter vault uses four main layers:
+The starter vault uses five main layers:
 
 ```text
+purpose.md              value judgment guidance for agents
+
 raw/
 ├── articles/        web articles, excerpts, tutorials, and practical guides
 ├── papers/          papers, PDFs, reports, and research material
@@ -251,7 +256,9 @@ wiki/
 ├── syntheses/       integrated analysis across sources or conversations
 ├── maps/            topic maps / MOCs that keep pages connected
 ├── index.md         top-level navigation entry
-└── log.md           append-only maintenance log
+├── log.md           append-only maintenance log
+├── overview.md      compressed state of the current knowledge base
+└── review.md        backlog for human judgment and later agent follow-up
 
 System/
 ├── Schema/          optional vault-local authority for rules and workflows
@@ -262,8 +269,11 @@ Folder intent:
 
 - `raw/` keeps source material close to its original form.
 - `assets/` keeps attachments and media files out of note folders.
+- `purpose.md` tells agents how to judge what is worth preserving.
 - `wiki/` is the durable knowledge layer agents should query and update.
 - `wiki/maps/` is the main anti-orphan mechanism.
+- `wiki/overview.md` is a compressed state view for agents and humans.
+- `wiki/review.md` records uncertain issues that need human judgment or later follow-up.
 - `System/Schema/`, when present, is the vault-local authority; agent-specific files should follow it instead of defining separate rules.
 
 ## Schema Precedence
@@ -282,12 +292,13 @@ Use when you give the agent a URL, article, PDF, screenshot pack, transcript, me
 
 Expected behavior:
 
-1. Save or summarize the source material under `raw/`.
-2. Save attachments under `assets/raw/<source-slug>/`.
-3. Create or update a one-to-one source summary under `wiki/sources/`.
-4. Update existing `wiki/concepts/`, `wiki/entities/`, or `wiki/syntheses/` when useful.
-5. Attach the new or updated knowledge to at least one `wiki/maps/` page.
-6. Update `wiki/index.md` and append to `wiki/log.md` after confirmed changes.
+1. Run source analysis first without writing files.
+2. Consult `purpose.md` when present and state a short value assessment.
+3. Identify the source thesis, reusable claims, important entities, concepts, related pages, possible duplicates, conflicts, and synthesis candidates.
+4. Propose wiki changes second: `raw/`, `assets/raw/<source-slug>/`, `wiki/sources/`, concept/entity/synthesis updates, maps, index, and log.
+5. Prefer updating existing `wiki/concepts/`, `wiki/entities/`, or `wiki/syntheses/` over creating duplicates.
+6. Use `wiki/review.md` when an issue needs human judgment instead of forced automatic cleanup.
+7. Write changes after confirmation unless you asked for automatic execution.
 
 Example:
 
@@ -303,9 +314,11 @@ Expected behavior:
 
 1. Extract only reusable knowledge.
 2. Avoid saving the full chat transcript by default.
-3. Suggest the best target page.
-4. Update the target page after confirmation.
-5. Create a `wiki/syntheses/` page only when the answer spans multiple topics or sources.
+3. Consult `purpose.md` when present and state why the conclusion is worth preserving.
+4. Suggest the best target page.
+5. Update the target page after confirmation.
+6. Create a `wiki/syntheses/` page only when the answer spans multiple topics or sources.
+7. Use `wiki/review.md` when a valuable conclusion still needs human judgment.
 
 Example:
 
@@ -344,6 +357,9 @@ Expected behavior:
 - flag missing `last_updated`, missing sources, or missing `Related Links`
 - flag raw-source attachment placement problems
 - flag wiki pages that should promote assets that still live only under `raw/` into `assets/wiki/`
+- flag stale or missing support pages such as `purpose.md`, `wiki/overview.md`, or `wiki/review.md` when expected by the active schema
+- flag graph health issues: clusters without maps, source clusters without concepts, concepts without sources, stale syntheses, overloaded maps, duplicate clusters, and bridge candidates
+- add or propose `wiki/review.md` items when graph health issues require interpretation
 
 Example:
 
@@ -361,9 +377,11 @@ Expected behavior:
 
 1. Resolve ranges such as `yesterday`, `this week`, `this month`, `last 14 days`, `since 2026-04-01`, or `2026-04-01 to 2026-04-15`.
 2. Read `wiki/log.md` first, page frontmatter `last_updated` second, and file modification time only as a fallback.
-3. Summarize the time range, new sources and pages, notable updates, topic clusters, open organization questions, and suggested next `ingest`, `capture`, or `lint` actions.
+3. Summarize the time range, new sources and pages, notable updates, topic clusters, open organization questions, open review items, overview drift, and suggested next `ingest`, `capture`, or `lint` actions.
 4. Keep the review read-only by default.
-5. If you want to save a weekly report or durable summary, ask the agent to switch to `capture` or propose a `wiki/syntheses/` update and confirm before writing.
+5. Propose `wiki/overview.md` updates when the review changes the compressed picture of the knowledge base.
+6. Propose `wiki/review.md` items for unresolved duplicate, source, stale synthesis, unclear value, or graph health questions.
+7. If you want to save a weekly report or durable summary, ask the agent to switch to `capture` or propose a `wiki/syntheses/` update and confirm before writing.
 
 Examples:
 
@@ -391,6 +409,10 @@ Formal wiki pages use these `type` values:
 - `source`: one-to-one summary of a raw source
 - `synthesis`: cross-source or cross-discussion integrated page
 - `map`: topic map / MOC
+- `overview`: compressed state of the current knowledge base
+- `review`: structured backlog for uncertain issues and human decisions
+- `purpose`: value judgment guidance for agents
+- `log`: append-only maintenance log
 
 ## Minimal Frontmatter
 
@@ -466,10 +488,11 @@ If the target vault already has a customized `System/Schema/`, compare it with t
 - 收录链接、文章、论文、转录稿、会议记录和原始笔记
 - 将原始材料保存在 `raw/`
 - 将稳定知识编译到 `wiki/`
+- 使用 `purpose.md` 指导 Agent 做价值判断
 - 将对话中形成的可复用结论沉淀到知识库
 - 基于已有 wiki 页面回答问题
 - 回顾近期新增内容和本周知识库变化
-- 对知识库做健康检查，发现孤立页面、缺失来源、重复主题、过期页面和附件放置问题
+- 对知识库做健康检查，发现孤立页面、缺失来源、重复主题、过期页面、附件放置问题和知识图谱健康问题
 
 ## 目录
 
@@ -505,6 +528,7 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 │   ├── page-types.md
 │   └── schema.md
 └── starter-vault/
+    ├── purpose.md
     ├── System/
     │   ├── Agents/
     │   └── Schema/
@@ -527,8 +551,8 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 - `ingest`：将来源保存到 `raw/`，在 `wiki/sources/` 创建来源摘要，并更新 maps/index/log。
 - `capture`：从对话中提取可复用结论，并更新最合适的目标页面。
 - `query`：从 `wiki/index.md`、maps 和正式 wiki 页面中回答问题。
-- `lint`：检查孤立页面、缺失来源、重复主题、过期页面和附件放置问题。
-- `review`：只读总结近期新增内容、显著更新、主题聚类和后续行动建议。
+- `lint`：检查孤立页面、缺失来源、重复主题、过期页面、附件放置问题和知识图谱健康问题。
+- `review`：默认只读总结近期新增内容、显著更新、主题聚类、待处理 review item、overview 漂移和后续行动建议。
 
 常用提示：
 
@@ -678,6 +702,7 @@ starter 知识库会创建这样的知识架构：
 ```text
 raw/        原始来源材料
 assets/     图片、PDF、截图和其它附件
+purpose.md  面向 Agent 的价值判断指南
 wiki/       可供 Agent 查询和综合的稳定知识页面
 System/     schema、工作流、页面规范和 Agent 适配说明
 ```
@@ -686,9 +711,11 @@ System/     schema、工作流、页面规范和 Agent 适配说明
 
 ## 知识库目录结构
 
-starter 知识库使用四个主要层次：
+starter 知识库使用五个主要层次：
 
 ```text
+purpose.md              面向 Agent 的价值判断指南
+
 raw/
 ├── articles/        网页文章、摘录、教程和实践指南
 ├── papers/          论文、PDF、报告和研究材料
@@ -708,7 +735,9 @@ wiki/
 ├── syntheses/       跨来源或跨对话的综合分析
 ├── maps/            主题地图 / MOC，用来保持页面连接
 ├── index.md         顶层导航入口
-└── log.md           追加式维护日志
+├── log.md           追加式维护日志
+├── overview.md      当前知识库整体状态的压缩视图
+└── review.md        需要人类判断或后续 Agent 跟进的待处理事项
 
 System/
 ├── Schema/          可选的知识库本地规则和工作流权威来源
@@ -719,8 +748,11 @@ System/
 
 - `raw/` 尽量保留来源材料的原始形态。
 - `assets/` 避免图片、PDF、截图等附件散落在笔记目录里。
+- `purpose.md` 告诉 Agent 如何判断哪些内容值得沉淀。
 - `wiki/` 是 Agent 应该查询和更新的稳定知识层。
 - `wiki/maps/` 是主要的防孤立页面机制。
+- `wiki/overview.md` 是给 Agent 和人看的知识库状态压缩视图。
+- `wiki/review.md` 记录需要人类判断或后续跟进的不确定事项。
 - `System/Schema/` 存在时，是知识库本地的权威规则来源；各 Agent 的适配文件应该遵循它，而不是另立一套规则。
 
 ## Schema 优先级
@@ -739,12 +771,13 @@ Agent 适配文件只负责说明不同 Agent 应该如何加载和执行 Obsiwi
 
 预期行为：
 
-1. 将原始来源保存或摘要到 `raw/`。
-2. 将附件保存到 `assets/raw/<source-slug>/`。
-3. 在 `wiki/sources/` 下创建或更新一对一来源摘要。
-4. 在有用时更新已有的 `wiki/concepts/`、`wiki/entities/` 或 `wiki/syntheses/`。
-5. 将新增或更新的知识挂到至少一个 `wiki/maps/` 页面。
-6. 在确认修改后更新 `wiki/index.md`，并追加 `wiki/log.md`。
+1. 先做 source analysis，不写文件。
+2. 如果存在 `purpose.md`，先读取并给出简短 value assessment。
+3. 识别来源的核心 thesis、可复用 claim、重要实体、概念、相关页面、可能重复、冲突和 synthesis 候选。
+4. 再提出 wiki changes：`raw/`、`assets/raw/<source-slug>/`、`wiki/sources/`、concept/entity/synthesis 更新、maps、index 和 log。
+5. 优先更新已有的 `wiki/concepts/`、`wiki/entities/` 或 `wiki/syntheses/`，而不是创建重复页面。
+6. 当问题需要人类判断时，使用 `wiki/review.md`，不要强行自动清理。
+7. 除非用户要求自动执行，否则确认后再写入。
 
 示例：
 
@@ -760,9 +793,11 @@ Use Obsiwiki to ingest this source: https://example.com/article
 
 1. 只提取可复用知识。
 2. 默认不保存完整聊天记录。
-3. 建议最合适的目标页面。
-4. 确认后更新目标页面。
-5. 仅当答案跨多个主题或来源时，才创建 `wiki/syntheses/` 页面。
+3. 如果存在 `purpose.md`，说明这个结论为什么值得沉淀。
+4. 建议最合适的目标页面。
+5. 确认后更新目标页面。
+6. 仅当答案跨多个主题或来源时，才创建 `wiki/syntheses/` 页面。
+7. 当有价值的结论仍需要人类判断时，使用 `wiki/review.md`。
 
 示例：
 
@@ -801,6 +836,9 @@ Use Obsiwiki to answer this from the vault: What does my knowledge base say abou
 - 标记缺失 `last_updated`、缺失 sources 或缺失 `Related Links`
 - 标记原始来源附件的放置问题
 - 标记只保存在 raw 层、但应提升到 `assets/wiki/` 的附件
+- 当当前 schema 需要时，标记缺失或过期的支持页面，例如 `purpose.md`、`wiki/overview.md` 或 `wiki/review.md`
+- 标记知识图谱健康问题：没有 map 覆盖的页面聚类、多个 source 指向同一主题但没有 concept、没有来源支撑的 concept、过期 synthesis、只堆链接的 map、疑似重复页面聚类、两个 map 之间可能需要 synthesis 或交叉链接
+- 当 graph health 问题需要解释判断时，新增或建议 `wiki/review.md` item，而不是把它当成确定性失败
 
 示例：
 
@@ -818,9 +856,11 @@ Use Obsiwiki to lint this vault.
 
 1. 解析 `昨天`、`本周`、`本月`、`last 14 days`、`since 2026-04-01` 或 `2026-04-01 to 2026-04-15` 等范围。
 2. 优先读取 `wiki/log.md`，其次使用页面 frontmatter 的 `last_updated`，最后才用文件修改时间兜底。
-3. 总结时间范围、新增来源与页面、显著更新、主题聚类、值得继续整理的问题，以及下次 `ingest`、`capture` 或 `lint` 建议。
+3. 总结时间范围、新增来源与页面、显著更新、主题聚类、待处理 review item、overview 漂移、值得继续整理的问题，以及下次 `ingest`、`capture` 或 `lint` 建议。
 4. 默认保持只读，不写入知识库。
-5. 如果你希望保存周报或长期摘要，请让 Agent 转入 `capture`，或建议更新 `wiki/syntheses/`，并在写入前确认。
+5. 当回顾改变了知识库整体状态判断时，建议更新 `wiki/overview.md`。
+6. 对未解决的重复主题、来源缺失、过期 synthesis、价值不明或 graph health 问题，建议写入 `wiki/review.md`。
+7. 如果你希望保存周报或长期摘要，请让 Agent 转入 `capture`，或建议更新 `wiki/syntheses/`，并在写入前确认。
 
 示例：
 
@@ -848,6 +888,10 @@ Use Obsiwiki to generate this week's knowledge base report.
 - `source`：原始来源的一对一摘要
 - `synthesis`：跨来源或跨讨论的综合页面
 - `map`：主题地图 / MOC
+- `overview`：当前知识库整体状态的压缩视图
+- `review`：不确定事项和人类决策的结构化待处理列表
+- `purpose`：面向 Agent 的价值判断指南
+- `log`：追加式维护日志
 
 ## 最小 Frontmatter
 

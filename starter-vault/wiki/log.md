@@ -12,5 +12,5 @@ aliases: []
 ## [2026-04-24] bootstrap
 
 - Initialized LLM Wiki vault skeleton.
-- Added `raw / assets / wiki / System` layers.
+- Added `raw / assets / purpose.md / wiki / System` layers.
 - Added schema, workflow, and page contract documents.

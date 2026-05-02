@@ -16,19 +16,24 @@ Use when the user provides a URL, article, PDF, screenshot pack, transcript, mee
 
 Default mode: draft first, then confirm.
 
-Steps:
+Stage 1: source analysis. Do not write files in this stage.
 
 1. Read title, author, publication date, URL, and body where available.
-2. Save attachments under `assets/raw/<source-slug>/`.
-3. Save the original source or source-like note under `raw/`.
-4. Create or update a one-to-one digest under `wiki/sources/`.
-5. Search for related `concepts`, `entities`, and `syntheses`.
-6. Prefer updating existing pages over creating duplicates.
-7. Attach new or updated pages to relevant `maps`.
-8. Show the user a concise draft of proposed changes.
-9. Write changes after confirmation unless the user asked for automatic execution.
-10. Update `wiki/index.md`.
-11. Append an entry to `wiki/log.md`.
+2. Consult `purpose.md` when present.
+3. Identify the core thesis, reusable claims, important entities, concepts, and examples.
+4. Search for related `concepts`, `entities`, `syntheses`, maps, and review items.
+5. Identify possible duplicates, conflicts, missing sources, or synthesis candidates.
+6. State a short value assessment.
+
+Stage 2: proposed wiki changes.
+
+1. Propose where to save attachments under `assets/raw/<source-slug>/`.
+2. Propose where to save the original source or source-like note under `raw/`.
+3. Propose the one-to-one digest under `wiki/sources/`.
+4. Propose updates to existing `concepts`, `entities`, or `syntheses` before creating duplicates.
+5. Propose map, `wiki/index.md`, and `wiki/log.md` updates.
+6. If an issue needs human judgment, propose a structured item in `wiki/review.md` instead of forcing a final decision.
+7. Write changes after confirmation unless the user asked for automatic execution.
 
 ## Capture
 
@@ -42,12 +47,15 @@ Steps:
 2. Present a structured draft:
    - core conclusion
    - suggested target page
+   - value assessment against `purpose.md` when present
    - possible conflicts with existing knowledge
    - whether a `synthesis` page is warranted
+   - whether a `wiki/review.md` item is needed
 3. Ask for confirmation before writing.
 4. Prefer updating the target page directly.
 5. Create a `wiki/syntheses/` page only when the result spans multiple pages or the target is ambiguous.
 6. Update relevant maps, `wiki/index.md`, and `wiki/log.md`.
+7. Add a review item when the conclusion is valuable but needs later human judgment.
 
 Do not save full chat transcripts by default.
 
@@ -85,7 +93,11 @@ Steps:
    - notable updates
    - topic clusters
    - open organization questions
+   - open review items
+   - overview drift
    - suggested next `ingest`, `capture`, or `lint` actions
+7. When useful, propose updates to `wiki/overview.md`.
+8. When uncertain issues need follow-up, propose structured items for `wiki/review.md`.
 
 Do not write to the vault by default. If the user wants to save a weekly report or durable summary, switch to `capture` or propose a `wiki/syntheses/` update and ask for confirmation before writing.
 
@@ -106,3 +118,14 @@ Check for:
 - maps that only list raw/source pages without durable concepts or syntheses
 - raw pages with attachments that are not stored under `assets/raw/`
 - wiki pages that depend on raw-only assets that should be promoted to `assets/wiki/`
+- missing or stale `purpose.md`, `wiki/overview.md`, or `wiki/review.md` when those support files are expected by the active schema
+- graph health issues:
+  - cluster without map: several related pages are not covered by a coherent map
+  - source cluster without concept: multiple sources point to the same durable idea but no concept page exists
+  - concept without sources: a concept contains durable claims but has no upstream source or explicit user judgment
+  - stale synthesis: a synthesis depends on pages that changed recently but the synthesis was not reviewed
+  - overloaded map: a map is only a link dump without grouping, descriptions, or organizing judgment
+  - duplicate cluster: titles, aliases, sources, or related links suggest overlapping pages
+  - bridge candidate: two maps share enough pages or themes that a synthesis or cross-link may be useful
+
+If a graph health issue requires interpretation, add or propose a `wiki/review.md` item rather than treating it as an automatic failure.

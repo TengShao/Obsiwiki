@@ -24,6 +24,28 @@ aliases: []
   - major `query -> synthesis` updates
 - `review` and weekly reports are read-only by default and should not append log entries unless the user confirms a follow-up `capture` or `synthesis` write.
 
+## `purpose.md`
+
+- Vault-level value judgment guide for agents.
+- Lists the vault mission, active themes, value criteria, low-value content, and agent decision rule.
+- Agents should consult it before promoting material into `wiki/`.
+- `purpose.md` can be multi-topic. It should not force the vault into a single theme.
+- When value is unclear, agents should suggest or create a review item instead of silently promoting the material.
+
+## `wiki/overview.md`
+
+- Compressed state of the current knowledge base.
+- Summarizes current shape, mature areas, emerging areas, knowledge gaps, important maps, and recent direction.
+- Updated during `review`, weekly reports, or explicit overview refreshes.
+- Not required after every small ingest.
+
+## `wiki/review.md`
+
+- Structured backlog for uncertain issues, human decisions, and later agent follow-up.
+- Agents may add open items with status, type, related pages, evidence, suggested action, and whether user decision is required.
+- Agents should not close items that require user judgment unless the user confirms the decision.
+- Resolved items should keep a short resolution note.
+
 ## `wiki/concepts/`
 
 - Complete minimal frontmatter.

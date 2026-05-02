@@ -27,4 +27,6 @@ Add integrated cross-source or cross-discussion pages here.
 
 ## Operations
 
+[[overview]] - compressed state of the current knowledge base
+[[review]] - backlog for human judgment and later agent follow-up
 [[log]] - append-only wiki maintenance log

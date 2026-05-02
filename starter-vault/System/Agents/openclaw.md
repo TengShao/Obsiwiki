@@ -28,7 +28,11 @@ Suggested subcommands:
 Rules:
 
 - Commands route into the shared `ingest / capture / query / lint / review` workflows.
+- Use two-stage draft-first behavior for `ingest`: source analysis first, proposed wiki changes second.
 - Keep `review` and weekly reports read-only by default; use the last 7 days unless the user specifies a range, and use `this week` for `/obsiwiki weekly`.
+- Consult `purpose.md` before promoting material into durable wiki content when present.
+- Use `wiki/overview.md` as the compressed knowledge base state.
+- Use `wiki/review.md` for uncertain value, duplicate, source, stale synthesis, or graph health decisions.
 - Directory semantics and page contracts come from the installed Obsiwiki schema by default.
 - If this vault contains `System/Schema/`, treat it as the vault-local source of truth.
 - Do not maintain private OpenClaw rules that conflict with the active Obsiwiki schema.

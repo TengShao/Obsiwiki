@@ -27,9 +27,12 @@ Typical requests:
 
 Recommended behavior:
 
-- Use draft-first behavior for `ingest`.
+- Use two-stage draft-first behavior for `ingest`: source analysis first, proposed wiki changes second.
 - Use suggest-and-confirm behavior for `capture`.
 - Keep `review` and weekly reports read-only by default; use the last 7 days unless the user specifies a range, and use `this week` for weekly reports.
+- Consult `purpose.md` before promoting material into durable wiki content when present.
+- Use `wiki/overview.md` as the compressed knowledge base state.
+- Use `wiki/review.md` for uncertain value, duplicate, source, stale synthesis, or graph health decisions.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
 - Use `wiki/maps/` as the main anti-orphan mechanism.
 - Follow the installed Obsiwiki schema by default.
