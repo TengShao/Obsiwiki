@@ -1,5 +1,6 @@
 ---
 name: obsiwiki
+version: 0.3.3
 description: Maintain an Obsidian vault as an agent-agnostic LLM Wiki. Use Obsiwiki when Codex or another agent needs to ingest external links or raw notes into raw/wiki, capture valuable discussion outcomes into formal notes, answer questions from wiki pages, review recent additions or weekly knowledge base changes, guide scheduled review/lint maintenance, maintain index and map pages, manage assets for raw or wiki content, or lint the vault for orphans, duplicate topics, missing links, missing sources, and stale pages.
 ---
 
