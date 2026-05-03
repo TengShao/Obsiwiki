@@ -2,7 +2,7 @@
 title: Vault Schema
 type: schema
 tags: []
-last_updated: 2026-04-24
+last_updated: 2026-05-03
 aliases: []
 ---
 
@@ -40,6 +40,8 @@ This vault is maintained in four main areas, with value guidance stored inside t
 - `raw/` may stay lightweight and source-like.
 - `raw/` should not store binary attachments.
 - `assets/` is the shared home for files and media.
+- During ingest, source-relevant images, figures, diagrams, screenshots, PDFs, and other attachments should be saved under `assets/raw/<source-slug>/` and embedded or linked from the raw/source note as local vault assets.
+- Captions, alt text, and source URLs should be preserved when available; skipped or unavailable assets should be recorded with a short reason.
 - `wiki/` is the default durable knowledge layer.
 - `System/Schema/purpose.md` should guide value assessment during `ingest`, `capture`, and `review`.
 - `System/Schema/` is the source of truth for workflow rules.

@@ -64,6 +64,7 @@ Scheduled maintenance is orchestration around `review` and `lint`, not a separat
 - During source analysis, do not write files. Identify the source thesis, reusable claims, entities, concepts, related pages, possible duplicates, conflicts, and synthesis candidates.
 - Consult `System/Schema/purpose.md` when present and include a short value assessment.
 - During proposed changes, name the `raw/`, `assets/raw/<source-slug>/`, `wiki/sources/`, concept/entity/synthesis, map, index, and log updates.
+- By default, preserve source-relevant images, figures, diagrams, screenshots, and other attachments: save them under `assets/raw/<source-slug>/`, embed or link the local copies from the raw/source note, keep captions/alt text/source URLs when available, and list any skipped or unavailable assets with reasons. Do not archive decorative, tracking, ad, avatar, or navigation images unless the user explicitly asks.
 - Prefer updating an existing `concept`, `entity`, or `synthesis` page over creating duplicates.
 - If an issue needs human judgment, propose or add a structured item in `wiki/review.md` instead of forcing a decision.
 - Write changes after confirmation unless the user explicitly asks for automatic execution.

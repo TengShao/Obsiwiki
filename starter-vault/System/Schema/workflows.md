@@ -2,7 +2,7 @@
 title: Workflows
 type: schema
 tags: []
-last_updated: 2026-04-28
+last_updated: 2026-05-03
 aliases: []
 ---
 
@@ -23,19 +23,23 @@ Stage 1: source analysis. Do not write files in this stage.
 1. Read title, author, publication date, URL, and body where available.
 2. Consult `System/Schema/purpose.md` when present.
 3. Identify the core thesis, reusable claims, important entities, concepts, and examples.
-4. Search for related `concepts`, `entities`, `syntheses`, maps, and review items.
-5. Identify possible duplicates, conflicts, missing sources, or synthesis candidates.
-6. State a short value assessment.
+4. Identify source-relevant images, figures, diagrams, screenshots, PDFs, and other attachments that should be preserved with the raw source.
+5. Search for related `concepts`, `entities`, `syntheses`, maps, and review items.
+6. Identify possible duplicates, conflicts, missing sources, or synthesis candidates.
+7. State a short value assessment.
 
 Stage 2: proposed wiki changes.
 
-1. Propose where to save attachments under `assets/raw/<source-slug>/`.
-2. Propose where to save the original source or source-like note under `raw/`.
-3. Propose the one-to-one digest under `wiki/sources/`.
-4. Propose updates to existing `concepts`, `entities`, or `syntheses` before creating duplicates.
-5. Propose map, `wiki/index.md`, and `wiki/log.md` updates.
-6. If an issue needs human judgment, propose a structured item in `wiki/review.md` instead of forcing a final decision.
-7. Write changes after confirmation unless the user asked for automatic execution.
+1. Propose where to save source-relevant attachments under `assets/raw/<source-slug>/`.
+2. Download or preserve those attachments by default when technically accessible; skip decorative, tracking, ad, avatar, and navigation images unless the user explicitly asks.
+3. Embed or link local asset copies from the raw/source note, preserving captions, alt text, and source URLs when available.
+4. Record skipped or unavailable assets with a short reason.
+5. Propose where to save the original source or source-like note under `raw/`.
+6. Propose the one-to-one digest under `wiki/sources/`.
+7. Propose updates to existing `concepts`, `entities`, or `syntheses` before creating duplicates.
+8. Propose map, `wiki/index.md`, and `wiki/log.md` updates.
+9. If an issue needs human judgment, propose a structured item in `wiki/review.md` instead of forcing a final decision.
+10. Write changes after confirmation unless the user asked for automatic execution.
 
 ## Capture
 

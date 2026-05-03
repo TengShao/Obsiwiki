@@ -30,6 +30,7 @@ Rules:
 
 - Commands route into the shared `ingest / capture / query / lint / review` workflows.
 - Use two-stage draft-first behavior for `ingest`: source analysis first, proposed wiki changes second.
+- During `ingest`, preserve source-relevant images, figures, diagrams, screenshots, PDFs, and other attachments under `assets/raw/<source-slug>/`; embed or link local copies from the raw/source note, preserve captions/alt text/source URLs when available, and record skipped assets with reasons.
 - Keep `review` and weekly reports read-only by default; use the last 7 days unless the user specifies a range, and use `this week` for `/obsiwiki weekly`.
 - Consult `System/Schema/purpose.md` before promoting material into durable wiki content when present.
 - Use `wiki/overview.md` as the compressed knowledge base state.

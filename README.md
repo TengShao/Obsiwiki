@@ -130,10 +130,11 @@ Expected behavior:
 1. Run source analysis first without writing files.
 2. Consult `System/Schema/purpose.md` when present and state a short value assessment.
 3. Identify the source thesis, reusable claims, important entities, concepts, related pages, possible duplicates, conflicts, and synthesis candidates.
-4. Propose wiki changes second: `raw/`, `assets/raw/<source-slug>/`, `wiki/sources/`, concept/entity/synthesis updates, maps, index, and log.
-5. Prefer updating existing `wiki/concepts/`, `wiki/entities/`, or `wiki/syntheses/` over creating duplicates.
-6. Use `wiki/review.md` when an issue needs human judgment instead of forced automatic cleanup.
-7. Write changes after confirmation unless you asked for automatic execution.
+4. Preserve source-relevant images, figures, diagrams, screenshots, PDFs, and attachments under `assets/raw/<source-slug>/`, embed or link local copies from the raw/source note, and record skipped or unavailable assets.
+5. Propose wiki changes second: `raw/`, `assets/raw/<source-slug>/`, `wiki/sources/`, concept/entity/synthesis updates, maps, index, and log.
+6. Prefer updating existing `wiki/concepts/`, `wiki/entities/`, or `wiki/syntheses/` over creating duplicates.
+7. Use `wiki/review.md` when an issue needs human judgment instead of forced automatic cleanup.
+8. Write changes after confirmation unless you asked for automatic execution.
 
 Example:
 
@@ -433,10 +434,11 @@ Report what changed and how to reload the agent.
 1. 先做 source analysis，不写文件。
 2. 如果存在 `System/Schema/purpose.md`，先读取并给出简短 value assessment。
 3. 识别来源的核心 thesis、可复用 claim、重要实体、概念、相关页面、可能重复、冲突和 synthesis 候选。
-4. 再提出 wiki changes：`raw/`、`assets/raw/<source-slug>/`、`wiki/sources/`、concept/entity/synthesis 更新、maps、index 和 log。
-5. 优先更新已有的 `wiki/concepts/`、`wiki/entities/` 或 `wiki/syntheses/`，而不是创建重复页面。
-6. 当问题需要人类判断时，使用 `wiki/review.md`，不要强行自动清理。
-7. 除非用户要求自动执行，否则确认后再写入。
+4. 默认保留与来源理解有关的图片、图表、截图、PDF 和附件，保存到 `assets/raw/<source-slug>/`，在 raw/source 文档中嵌入或链接本地副本，并记录跳过或无法获取的资产。
+5. 再提出 wiki changes：`raw/`、`assets/raw/<source-slug>/`、`wiki/sources/`、concept/entity/synthesis 更新、maps、index 和 log。
+6. 优先更新已有的 `wiki/concepts/`、`wiki/entities/` 或 `wiki/syntheses/`，而不是创建重复页面。
+7. 当问题需要人类判断时，使用 `wiki/review.md`，不要强行自动清理。
+8. 除非用户要求自动执行，否则确认后再写入。
 
 示例：
 

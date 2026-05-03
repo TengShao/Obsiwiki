@@ -73,6 +73,7 @@ Read:
 
 Maintain this vault through these workflows:
 - ingest: analyze source first, then propose raw/source/page/map/index/log changes
+- ingest assets: preserve source-relevant images, figures, diagrams, screenshots, PDFs, and other attachments under assets/raw/<source-slug>/; embed or link local copies from the raw/source note; record skipped assets with reasons
 - capture: extract reusable conclusions, ask before writing, update target pages
 - query: answer from wiki/index.md, maps, concepts, entities, sources, syntheses
 - lint: find orphan pages, missing sources, duplicates, stale pages, asset issues, and graph health issues
