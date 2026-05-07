@@ -14,6 +14,22 @@ Read these references as needed:
 - `references/page-types.md` for note routing and page expectations
 - `references/lint-checklist.md` for maintenance checks
 
+## Vault Location
+
+Resolve the target vault before running any workflow.
+
+Use this discovery order:
+
+1. A vault path explicitly provided by the user.
+2. `OBSIWIKI_VAULT`, when the environment exposes it.
+3. A user-level registry such as `~/.config/obsiwiki/vaults.toml`, when readable.
+4. The current working directory or one of its ancestors, if it contains `System/obsiwiki.toml`.
+5. A legacy fallback: the current working directory or one of its ancestors, if it contains both `wiki/index.md` and `System/Schema/`.
+
+When the user confirms a target vault path, record it in the user-level registry when the environment allows writing there. Do not store absolute machine-local paths inside the vault-local `System/obsiwiki.toml`; keep that file portable.
+
+If no single vault can be resolved, ask the user for the vault path before reading or writing.
+
 ## Core Model
 
 1. `raw/` stores original text sources.

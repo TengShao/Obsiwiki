@@ -2,7 +2,7 @@
 title: Workflows
 type: schema
 tags: []
-last_updated: 2026-05-03
+last_updated: 2026-05-07
 aliases: []
 ---
 
@@ -11,6 +11,8 @@ aliases: []
 This vault supports five primary workflows: `ingest`, `capture`, `query`, `lint`, and `review`.
 
 Scheduled maintenance is orchestration around `review` and `lint`, not a separate content workflow.
+
+Before any workflow, resolve the target vault. Prefer an explicit user path, then `OBSIWIKI_VAULT`, then `~/.config/obsiwiki/vaults.toml`, then an ancestor containing `System/obsiwiki.toml`, then a legacy ancestor containing both `wiki/index.md` and `System/Schema/`. If the user confirms a vault path, record it in the user-level registry when possible.
 
 ## Ingest
 
@@ -149,7 +151,7 @@ Use for vault health checks and structural cleanup.
 Check for:
 
 - exclude `System/` files from ordinary content lint
-- lightweight `System/` configuration health: key schema files are readable, `System/Agents/` follows `System/Schema/`, and vault-local schema customizations are preserved
+- lightweight `System/` configuration health: `System/obsiwiki.toml` exists when the vault has adopted the locator protocol, key schema files are readable, `System/Agents/` follows `System/Schema/`, and vault-local schema customizations are preserved
 - completely isolated pages
 - formal wiki pages not covered by maps or index
 - `sources/` pages that do not point to a concept, entity, or map

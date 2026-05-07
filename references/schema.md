@@ -8,7 +8,22 @@ Use these write targets:
 - value judgment guidance: `System/Schema/purpose.md`
 - current knowledge state: `wiki/overview.md`
 - uncertain issues and human decisions: `wiki/review.md`
+- vault marker: `System/obsiwiki.toml`
 - rules and contracts: `System/Schema/`
+
+## Vault Location
+
+Agents should resolve the target vault before reading or writing:
+
+1. Use an explicit path from the user.
+2. Use `OBSIWIKI_VAULT` if the environment exposes it.
+3. Use `~/.config/obsiwiki/vaults.toml` if it is readable.
+4. Walk upward from the current working directory until `System/obsiwiki.toml` is found.
+5. As a legacy fallback, walk upward until both `wiki/index.md` and `System/Schema/` are found.
+
+After the user confirms a vault path, record it in `~/.config/obsiwiki/vaults.toml` when that location is writable. Keep vault-local paths relative inside `System/obsiwiki.toml`.
+
+If multiple vaults match or no vault matches, ask the user to choose. The installed Obsiwiki skill directory is not itself the user's vault.
 
 Key rules:
 

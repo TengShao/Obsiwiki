@@ -28,6 +28,18 @@ Suggested subcommands:
 
 Do not install `adapters/` into the local OpenClaw command directory. Read adapters from the repository as reference notes.
 
+## Vault Location
+
+Before any command, resolve the target vault in this order:
+
+1. Path explicitly provided by the user.
+2. `OBSIWIKI_VAULT`, when available.
+3. `~/.config/obsiwiki/vaults.toml`, when readable.
+4. Current working directory or an ancestor containing `System/obsiwiki.toml`.
+5. Legacy fallback: current working directory or an ancestor containing both `wiki/index.md` and `System/Schema/`.
+
+After the user confirms a vault path, record it in the user-level registry when possible. Keep `System/obsiwiki.toml` portable and do not write absolute paths into it.
+
 ## Command Semantics
 
 ### `/obsiwiki ingest <url-or-source>`

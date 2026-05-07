@@ -21,6 +21,18 @@ Use the installed Obsiwiki schema as the default. If the target vault contains `
 
 Do not install `adapters/` into the local Hermes skill directory. Read adapters from the repository as reference notes.
 
+## Vault Location
+
+Before any workflow, resolve the target vault in this order:
+
+1. Path explicitly provided by the user.
+2. `OBSIWIKI_VAULT`, when available.
+3. `~/.config/obsiwiki/vaults.toml`, when readable.
+4. Current working directory or an ancestor containing `System/obsiwiki.toml`.
+5. Legacy fallback: current working directory or an ancestor containing both `wiki/index.md` and `System/Schema/`.
+
+After the user confirms a vault path, record it in the user-level registry when possible. Keep `System/obsiwiki.toml` portable and do not write absolute paths into it.
+
 ## Update Behavior
 
 When updating the installed Obsiwiki skill, refresh the skill files first. Then, if the target vault has `System/Schema/`, compare the latest default schema, value guidance, and support pages with the vault-local files.
@@ -69,6 +81,7 @@ Read:
 - references/schema.md
 - references/page-types.md
 - references/lint-checklist.md
+- System/obsiwiki.toml if present
 - System/Schema/ if present, otherwise the installed Obsiwiki schema
 
 Maintain this vault through these workflows:

@@ -2,7 +2,7 @@
 title: Vault Schema
 type: schema
 tags: []
-last_updated: 2026-05-03
+last_updated: 2026-05-07
 aliases: []
 ---
 
@@ -13,7 +13,14 @@ This vault is maintained in four main areas, with value guidance stored inside t
 1. `raw/`: original source material.
 2. `assets/`: binary files, screenshots, PDFs, and reusable visuals.
 3. `wiki/`: durable knowledge pages for agent query, update, and synthesis.
-4. `System/Schema/`: rules, workflows, page contracts, and vault-level value guidance.
+4. `System/`: vault marker, rules, workflows, page contracts, and vault-level value guidance.
+
+## Vault Identity
+
+- `System/obsiwiki.toml` marks the root of an Obsiwiki-managed vault.
+- Agents can identify the vault by walking upward from their current working directory until they find `System/obsiwiki.toml`.
+- User-level registries such as `~/.config/obsiwiki/vaults.toml` may store absolute paths to confirmed vaults.
+- `System/obsiwiki.toml` should stay portable and use relative paths only.
 
 ## Directory Semantics
 
@@ -26,6 +33,7 @@ This vault is maintained in four main areas, with value guidance stored inside t
 - `assets/wiki/<topic-slug>/`: reusable long-lived knowledge assets.
 - `assets/projects/<project-name>/`: project-specific assets.
 - `assets/shared/`: assets reused across topics.
+- `System/obsiwiki.toml`: vault identity marker and relative path map.
 - `System/Schema/purpose.md`: value criteria and active themes that guide whether material should be promoted into durable wiki content.
 - `wiki/overview.md`: compressed state of the current knowledge base.
 - `wiki/review.md`: structured backlog for uncertain issues, human decisions, and later agent follow-up.
@@ -43,6 +51,7 @@ This vault is maintained in four main areas, with value guidance stored inside t
 - During ingest, source-relevant images, figures, diagrams, screenshots, PDFs, and other attachments should be saved under `assets/raw/<source-slug>/` and embedded or linked from the raw/source note as local vault assets.
 - Captions, alt text, and source URLs should be preserved when available; skipped or unavailable assets should be recorded with a short reason.
 - `wiki/` is the default durable knowledge layer.
+- `System/obsiwiki.toml` identifies the vault root and relative path layout.
 - `System/Schema/purpose.md` should guide value assessment during `ingest`, `capture`, and `review`.
 - `System/Schema/` is the source of truth for workflow rules.
 - `System/Agents/` adapts those rules for specific agents and must not fork the schema.

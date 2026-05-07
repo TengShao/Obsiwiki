@@ -2,7 +2,7 @@
 title: Hermes Adapter
 type: agent-adapter
 tags: []
-last_updated: 2026-05-03
+last_updated: 2026-05-07
 aliases: []
 ---
 
@@ -29,6 +29,7 @@ Typical requests:
 
 Recommended behavior:
 
+- Resolve the target vault before any workflow. Prefer an explicit path, `OBSIWIKI_VAULT`, a readable `~/.config/obsiwiki/vaults.toml`, then an ancestor containing `System/obsiwiki.toml`. Record a user-confirmed vault path in the user-level registry when possible.
 - Use two-stage draft-first behavior for `ingest`: source analysis first, proposed wiki changes second.
 - During `ingest`, preserve source-relevant images, figures, diagrams, screenshots, PDFs, and other attachments under `assets/raw/<source-slug>/`; embed or link local copies from the raw/source note, preserve captions/alt text/source URLs when available, and record skipped assets with reasons.
 - Use suggest-and-confirm behavior for `capture`.

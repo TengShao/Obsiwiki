@@ -42,6 +42,7 @@ Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/kar
 │   └── schema.md
 └── starter-vault/
     ├── System/
+    │   ├── obsiwiki.toml
     │   ├── Agents/
     │   └── Schema/
     │       └── purpose.md
@@ -89,6 +90,8 @@ Inspect the repository and decide which Obsiwiki files are needed for this agent
 Decide where this agent keeps reusable skills, project instructions, commands, plugins, or context. Install the necessary Obsiwiki files there.
 
 Ask me for the target Obsidian vault path. If I do not know it, help me find likely vault folders and ask me to confirm one before making changes.
+
+After I confirm the target vault path, record it for future Obsiwiki runs in this environment when possible.
 
 If the confirmed vault is new or lightly structured, use starter-vault/ as the initialization reference. If it already has notes, do not bulk move them; propose incremental changes instead.
 
@@ -286,6 +289,7 @@ wiki/
 └── review.md        backlog for human judgment and later agent follow-up
 
 System/
+├── obsiwiki.toml   vault-local marker file
 └── Schema/          vault-local authority for rules, workflows, and value guidance
     └── purpose.md   value judgment guidance for agents
 ```
@@ -294,6 +298,7 @@ Folder intent:
 
 - `raw/` keeps source material close to its original form.
 - `assets/` keeps attachments and media files out of note folders.
+- `System/obsiwiki.toml` marks the vault root for future Obsiwiki runs.
 - `System/Schema/purpose.md` tells agents how to judge what is worth preserving.
 - `wiki/` is the durable knowledge layer agents should query and update.
 - `wiki/maps/` is the main anti-orphan mechanism.
@@ -346,6 +351,7 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 │   └── schema.md
 └── starter-vault/
     ├── System/
+    │   ├── obsiwiki.toml
     │   ├── Agents/
     │   └── Schema/
     │       └── purpose.md
@@ -393,6 +399,8 @@ Inspect the repository and decide which Obsiwiki files are needed for this agent
 Decide where this agent keeps reusable skills, project instructions, commands, plugins, or context. Install the necessary Obsiwiki files there.
 
 Ask me for the target Obsidian vault path. If I do not know it, help me find likely vault folders and ask me to confirm one before making changes.
+
+After I confirm the target vault path, record it for future Obsiwiki runs in this environment when possible.
 
 If the confirmed vault is new or lightly structured, use starter-vault/ as the initialization reference. If it already has notes, do not bulk move them; propose incremental changes instead.
 
@@ -590,6 +598,7 @@ wiki/
 └── review.md        需要人类判断或后续 Agent 跟进的待处理事项
 
 System/
+├── obsiwiki.toml   知识库本地标记文件
 └── Schema/          知识库本地规则、工作流和价值判断指南
     └── purpose.md   面向 Agent 的价值判断指南
 ```
@@ -598,6 +607,7 @@ System/
 
 - `raw/` 尽量保留来源材料的原始形态。
 - `assets/` 避免图片、PDF、截图等附件散落在笔记目录里。
+- `System/obsiwiki.toml` 用来标记知识库根目录，方便后续 Obsiwiki 运行识别。
 - `System/Schema/purpose.md` 告诉 Agent 如何判断哪些内容值得沉淀。
 - `wiki/` 是 Agent 应该查询和更新的稳定知识层。
 - `wiki/maps/` 是主要的防孤立页面机制。

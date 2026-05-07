@@ -1,0 +1,14 @@
+# Obsiwiki vault marker.
+# Keep this file at System/obsiwiki.toml so agents can identify the vault
+# by walking upward from their current working directory.
+
+version = 1
+vault_name = ""
+vault_role = "default"
+
+[paths]
+raw = "raw"
+assets = "assets"
+wiki = "wiki"
+schema = "System/Schema"
+agents = "System/Agents"

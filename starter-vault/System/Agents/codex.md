@@ -2,7 +2,7 @@
 title: Codex Adapter
 type: agent-adapter
 tags: []
-last_updated: 2026-05-03
+last_updated: 2026-05-07
 aliases: []
 ---
 
@@ -26,6 +26,7 @@ Typical requests:
 
 Codex rules:
 
+- Resolve the target vault before any workflow. Prefer an explicit path, `OBSIWIKI_VAULT`, a readable `~/.config/obsiwiki/vaults.toml`, then an ancestor containing `System/obsiwiki.toml`. Record a user-confirmed vault path in the user-level registry when possible.
 - Follow the installed Obsiwiki schema by default.
 - If this vault contains `System/Schema/`, treat it as the vault-local source of truth.
 - Use two-stage draft-first behavior for `ingest`: source analysis first, proposed wiki changes second.

@@ -2,7 +2,7 @@
 title: OpenClaw Adapter
 type: agent-adapter
 tags: []
-last_updated: 2026-05-03
+last_updated: 2026-05-07
 aliases: []
 ---
 
@@ -28,6 +28,7 @@ Suggested subcommands:
 
 Rules:
 
+- Resolve the target vault before any command. Prefer an explicit path, `OBSIWIKI_VAULT`, a readable `~/.config/obsiwiki/vaults.toml`, then an ancestor containing `System/obsiwiki.toml`. Record a user-confirmed vault path in the user-level registry when possible.
 - Commands route into the shared `ingest / capture / query / lint / review` workflows.
 - Use two-stage draft-first behavior for `ingest`: source analysis first, proposed wiki changes second.
 - During `ingest`, preserve source-relevant images, figures, diagrams, screenshots, PDFs, and other attachments under `assets/raw/<source-slug>/`; embed or link local copies from the raw/source note, preserve captions/alt text/source URLs when available, and record skipped assets with reasons.
