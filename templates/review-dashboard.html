@@ -1,0 +1,1732 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Obsiwiki Review Dashboard</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background-deep: #020203;
+      --background-base: #050506;
+      --background-elevated: #0a0a0c;
+      --surface: rgba(255, 255, 255, 0.05);
+      --surface-hover: rgba(255, 255, 255, 0.08);
+      --foreground: #EDEDEF;
+      --foreground-muted: #8A8F98;
+      --foreground-subtle: rgba(255, 255, 255, 0.60);
+      --accent: #5E6AD2;
+      --accent-bright: #6872D9;
+      --accent-glow: rgba(94, 106, 210, 0.30);
+      --border-default: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(255, 255, 255, 0.10);
+      --border-accent: rgba(94, 106, 210, 0.30);
+      --warning: #D69D55;
+      --danger: #E16D6D;
+      --success: #6AD2A1;
+      --radius-card: 16px;
+      --radius-control: 8px;
+      --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 2px 20px rgba(0, 0, 0, 0.40), 0 0 40px rgba(0, 0, 0, 0.20);
+      --shadow-card-hover: 0 0 0 1px rgba(255, 255, 255, 0.10), 0 8px 40px rgba(0, 0, 0, 0.50), 0 0 40px rgba(0, 0, 0, 0.24);
+      --shadow-accent: 0 0 0 1px rgba(94, 106, 210, 0.50), 0 4px 12px rgba(94, 106, 210, 0.30), inset 0 1px 0 0 rgba(255, 255, 255, 0.20);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --font-sans: "Inter", "Geist Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "SFMono-Regular", "Cascadia Code", "Roboto Mono", ui-monospace, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--background-deep);
+    }
+
+    body {
+      min-height: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse at top, #0a0a0f 0%, var(--background-base) 50%, var(--background-deep) 100%);
+      color: var(--foreground);
+      font: 14px/1.5 var(--font-sans);
+      letter-spacing: 0;
+    }
+
+    body::before,
+    body::after {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      content: "";
+    }
+
+    body::before {
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), transparent 88%);
+    }
+
+    body::after {
+      opacity: 0.16;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
+      mix-blend-mode: screen;
+    }
+
+    a {
+      color: var(--foreground);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #ffffff;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button,
+    select {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    summary:focus-visible,
+    a:focus-visible {
+      outline: 2px solid rgba(94, 106, 210, 0.75);
+      outline-offset: 2px;
+    }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(130px);
+      opacity: 0.72;
+      transform: translateZ(0);
+      animation: float 9s ease-in-out infinite;
+    }
+
+    .blob.primary {
+      top: -460px;
+      left: 50%;
+      width: 920px;
+      height: 1380px;
+      background: rgba(94, 106, 210, 0.26);
+      transform: translateX(-50%);
+    }
+
+    .blob.secondary {
+      top: 120px;
+      left: -330px;
+      width: 660px;
+      height: 820px;
+      background: rgba(146, 93, 210, 0.16);
+      animation-duration: 10s;
+      animation-delay: -2s;
+    }
+
+    .blob.tertiary {
+      top: 280px;
+      right: -260px;
+      width: 560px;
+      height: 760px;
+      background: rgba(70, 117, 225, 0.14);
+      animation-duration: 8s;
+      animation-delay: -4s;
+    }
+
+    .blob.bottom {
+      right: 18%;
+      bottom: -360px;
+      width: 740px;
+      height: 540px;
+      background: rgba(94, 106, 210, 0.11);
+      animation-duration: 12s;
+      animation-name: pulse-float;
+    }
+
+    .shell {
+      position: relative;
+      width: min(1320px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 18px 0 42px;
+    }
+
+    .hero {
+      min-height: 184px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 22px;
+      align-items: start;
+      padding: 24px 0 16px;
+      transform: translateY(var(--hero-y, 0)) scale(var(--hero-scale, 1));
+      opacity: var(--hero-opacity, 1);
+      transform-origin: top center;
+      transition: opacity 160ms linear;
+    }
+
+    .hero-copy {
+      min-width: 0;
+      max-width: 1040px;
+      animation: fade-up 640ms var(--ease-out) both;
+    }
+
+    .hero-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 0 0 10px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      margin: 0;
+      padding: 0 9px;
+      border: 1px solid var(--border-accent);
+      border-radius: 999px;
+      background: rgba(94, 106, 210, 0.10);
+      color: rgba(237, 237, 239, 0.86);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 26px rgba(94, 106, 210, 0.16);
+    }
+
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      background: linear-gradient(to bottom, #ffffff 0%, rgba(255, 255, 255, 0.94) 48%, rgba(255, 255, 255, 0.70) 100%);
+      background-clip: text;
+      color: transparent;
+      font-size: 32px;
+      font-weight: 650;
+      letter-spacing: 0;
+      line-height: 1.18;
+    }
+
+    .summary {
+      width: fit-content;
+      max-width: min(100%, 1040px);
+      margin: 10px 0 0;
+      overflow: hidden;
+      color: var(--foreground-muted);
+      font-size: 15px;
+      line-height: 1.62;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 0;
+    }
+
+    .language-toggle,
+    .meta,
+    .card,
+    .panel,
+    .item {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-default);
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(20px);
+    }
+
+    .spotlight:hover,
+    .spotlight:focus-within {
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-3px);
+    }
+
+    .language-toggle {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0;
+      border-radius: var(--radius-control);
+      background-color: rgba(255, 255, 255, 0.045);
+    }
+
+    .meta {
+      display: grid;
+      gap: 10px;
+      min-width: 300px;
+      padding: 14px 16px;
+      border-radius: var(--radius-card);
+      animation: fade-up 640ms var(--ease-out) 80ms both;
+    }
+
+    .meta-row {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .meta-row span:first-child {
+      color: var(--foreground-muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .meta-row strong {
+      min-width: 0;
+      overflow: hidden;
+      color: var(--foreground);
+      font-weight: 560;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    input,
+    select,
+    button {
+      min-height: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: var(--radius-control);
+      background: #0F0F12;
+      color: var(--foreground);
+    }
+
+    input,
+    select {
+      width: 100%;
+      transition: border-color 220ms var(--ease-out), box-shadow 220ms var(--ease-out), background 220ms var(--ease-out);
+    }
+
+    input {
+      padding: 0 12px;
+    }
+
+    select {
+      padding: 0 36px 0 12px;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.40);
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(94, 106, 210, 0.72);
+      box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.16), 0 0 30px rgba(94, 106, 210, 0.14);
+    }
+
+    button {
+      padding: 0 14px;
+      transition: transform 220ms var(--ease-out), border-color 220ms var(--ease-out), background 220ms var(--ease-out), color 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+    }
+
+    button:hover {
+      border-color: var(--border-hover);
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+
+    button[aria-pressed="true"] {
+      border-color: rgba(94, 106, 210, 0.55);
+      background: rgba(94, 106, 210, 0.18);
+      color: #ffffff;
+      box-shadow: 0 0 0 1px rgba(94, 106, 210, 0.20), 0 0 32px rgba(94, 106, 210, 0.13);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .language-toggle select {
+      min-height: 28px;
+      width: auto;
+      padding: 0 28px 0 10px;
+      border: 0;
+      border-radius: 7px;
+      background-color: transparent;
+      color: var(--foreground);
+      font-size: 12px;
+      line-height: 28px;
+      box-shadow: none;
+    }
+
+    .language-toggle select:focus {
+      border-color: transparent;
+      box-shadow: 0 0 0 2px rgba(94, 106, 210, 0.36);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .section-divider {
+      height: 1px;
+      margin: 0 0 14px;
+      border: 0;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.11), transparent);
+    }
+
+    .metrics .card {
+      grid-column: span 3;
+    }
+
+    .metrics[data-card-count="3"] .card:not([hidden]) {
+      grid-column: span 4;
+    }
+
+    .card {
+      min-height: 150px;
+      padding: 20px;
+      border-radius: var(--radius-card);
+      transition: transform 260ms var(--ease-out), border-color 260ms var(--ease-out), box-shadow 260ms var(--ease-out), background 260ms var(--ease-out);
+      animation: scale-in 580ms var(--ease-out) both;
+    }
+
+    .card:nth-child(1) { animation-delay: 80ms; }
+    .card:nth-child(2) { animation-delay: 140ms; }
+    .card:nth-child(3) { animation-delay: 200ms; }
+    .card:nth-child(4) { animation-delay: 260ms; }
+
+    .card.action-card {
+      cursor: pointer;
+    }
+
+    .card.action-card:focus-visible {
+      outline: 2px solid rgba(94, 106, 210, 0.75);
+      outline-offset: 2px;
+    }
+
+    .card-header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 0 14px;
+    }
+
+    .card-header h2 {
+      min-width: 0;
+      margin: 0;
+    }
+
+    .card-link-hint {
+      flex: 0 0 auto;
+      max-width: 48%;
+      overflow: hidden;
+      padding: 3px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.035);
+      color: var(--foreground-muted);
+      font-size: 12px;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card.action-card:hover .card-link-hint,
+    .card.action-card:focus-visible .card-link-hint {
+      border-color: rgba(255, 255, 255, 0.14);
+      color: var(--foreground);
+    }
+
+    .card h2,
+    .panel h2 {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 14px;
+      color: var(--accent-bright);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .card .card-header h2 {
+      margin: 0;
+    }
+
+    .metric {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .metric strong {
+      background: linear-gradient(to bottom, #ffffff, rgba(255, 255, 255, 0.68));
+      background-clip: text;
+      color: transparent;
+      font-size: clamp(38px, 6vw, 58px);
+      font-weight: 650;
+      line-height: 0.92;
+    }
+
+    .metric span {
+      padding-bottom: 5px;
+      color: var(--foreground-muted);
+      font-size: 13px;
+    }
+
+    .action-panel {
+      margin: 0 0 16px;
+      padding: 22px;
+      border-radius: var(--radius-card);
+      animation: fade-up 620ms var(--ease-out) 180ms both;
+    }
+
+    .dashboard-grid {
+      column-count: 2;
+      column-gap: 14px;
+    }
+
+    .panel {
+      align-self: start;
+      display: inline-block;
+      width: 100%;
+      margin: 0 0 14px;
+      padding: 22px;
+      border-radius: var(--radius-card);
+      break-inside: avoid;
+      transition: transform 260ms var(--ease-out), border-color 260ms var(--ease-out), box-shadow 260ms var(--ease-out), background 260ms var(--ease-out);
+      animation: fade-up 620ms var(--ease-out) both;
+    }
+
+    .panel.clusters {
+      grid-column: span 6;
+      animation-delay: 120ms;
+    }
+
+    .panel.drift {
+      grid-column: span 6;
+      animation-delay: 180ms;
+    }
+
+    .panel.updates,
+    .panel.actions {
+      grid-column: span 6;
+      animation-delay: 300ms;
+    }
+
+    .list {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .item {
+      padding: 14px;
+      border-radius: 12px;
+      background-color: rgba(10, 10, 12, 0.58);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      transition: transform 220ms var(--ease-out), border-color 220ms var(--ease-out), background 220ms var(--ease-out);
+    }
+
+    .item:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-hover);
+      background-color: rgba(255, 255, 255, 0.065);
+    }
+
+    .action-item {
+      display: grid;
+      gap: 12px;
+    }
+
+    .action-meta {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .action-meta-item,
+    .action-block {
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.025);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .action-meta-item {
+      min-width: 0;
+      padding: 8px 10px;
+    }
+
+    .action-label {
+      display: block;
+      color: var(--foreground-subtle);
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .action-value {
+      display: block;
+      min-width: 0;
+      margin-top: 4px;
+      overflow: hidden;
+      color: var(--foreground);
+      font-size: 13px;
+      font-weight: 620;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .action-block {
+      position: relative;
+      z-index: 1;
+      padding: 10px;
+    }
+
+    .action-block .pills {
+      margin-top: 8px;
+    }
+
+    .action-section-title {
+      margin: 0;
+      color: var(--foreground-subtle);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .page-change-group + .page-change-group {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .group-title {
+      margin: 0 0 10px;
+      color: var(--foreground-subtle);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .show-more-row {
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+    }
+
+    .show-more-button {
+      width: 100%;
+      min-height: 34px;
+      padding: 0 12px;
+      border-color: rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.035);
+      color: var(--foreground-muted);
+      font-size: 13px;
+    }
+
+    .show-more-button:hover {
+      border-color: rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--foreground);
+    }
+
+    .item-head {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .item-title {
+      margin: 0;
+      color: var(--foreground);
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .item-body {
+      position: relative;
+      z-index: 1;
+      margin: 8px 0 0;
+      color: var(--foreground-muted);
+      line-height: 1.65;
+    }
+
+    .pills {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 9px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--foreground-muted);
+      font-size: 12px;
+      line-height: 1;
+      white-space: nowrap;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    a.pill:hover {
+      border-color: var(--border-accent);
+      background: rgba(94, 106, 210, 0.12);
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .pill.warn {
+      border-color: rgba(214, 157, 85, 0.30);
+      color: var(--warning);
+    }
+
+    .pill.danger {
+      border-color: rgba(225, 109, 109, 0.32);
+      color: var(--danger);
+    }
+
+    details {
+      position: relative;
+      z-index: 1;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    summary {
+      color: rgba(237, 237, 239, 0.88);
+      cursor: pointer;
+      font-weight: 620;
+    }
+
+    .evidence {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--foreground-muted);
+      line-height: 1.62;
+    }
+
+    .empty {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: var(--foreground-muted);
+    }
+
+    .cluster-list {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .cluster-bar {
+      display: grid;
+      grid-template-columns: minmax(120px, 170px) minmax(0, 1fr) 38px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .cluster-bar strong {
+      min-width: 0;
+      overflow: hidden;
+      color: rgba(237, 237, 239, 0.86);
+      font-weight: 560;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .cluster-bar span {
+      color: var(--foreground-muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .bar-track {
+      height: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.28);
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), #8c95ff);
+      box-shadow: 0 0 22px rgba(94, 106, 210, 0.36);
+    }
+
+    .footer {
+      margin-top: 28px;
+      padding: 20px 0 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--foreground-muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(1deg);
+      }
+    }
+
+    @keyframes pulse-float {
+      0%, 100% {
+        opacity: 0.58;
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        opacity: 0.82;
+        transform: translateY(-16px) scale(1.04);
+      }
+    }
+
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scale-in {
+      from {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .shell {
+        width: min(100% - 32px, 1320px);
+        padding-top: 18px;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-top: 22px;
+      }
+
+      .meta {
+        min-width: 0;
+      }
+
+      .action-meta {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .dashboard-grid {
+        column-count: 1;
+      }
+
+      .card,
+      .panel.clusters,
+      .panel.drift,
+      .panel.updates,
+      .panel.actions {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100% - 24px, 1320px);
+        padding-bottom: 28px;
+      }
+
+      .hero {
+        padding-top: 18px;
+      }
+
+      .summary {
+        max-width: 100%;
+        font-size: 16px;
+        white-space: normal;
+      }
+
+      .card,
+      .panel {
+        padding: 16px;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .metrics .card,
+      .metrics[data-card-count="3"] .card:not([hidden]) {
+        grid-column: span 1;
+        min-height: 128px;
+      }
+
+      .metrics .card-header {
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .metrics .card-link-hint {
+        max-width: 52%;
+        padding: 3px 7px;
+        font-size: 11px;
+      }
+
+      .metrics .metric {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .metrics .metric strong {
+        font-size: 44px;
+        line-height: 0.95;
+      }
+
+      .metrics .metric span {
+        padding-bottom: 0;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .cluster-bar {
+        grid-template-columns: 1fr 34px;
+      }
+
+      .cluster-bar .bar-track {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      .action-meta {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .hero {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <div class="blob primary"></div>
+    <div class="blob secondary"></div>
+    <div class="blob tertiary"></div>
+    <div class="blob bottom"></div>
+  </div>
+
+  <main class="shell">
+    <header class="hero" id="hero">
+      <div class="hero-copy">
+        <div class="hero-kicker">
+          <p class="eyebrow" data-i18n="eyebrow">Obsiwiki Review</p>
+          <div class="header-actions">
+            <div class="language-toggle" aria-label="Language">
+              <select id="language-select" aria-label="Language">
+                <option value="en">EN</option>
+                <option value="zh">中文</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <h1 id="report-title">Review Dashboard Sample</h1>
+        <p class="summary" id="report-summary"></p>
+      </div>
+
+      <aside class="meta spotlight" aria-label="Report metadata">
+        <div class="meta-row"><span data-i18n="range">Range</span><strong id="meta-range"></strong></div>
+        <div class="meta-row"><span data-i18n="generated">Generated</span><strong id="meta-generated"></strong></div>
+        <div class="meta-row"><span data-i18n="vault">Vault</span><strong id="meta-vault"></strong></div>
+      </aside>
+    </header>
+
+    <section class="metrics" aria-label="Review metrics" data-card-count="4">
+      <article class="card spotlight action-card" id="action-required-card" role="button" tabindex="0" aria-controls="action-items">
+        <div class="card-header">
+          <h2 data-i18n="actionRequired">Action Required</h2>
+          <span class="card-link-hint" data-i18n="viewActionItems">View items</span>
+        </div>
+        <div class="metric"><strong id="metric-action-items">0</strong><span data-i18n="needsAction">needs action</span></div>
+      </article>
+      <article class="card spotlight">
+        <h2 data-i18n="topicClusters">Topic Clusters</h2>
+        <div class="metric"><strong id="metric-clusters">0</strong><span data-i18n="clustersFound">clusters</span></div>
+      </article>
+      <article class="card spotlight action-card" id="new-pages-card" role="button" tabindex="0" aria-controls="page-changes-panel">
+        <div class="card-header">
+          <h2 data-i18n="newPages">New Pages</h2>
+          <span class="card-link-hint" data-i18n="viewPages">View pages</span>
+        </div>
+        <div class="metric"><strong id="metric-new-pages">0</strong><span data-i18n="created">created</span></div>
+      </article>
+      <article class="card spotlight action-card" id="updated-pages-card" role="button" tabindex="0" aria-controls="page-changes-panel">
+        <div class="card-header">
+          <h2 data-i18n="updatedPages">Updated Pages</h2>
+          <span class="card-link-hint" data-i18n="viewPages">View pages</span>
+        </div>
+        <div class="metric"><strong id="metric-updated-pages">0</strong><span data-i18n="changed">changed</span></div>
+      </article>
+    </section>
+
+    <hr class="section-divider" aria-hidden="true">
+
+    <section class="panel action-panel spotlight" id="action-panel" aria-label="Action required">
+      <h2 data-i18n="actionRequired">Action Required</h2>
+      <ul class="list" id="action-items"></ul>
+    </section>
+
+    <section class="dashboard-grid" aria-label="Review dashboard">
+      <article class="panel clusters spotlight">
+        <h2 data-i18n="topicClusters">Topic Clusters</h2>
+        <div class="cluster-list" id="cluster-list"></div>
+      </article>
+
+      <article class="panel pages spotlight" id="page-changes-panel">
+        <h2 data-i18n="pageChanges">Page Changes</h2>
+        <div id="page-changes"></div>
+      </article>
+
+      <article class="panel updates spotlight">
+        <h2 data-i18n="notableUpdates">Notable Updates</h2>
+        <ul class="list" id="update-list"></ul>
+      </article>
+
+      <article class="panel drift spotlight">
+        <h2 data-i18n="overviewDrift">Overview Drift</h2>
+        <ul class="list" id="drift-list"></ul>
+      </article>
+
+      <article class="panel actions spotlight">
+        <h2 data-i18n="nextActions">Suggested Next Actions</h2>
+        <ul class="list" id="action-list"></ul>
+      </article>
+    </section>
+
+    <footer class="footer" id="footer">
+      Generated by Obsiwiki from Demo Vault data.
+    </footer>
+  </main>
+
+  <script id="review-data" type="application/json">
+{
+  "title": {
+    "en": "Review Dashboard Sample",
+    "zh": "Review Dashboard 示例"
+  },
+  "summary": {
+    "en": "Sample data for a generated review webpage. Replace this payload with vault review, lint, or weekly report results.",
+    "zh": "用于生成 review 网页的示例数据。实际使用时请替换为 vault review、lint 或周报结果。"
+  },
+  "range": {
+    "en": "sample review window",
+    "zh": "示例回顾周期"
+  },
+  "generatedAt": "2026-01-01 09:00",
+  "vaultName": "Demo Vault",
+  "metrics": {
+    "newPages": 8,
+    "updatedPages": 12
+  },
+  "pageChanges": {
+    "new": [
+      {
+        "title": { "en": "Example source summary", "zh": "示例来源摘要" },
+        "detail": { "en": "A raw note was summarized into a source page.", "zh": "一条 raw 笔记被整理为来源页。" },
+        "path": "wiki/sources/example-source.md"
+      },
+      {
+        "title": { "en": "Example concept page", "zh": "示例概念页" },
+        "detail": { "en": "A recurring idea was promoted into a concept page.", "zh": "一个反复出现的想法被提升为概念页。" },
+        "path": "wiki/concepts/example-topic.md"
+      },
+      {
+        "title": { "en": "Example topic map", "zh": "示例主题地图" },
+        "detail": { "en": "A lightweight map was created to connect related notes.", "zh": "新增轻量地图，用来连接相关笔记。" },
+        "path": "wiki/maps/example-topic.md"
+      },
+      {
+        "title": { "en": "Example synthesis note", "zh": "示例综合页" },
+        "detail": { "en": "Several notes were grouped into a reusable synthesis candidate.", "zh": "多篇笔记被整理为可复用的综合候选。" },
+        "path": "wiki/syntheses/example-synthesis.md"
+      },
+      {
+        "title": { "en": "Example entity note", "zh": "示例实体页" },
+        "detail": { "en": "A named tool or system was split into its own entity page.", "zh": "一个具名工具或系统被拆分为独立实体页。" },
+        "path": "wiki/entities/example-tool.md"
+      },
+      {
+        "title": { "en": "Example workflow note", "zh": "示例工作流笔记" },
+        "detail": { "en": "A repeatable process was captured as a workflow note.", "zh": "一个可重复流程被沉淀为工作流笔记。" },
+        "path": "wiki/concepts/example-workflow.md"
+      },
+      {
+        "title": { "en": "Example glossary note", "zh": "示例术语页" },
+        "detail": { "en": "A recurring term was documented for consistent naming.", "zh": "一个反复出现的术语被记录下来，以统一命名。" },
+        "path": "wiki/concepts/example-glossary.md"
+      },
+      {
+        "title": { "en": "Example project note", "zh": "示例项目页" },
+        "detail": { "en": "A project-specific note was created from related materials.", "zh": "一个项目相关笔记由关联材料生成。" },
+        "path": "wiki/projects/example-project.md"
+      }
+    ],
+    "updated": [
+      {
+        "title": { "en": "Overview note", "zh": "Overview 笔记" },
+        "detail": { "en": "Updated to reflect the new source cluster.", "zh": "已更新，以反映新的来源聚类。" },
+        "path": "wiki/overview.md"
+      },
+      {
+        "title": { "en": "Review backlog", "zh": "Review backlog" },
+        "detail": { "en": "Added an action item for a duplicate-topic decision.", "zh": "新增一个重复主题待处理事项。" },
+        "path": "wiki/review.md"
+      },
+      {
+        "title": { "en": "Knowledge index", "zh": "知识索引" },
+        "detail": { "en": "Added links to recently created pages.", "zh": "补充了近期新增页面链接。" },
+        "path": "wiki/index.md"
+      },
+      {
+        "title": { "en": "Source map", "zh": "来源地图" },
+        "detail": { "en": "Connected new source summaries to the map.", "zh": "把新的来源摘要连接到地图。" },
+        "path": "wiki/maps/sources.md"
+      },
+      {
+        "title": { "en": "Workflow concept", "zh": "工作流概念" },
+        "detail": { "en": "Clarified related links and source references.", "zh": "澄清了相关链接和来源引用。" },
+        "path": "wiki/concepts/workflow.md"
+      },
+      {
+        "title": { "en": "Research notes map", "zh": "研究笔记地图" },
+        "detail": { "en": "Grouped updated notes under the current topic cluster.", "zh": "把更新后的笔记归入当前主题簇。" },
+        "path": "wiki/maps/research-notes.md"
+      },
+      {
+        "title": { "en": "Example entity note", "zh": "示例实体页" },
+        "detail": { "en": "Refreshed metadata and related links.", "zh": "刷新了元数据和相关链接。" },
+        "path": "wiki/entities/example-tool.md"
+      },
+      {
+        "title": { "en": "Example project note", "zh": "示例项目页" },
+        "detail": { "en": "Linked the project note to source summaries.", "zh": "把项目笔记链接到来源摘要。" },
+        "path": "wiki/projects/example-project.md"
+      },
+      {
+        "title": { "en": "Example glossary note", "zh": "示例术语页" },
+        "detail": { "en": "Normalized names used across related notes.", "zh": "统一了相关笔记中的命名。" },
+        "path": "wiki/concepts/example-glossary.md"
+      },
+      {
+        "title": { "en": "Example synthesis note", "zh": "示例综合页" },
+        "detail": { "en": "Updated evidence and suggested next links.", "zh": "更新了证据和建议下一步链接。" },
+        "path": "wiki/syntheses/example-synthesis.md"
+      },
+      {
+        "title": { "en": "Example topic map", "zh": "示例主题地图" },
+        "detail": { "en": "Added the latest pages to the map.", "zh": "把最新页面加入地图。" },
+        "path": "wiki/maps/example-topic.md"
+      },
+      {
+        "title": { "en": "Example source summary", "zh": "示例来源摘要" },
+        "detail": { "en": "Added related concepts and backlinks.", "zh": "补充了相关概念和反向链接。" },
+        "path": "wiki/sources/example-source.md"
+      }
+    ]
+  },
+  "clusters": [
+    { "name": { "en": "Research Workflow", "zh": "研究工作流" }, "count": 8 },
+    { "name": { "en": "Knowledge Structure", "zh": "知识结构" }, "count": 6 },
+    { "name": { "en": "Source Review", "zh": "来源复核" }, "count": 4 }
+  ],
+  "overviewDrift": [
+    {
+      "title": {
+        "en": "New source cluster emerged",
+        "zh": "出现新的来源聚类"
+      },
+      "detail": {
+        "en": "Recent additions point to a recurring topic that may deserve a concept page or map update.",
+        "zh": "近期新增内容指向一个反复出现的主题，可能需要新增概念页或更新地图。"
+      },
+      "links": ["wiki/overview.md", "wiki/maps/example-topic.md"]
+    }
+  ],
+  "reviewItems": [
+    {
+      "id": "review-001",
+      "title": {
+        "en": "Decide whether overlapping topic notes should be merged",
+        "zh": "决定是否合并重叠主题笔记"
+      },
+      "type": "duplicate-topic",
+      "status": "open",
+      "severity": "medium",
+      "requiresUserDecision": true,
+      "relatedPages": ["wiki/review.md", "wiki/concepts/example-topic.md"],
+      "evidence": [
+        {
+          "en": "Two notes use different names for what appears to be the same recurring idea.",
+          "zh": "两篇笔记使用了不同名称，但似乎指向同一个反复出现的想法。"
+        },
+        {
+          "en": "Both notes share sources and related links.",
+          "zh": "两篇笔记共享来源和相关链接。"
+        }
+      ],
+      "suggestedAction": {
+        "en": "Review both pages and choose merge, link, or keep separate.",
+        "zh": "复核两篇页面，并选择合并、互链或继续分开维护。"
+      }
+    }
+  ],
+  "notableUpdates": [
+    {
+      "title": {
+        "en": "Source summaries were added",
+        "zh": "新增了来源摘要"
+      },
+      "detail": {
+        "en": "Several raw notes now have source summaries that can be linked into maps.",
+        "zh": "多篇 raw 笔记已有来源摘要，可以进一步链接到地图。"
+      },
+      "links": ["wiki/sources/example-source.md"]
+    }
+  ],
+  "nextActions": [
+    {
+      "title": {
+        "en": "Review the duplicate-topic candidate",
+        "zh": "复核重复主题候选"
+      },
+      "detail": {
+        "en": "Decide whether the overlapping notes should be merged or connected with explicit links.",
+        "zh": "判断重叠笔记应合并，还是通过明确链接连接。"
+      }
+    },
+    {
+      "title": {
+        "en": "Update the topic map",
+        "zh": "更新主题地图"
+      },
+      "detail": {
+        "en": "Add the new source summaries to the relevant map after review.",
+        "zh": "复核后，把新的来源摘要加入相关地图。"
+      }
+    }
+  ]
+}
+  </script>
+
+  <script>
+    const data = JSON.parse(document.getElementById("review-data").textContent);
+    const translations = {
+      en: {
+        pageTitle: "Obsiwiki Review Dashboard",
+        eyebrow: "Obsiwiki Review",
+        range: "Range",
+        generated: "Generated",
+        vault: "Vault",
+        newPages: "New Pages",
+        created: "created",
+        updatedPages: "Updated Pages",
+        changed: "changed",
+        viewPages: "View pages",
+        actionRequired: "Action Required",
+        needsAction: "needs action",
+        viewActionItems: "View items",
+        clustersFound: "clusters",
+        pageChanges: "Page Changes",
+        newPageGroup: "New pages",
+        updatedPageGroup: "Updated pages",
+        topicClusters: "Topic Clusters",
+        overviewDrift: "Needs Update",
+        notableUpdates: "Notable Updates",
+        nextActions: "Suggested Next Actions",
+        footerGenerated: "Generated by Obsiwiki from {vault} data.",
+        noItems: "No items found.",
+        noClusters: "No clusters found.",
+        evidenceSummary: "Evidence and suggested action",
+        suggestedAction: "Suggested action:",
+        relatedPages: "Related pages",
+        itemType: "Type",
+        itemStatus: "Status",
+        decisionLabel: "Decision",
+        none: "None",
+        unspecified: "unspecified",
+        unknown: "unknown",
+        normal: "normal",
+        other: "other",
+        needsDecision: "needs decision",
+        status: {
+          open: "open",
+          resolved: "resolved"
+        },
+        severity: {
+          high: "high",
+          medium: "medium",
+          low: "low",
+          normal: "normal"
+        },
+        type: {
+          "duplicate-topic": "duplicate topic",
+          "missing-source": "missing source",
+          "synthesis-candidate": "synthesis candidate",
+          "stale-synthesis": "stale synthesis",
+          "unclear-value": "unclear value",
+          "graph-health": "graph health",
+          other: "other"
+        }
+      },
+      zh: {
+        pageTitle: "Obsiwiki Review 看板",
+        eyebrow: "Obsiwiki Review",
+        range: "范围",
+        generated: "生成时间",
+        vault: "Vault",
+        newPages: "新增页面",
+        created: "已创建",
+        updatedPages: "更新页面",
+        changed: "已变更",
+        viewPages: "查看页面",
+        actionRequired: "需要处理",
+        needsAction: "待处理",
+        viewActionItems: "查看事项",
+        clustersFound: "个主题簇",
+        pageChanges: "页面变更",
+        newPageGroup: "新增页面",
+        updatedPageGroup: "更新页面",
+        topicClusters: "主题簇",
+        overviewDrift: "待更新",
+        notableUpdates: "重要更新",
+        nextActions: "建议下一步",
+        footerGenerated: "Obsiwiki 根据 {vault} 数据生成",
+        noItems: "没有找到条目。",
+        noClusters: "没有找到主题簇。",
+        evidenceSummary: "证据与建议动作",
+        suggestedAction: "建议动作：",
+        relatedPages: "关联页面",
+        itemType: "类型",
+        itemStatus: "状态",
+        decisionLabel: "决策",
+        none: "无",
+        unspecified: "未指定",
+        unknown: "未知",
+        normal: "普通",
+        other: "其他",
+        needsDecision: "需要决策",
+        status: {
+          open: "open",
+          resolved: "resolved"
+        },
+        severity: {
+          high: "高",
+          medium: "中",
+          low: "低",
+          normal: "普通"
+        },
+        type: {
+          "duplicate-topic": "重复主题",
+          "missing-source": "缺少来源",
+          "synthesis-candidate": "综合候选",
+          "stale-synthesis": "过期综合",
+          "unclear-value": "价值不明确",
+          "graph-health": "图谱健康",
+          other: "其他"
+        }
+      }
+    };
+
+    const PAGE_CHANGE_BATCH_SIZE = 3;
+    let currentLanguage = getInitialLanguage();
+    const pageChangeVisible = {
+      new: PAGE_CHANGE_BATCH_SIZE,
+      updated: PAGE_CHANGE_BATCH_SIZE
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const actionItemsEl = $("#action-items");
+    const newPagesCardEl = $("#new-pages-card");
+    const updatedPagesCardEl = $("#updated-pages-card");
+    const actionRequiredCardEl = $("#action-required-card");
+    const languageSelectEl = $("#language-select");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function getInitialLanguage() {
+      try {
+        const saved = window.localStorage.getItem("obsiwiki-review-language");
+        if (saved === "en" || saved === "zh") return saved;
+      } catch {
+        // Ignore storage errors in local files or restricted browser contexts.
+      }
+      return navigator.language && navigator.language.startsWith("zh") ? "zh" : "en";
+    }
+
+    function t(key) {
+      return translations[currentLanguage][key] || translations.en[key] || key;
+    }
+
+    function text(value, fallback = "") {
+      return value === undefined || value === null || value === "" ? fallback : String(value);
+    }
+
+    function localize(value, fallback = "") {
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        return text(value[currentLanguage] ?? value.en ?? value.zh ?? Object.values(value)[0], fallback);
+      }
+      return text(value, fallback);
+    }
+
+    function translateValue(group, value, fallback = "") {
+      return translations[currentLanguage][group]?.[value] || translations.en[group]?.[value] || text(value, fallback);
+    }
+
+    function flattenText(value) {
+      if (Array.isArray(value)) return value.map(flattenText).join(" ");
+      if (value && typeof value === "object") return Object.values(value).map(flattenText).join(" ");
+      return text(value);
+    }
+
+    function escapeHtml(value) {
+      return text(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value).replace(/`/g, "&#96;");
+    }
+
+    function linkList(paths = []) {
+      if (!paths.length) return "";
+      return `<div class="pills">${paths.map((path) => `<a class="pill" href="${escapeAttribute(path)}">${escapeHtml(path)}</a>`).join("")}</div>`;
+    }
+
+    function showMoreLabel(count) {
+      return currentLanguage === "zh" ? `再显示 ${count} 条` : `Show ${count} more`;
+    }
+
+    function renderSimpleList(selector, items) {
+      const target = $(selector);
+      if (!items || items.length === 0) {
+        target.innerHTML = `<p class="empty">${escapeHtml(t("noItems"))}</p>`;
+        return;
+      }
+      target.innerHTML = items.map((item) => `
+        <li class="item spotlight">
+          <div class="item-head">
+            <p class="item-title">${escapeHtml(localize(item.title))}</p>
+          </div>
+          <p class="item-body">${escapeHtml(localize(item.detail))}</p>
+          ${linkList(item.links)}
+        </li>
+      `).join("");
+    }
+
+    function renderPageChanges() {
+      const changes = data.pageChanges || {};
+      const groups = [
+        { key: "new", label: t("newPageGroup"), items: changes.new || [] },
+        { key: "updated", label: t("updatedPageGroup"), items: changes.updated || [] }
+      ];
+      $("#page-changes").innerHTML = groups.map((group) => `
+        <section class="page-change-group" id="page-change-${escapeAttribute(group.key)}">
+          <p class="group-title">${escapeHtml(group.label)}</p>
+          ${renderPageChangeList(group.key, group.items)}
+        </section>
+      `).join("");
+    }
+
+    function renderPageChangeList(groupKey, items) {
+      if (!items.length) return `<p class="empty">${escapeHtml(t("noItems"))}</p>`;
+      const visibleCount = pageChangeVisible[groupKey] || PAGE_CHANGE_BATCH_SIZE;
+      const visibleItems = items.slice(0, visibleCount);
+      const remaining = Math.max(items.length - visibleItems.length, 0);
+      const nextCount = Math.min(PAGE_CHANGE_BATCH_SIZE, remaining);
+      return `
+        <ul class="list">
+          ${visibleItems.map((item) => `
+            <li class="item spotlight">
+              <div class="item-head">
+                <p class="item-title">${escapeHtml(localize(item.title))}</p>
+              </div>
+              <p class="item-body">${escapeHtml(localize(item.detail))}</p>
+              ${item.path ? linkList([item.path]) : ""}
+            </li>
+          `).join("")}
+        </ul>
+        ${remaining > 0 ? `
+          <div class="show-more-row">
+            <button class="show-more-button" type="button" data-page-change-more="${escapeAttribute(groupKey)}">
+              ${escapeHtml(showMoreLabel(nextCount))}
+            </button>
+          </div>
+        ` : ""}
+      `;
+    }
+
+    function renderClusters(clusters = []) {
+      const target = $("#cluster-list");
+      if (clusters.length === 0) {
+        target.innerHTML = `<p class="empty">${escapeHtml(t("noClusters"))}</p>`;
+        return;
+      }
+      const max = Math.max(...clusters.map((cluster) => cluster.count), 1);
+      target.innerHTML = clusters.map((cluster) => {
+        const width = Math.max(6, Math.round((cluster.count / max) * 100));
+        return `
+          <div class="cluster-bar">
+            <strong title="${escapeAttribute(localize(cluster.name))}">${escapeHtml(localize(cluster.name))}</strong>
+            <div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width: ${width}%"></div></div>
+            <span>${escapeHtml(cluster.count)}</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderReviewItems() {
+      const filtered = (data.reviewItems || []).filter((item) => item.status !== "resolved");
+
+      if (filtered.length === 0) {
+        actionItemsEl.innerHTML = `<p class="empty">${escapeHtml(t("noItems"))}</p>`;
+        return;
+      }
+
+      actionItemsEl.innerHTML = filtered.map((item) => {
+        const severityClass = item.severity === "high" ? "danger" : item.severity === "medium" ? "warn" : "";
+        return `
+          <li class="item action-item spotlight" data-type="${escapeAttribute(item.type)}" data-requires-decision="${item.requiresUserDecision === true ? "true" : "false"}">
+            <div class="item-head">
+              <p class="item-title">${escapeHtml(localize(item.title))}</p>
+              <span class="pill ${severityClass}">${escapeHtml(translateValue("severity", item.severity, t("normal")))}</span>
+            </div>
+            <div class="action-meta">
+              <div class="action-meta-item">
+                <span class="action-label">${escapeHtml(t("itemType"))}</span>
+                <span class="action-value">${escapeHtml(translateValue("type", item.type, t("other")))}</span>
+              </div>
+              <div class="action-meta-item">
+                <span class="action-label">${escapeHtml(t("itemStatus"))}</span>
+                <span class="action-value">${escapeHtml(translateValue("status", item.status, "open"))}</span>
+              </div>
+              <div class="action-meta-item">
+                <span class="action-label">${escapeHtml(t("decisionLabel"))}</span>
+                <span class="action-value">${escapeHtml(item.requiresUserDecision ? t("needsDecision") : t("none"))}</span>
+              </div>
+            </div>
+            <div class="action-block">
+              <p class="action-section-title">${escapeHtml(t("relatedPages"))}</p>
+              ${linkList(item.relatedPages)}
+            </div>
+            <div class="action-block">
+              <p class="action-section-title">${escapeHtml(t("suggestedAction"))}</p>
+              <p class="item-body">${escapeHtml(localize(item.suggestedAction, t("none")))}</p>
+            </div>
+            <details>
+              <summary>${escapeHtml(t("evidenceSummary"))}</summary>
+              <ul class="evidence">
+                ${(item.evidence || []).map((line) => `<li>${escapeHtml(localize(line))}</li>`).join("")}
+              </ul>
+            </details>
+          </li>
+        `;
+      }).join("");
+    }
+
+    function bindEvents() {
+      languageSelectEl.addEventListener("change", () => {
+        currentLanguage = languageSelectEl.value;
+        try {
+          window.localStorage.setItem("obsiwiki-review-language", currentLanguage);
+        } catch {
+          // Ignore storage errors in local files or restricted browser contexts.
+        }
+        render();
+      });
+
+      $("#page-changes").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-page-change-more]");
+        if (!button) return;
+        const groupKey = button.dataset.pageChangeMore;
+        const items = data.pageChanges?.[groupKey] || [];
+        const current = pageChangeVisible[groupKey] || PAGE_CHANGE_BATCH_SIZE;
+        pageChangeVisible[groupKey] = Math.min(current + PAGE_CHANGE_BATCH_SIZE, items.length);
+        renderPageChanges();
+      });
+
+      newPagesCardEl.addEventListener("click", () => showPageChanges("new"));
+      newPagesCardEl.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          showPageChanges("new");
+        }
+      });
+
+      updatedPagesCardEl.addEventListener("click", () => showPageChanges("updated"));
+      updatedPagesCardEl.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          showPageChanges("updated");
+        }
+      });
+
+      actionRequiredCardEl.addEventListener("click", showActionItems);
+      actionRequiredCardEl.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          showActionItems();
+        }
+      });
+
+      if (!reduceMotion) {
+        window.addEventListener("scroll", updateHeroParallax, { passive: true });
+      }
+    }
+
+    function renderStaticText() {
+      document.documentElement.lang = currentLanguage === "zh" ? "zh-CN" : "en";
+      document.title = t("pageTitle");
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        el.textContent = t(el.dataset.i18n);
+      });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+        el.setAttribute("placeholder", t(el.dataset.i18nPlaceholder));
+      });
+      languageSelectEl.value = currentLanguage;
+    }
+
+    function render() {
+      renderStaticText();
+
+      $("#report-title").textContent = localize(data.title, "Review Dashboard Sample");
+      $("#report-summary").textContent = localize(data.summary);
+      $("#meta-range").textContent = localize(data.range, t("unspecified"));
+      $("#meta-generated").textContent = text(data.generatedAt, t("unknown"));
+      $("#meta-vault").textContent = text(data.vaultName, t("unknown"));
+      $("#footer").textContent = t("footerGenerated").replace("{vault}", text(data.vaultName, t("unknown")));
+
+      $("#metric-new-pages").textContent = text(data.metrics?.newPages ?? data.pageChanges?.new?.length, 0);
+      $("#metric-updated-pages").textContent = text(data.metrics?.updatedPages ?? data.pageChanges?.updated?.length, 0);
+      const actionItemCount = (data.reviewItems || []).filter((item) => item.status !== "resolved").length;
+      $("#metric-action-items").textContent = actionItemCount;
+      $("#metric-clusters").textContent = (data.clusters || []).length;
+      actionRequiredCardEl.hidden = actionItemCount === 0;
+      $("#action-panel").hidden = actionItemCount === 0;
+      $(".metrics").dataset.cardCount = actionItemCount === 0 ? "3" : "4";
+
+      renderClusters(data.clusters);
+      renderPageChanges();
+      renderSimpleList("#drift-list", data.overviewDrift);
+      renderSimpleList("#update-list", data.notableUpdates);
+      renderSimpleList("#action-list", data.nextActions);
+      renderReviewItems();
+      updateHeroParallax();
+    }
+
+    function showPageChanges(group) {
+      const target = $(`#page-change-${group}`) || $("#page-changes-panel");
+      target.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start"
+      });
+    }
+
+    function showActionItems() {
+      renderReviewItems();
+      scrollToActionPanel();
+    }
+
+    function scrollToActionPanel() {
+      $("#action-panel").scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start"
+      });
+    }
+
+    function updateHeroParallax() {
+      if (reduceMotion) return;
+      const progress = Math.min(window.scrollY / 420, 1);
+      const hero = $("#hero");
+      hero.style.setProperty("--hero-opacity", String(1 - progress * 0.55));
+      hero.style.setProperty("--hero-scale", String(1 - progress * 0.045));
+      hero.style.setProperty("--hero-y", `${progress * 72}px`);
+    }
+
+    bindEvents();
+    render();
+  </script>
+</body>
+</html>

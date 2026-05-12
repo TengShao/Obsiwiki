@@ -8,6 +8,7 @@ Use these write targets:
 - value judgment guidance: `System/Schema/purpose.md`
 - current knowledge state: `wiki/overview.md`
 - uncertain issues and human decisions: `wiki/review.md`
+- disposable generated review/report artifacts: `exports/reviews/`
 - vault marker: `System/obsiwiki.toml`
 - rules and contracts: `System/Schema/`
 
@@ -34,3 +35,4 @@ Key rules:
 - Consult `System/Schema/purpose.md` before promoting material into durable wiki content.
 - Use `wiki/maps/` to absorb pages into the graph before over-optimizing body links.
 - Use `wiki/review.md` when an issue needs human judgment instead of forced automatic cleanup.
+- Keep generated HTML dashboards and other disposable reports under `exports/reviews/`; do not treat them as durable wiki knowledge or sources of truth.

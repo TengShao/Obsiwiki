@@ -10,6 +10,8 @@ Point Hermes at these files:
 - `references/schema.md`
 - `references/page-types.md`
 - `references/lint-checklist.md`
+- `references/review-dashboard.md`
+- `templates/review-dashboard.html`
 - `starter-vault/System/Schema/vault-schema.md`
 - `starter-vault/System/Schema/workflows.md`
 - `starter-vault/System/Schema/page-contracts.md`
@@ -51,6 +53,7 @@ When updating the installed Obsiwiki skill, refresh the skill files first. Then,
 - Use suggest-and-confirm behavior for `capture`.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
 - Keep `review` and weekly reports read-only by default; use the last 7 days unless the user specifies a range, and use `this week` for weekly reports.
+- Use `templates/review-dashboard.html` as the agent-side webpage generation template when the user asks for an HTML dashboard, interactive report, visual review, or exported report file; write generated webpages under `exports/reviews/`.
 - Consult `System/Schema/purpose.md` before promoting material into durable wiki content when present.
 - Use `wiki/overview.md` as the compressed knowledge base state.
 - Use `wiki/review.md` for uncertain value, duplicate, source, stale synthesis, or graph health decisions.
@@ -81,6 +84,8 @@ Read:
 - references/schema.md
 - references/page-types.md
 - references/lint-checklist.md
+- references/review-dashboard.md when generating HTML review/report webpages
+- templates/review-dashboard.html when generating HTML review/report webpages
 - System/obsiwiki.toml if present
 - System/Schema/ if present, otherwise the installed Obsiwiki schema
 
@@ -91,7 +96,8 @@ Maintain this vault through these workflows:
 - query: answer from wiki/index.md, maps, concepts, entities, sources, syntheses
 - lint: find orphan pages, missing sources, duplicates, stale pages, asset issues, and graph health issues
 - review: summarize recent additions, weekly changes, topic clusters, open review items, overview drift, and next actions without writing
+- review dashboard: when requested, use templates/review-dashboard.html to generate a self-contained webpage under exports/reviews/
 - scheduled maintenance: guide creation of a recurring review/lint job; default to Monday 09:00 unless the user chooses another schedule
 
-Keep raw sources in raw/, binary assets in assets/, durable knowledge in wiki/, value judgment in `System/Schema/purpose.md`, review backlog in wiki/review.md, and workflow rules in the active Obsiwiki schema.
+Keep raw sources in raw/, binary assets in assets/, durable knowledge in wiki/, disposable generated webpages in exports/reviews/, value judgment in `System/Schema/purpose.md`, review backlog in wiki/review.md, and workflow rules in the active Obsiwiki schema.
 ```

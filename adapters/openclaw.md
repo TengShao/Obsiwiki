@@ -111,6 +111,7 @@ Expected behavior:
 - propose `wiki/overview.md` updates when the review changes the compressed picture of the knowledge base
 - propose `wiki/review.md` items for unresolved duplicate, source, stale synthesis, unclear value, or graph health questions
 - do not write to the vault by default
+- when the user asks for an HTML dashboard, interactive report, visual review, or exported report file, use `templates/review-dashboard.html` as the agent-side webpage generation template and write the generated webpage under `exports/reviews/`
 
 ### `/obsiwiki review <range>`
 
@@ -138,6 +139,7 @@ Expected behavior:
 - Commands route into the shared `ingest / capture / query / lint / review` workflows.
 - Directory semantics and page contracts come from the installed Obsiwiki schema by default.
 - If the target vault contains `System/Schema/`, treat that vault-local schema as the source of truth.
+- Keep generated HTML review/report webpages in `exports/reviews/`; do not treat them as durable wiki pages.
 - Do not maintain private OpenClaw rules that conflict with the active Obsiwiki schema.
 - Prefer updating existing pages over creating duplicates.
 - Consult `System/Schema/purpose.md` before promoting material into durable wiki content when present.

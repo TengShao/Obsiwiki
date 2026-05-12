@@ -20,6 +20,7 @@ It gives your agents a shared way to:
 - [Install Skill](#install-skill)
 - [Update Skill](#update-skill)
 - [Core Workflows](#core-workflows)
+- [Visual HTML Output](#visual-html-output)
 - [Vault Folder Structure](#vault-folder-structure)
 
 ## Acknowledgements
@@ -39,7 +40,10 @@ Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/kar
 ├── references/
 │   ├── lint-checklist.md
 │   ├── page-types.md
+│   ├── review-dashboard.md
 │   └── schema.md
+├── templates/
+│   └── review-dashboard.html
 └── starter-vault/
     ├── System/
     │   ├── obsiwiki.toml
@@ -47,6 +51,7 @@ Obsiwiki is inspired by Andrej Karpathy's [LLM Wiki](https://gist.github.com/kar
     │   └── Schema/
     │       └── purpose.md
     ├── assets/
+    ├── exports/
     ├── raw/
     └── wiki/
 ```
@@ -64,7 +69,7 @@ Common workflow verbs:
 - `capture`: extract reusable conclusions from a conversation and update the best target page.
 - `query`: answer from `wiki/index.md`, maps, and formal wiki pages.
 - `lint`: check for orphan pages, missing sources, duplicates, stale pages, asset placement issues, and graph health issues.
-- `review`: summarize recent additions, notable updates, topic clusters, open review items, overview drift, and next actions.
+- `review`: summarize recent additions, notable updates, topic clusters, action items that need attention, overview drift, and next actions.
 
 Canonical workflow prompts:
 
@@ -74,6 +79,7 @@ Canonical workflow prompts:
 /obsiwiki answer this from the vault: <question>
 /obsiwiki lint this vault.
 /obsiwiki review recent additions to this vault.
+/obsiwiki generate an HTML review dashboard for this vault.
 /obsiwiki generate this week's knowledge base report.
 /obsiwiki set up scheduled maintenance for this vault.
 ```
@@ -86,6 +92,8 @@ Send this prompt to the agent to install Obsiwiki skill:
 Install Obsiwiki for the agent I am currently using. Use this repository: https://github.com/TengShao/Obsiwiki
 
 Inspect the repository and decide which Obsiwiki files are needed for this agent. Read the relevant adapter note under adapters/ from the repository for guidance, but do not install adapters/ locally.
+
+Install `templates/` and `references/review-dashboard.md` when the agent can generate local files. `templates/review-dashboard.html` is an agent-side webpage generation template for review/report dashboards.
 
 Decide where this agent keeps reusable skills, project instructions, commands, plugins, or context. Install the necessary Obsiwiki files there.
 
@@ -115,7 +123,7 @@ Update the existing Obsiwiki installation for the agent I am currently using. Us
 
 Inspect the latest repository and decide which installed Obsiwiki files need refreshing. Read the relevant adapter note under adapters/ from the repository for guidance, but do not install adapters/ locally.
 
-Find the current Obsiwiki skill installation and refresh it from the latest repository version. If any vault-local System/Schema/ files are involved, preserve local customizations.
+Find the current Obsiwiki skill installation and refresh it from the latest repository version, including templates/ when present. If any vault-local System/Schema/ files are involved, preserve local customizations.
 
 After refreshing the skill, compare the latest default schema, value guidance, and support pages with the target vault if it has System/Schema/. Do not overwrite the vault. Report schema/workflow changes separately from value-guidance additions such as System/Schema/purpose.md and support-page additions such as wiki/overview.md and wiki/review.md. If System/Schema/purpose.md is missing, ask whether to initialize one from the starter template or draft one for this vault. If wiki/overview.md or wiki/review.md is missing, scan wiki/index.md, wiki/maps/, wiki/log.md, and recent formal page updates, then ask whether to initialize those support pages. Draft wiki/overview.md as a current-state summary and wiki/review.md as a backlog with issues found during the scan. Ask me whether to merge any suggested vault-local migration.
 
@@ -216,11 +224,13 @@ Expected behavior:
 
 1. Resolve ranges such as `yesterday`, `this week`, `this month`, `last 14 days`, `since 2026-04-01`, or `2026-04-01 to 2026-04-15`.
 2. Read `wiki/log.md` first, page frontmatter `last_updated` second, and file modification time only as a fallback.
-3. Summarize the time range, new sources and pages, notable updates, topic clusters, open organization questions, open review items, overview drift, and suggested next `ingest`, `capture`, or `lint` actions.
+3. Summarize the time range, new sources and pages, notable updates, topic clusters, open organization questions, action items that need attention, overview drift, and suggested next `ingest`, `capture`, or `lint` actions.
 4. Keep the review read-only by default.
 5. Propose `wiki/overview.md` updates when the review changes the compressed picture of the knowledge base.
 6. Propose `wiki/review.md` items for unresolved duplicate, source, stale synthesis, unclear value, or graph health questions.
 7. If you want to save a weekly report or durable summary, ask the agent to switch to `capture` or propose a `wiki/syntheses/` update and confirm before writing.
+
+Optional generated webpage artifact: agents can use `templates/review-dashboard.html` as an agent-side webpage generation template to produce a disposable, bilingual English/Chinese, Linear-style interactive HTML review dashboard from vault data. Keep Markdown files such as `wiki/review.md` as the durable source of truth.
 
 Examples:
 
@@ -230,6 +240,7 @@ Examples:
 /obsiwiki review recent additions from this week.
 /obsiwiki review recent additions from this month.
 /obsiwiki review recent additions since 2026-04-01.
+/obsiwiki generate an HTML review dashboard for this vault.
 /obsiwiki generate this week's knowledge base report.
 ```
 
@@ -250,7 +261,7 @@ Expected behavior:
 Suggested recurring task prompt:
 
 ```text
-Review recent additions to this vault and lint this vault. Keep the run read-only by default. Summarize recent additions, notable updates, open review items, overview drift, lint issues, graph health issues, and suggested next actions. Propose any durable writes for user confirmation.
+Review recent additions to this vault and lint this vault. Keep the run read-only by default. Summarize recent additions, notable updates, action items that need attention, overview drift, lint issues, graph health issues, and suggested next actions. Propose any durable writes for user confirmation.
 ```
 
 Example:
@@ -260,9 +271,26 @@ Example:
 ```
 
 
+## Visual HTML Output
+
+Obsiwiki can give agents a webpage template for review and report artifacts.
+
+When a user asks for an HTML dashboard, visual review, interactive report, or exported review file, the agent uses `templates/review-dashboard.html` as a generation template, replaces the embedded `script#review-data` JSON payload, and writes a self-contained HTML file under `exports/reviews/`.
+
+The generated page can show:
+
+- recent review or weekly report summaries
+- new and updated pages
+- topic clusters
+- action items that need attention
+- overview drift
+- notable updates and suggested next actions
+
+![Review dashboard webpage sample](templates/dashboard-webpage-sample.png)
+
 ## Vault Folder Structure
 
-The starter vault uses four main layers plus vault-local guidance under `System/Schema/`:
+The starter vault uses five main layers plus vault-local guidance under `System/Schema/`:
 
 ```text
 raw/
@@ -276,6 +304,9 @@ assets/
 ├── wiki/            reusable long-lived knowledge assets
 ├── projects/        project-specific assets
 └── shared/          assets reused across topics
+
+exports/
+└── reviews/         generated HTML review/report webpages created by agents
 
 wiki/
 ├── concepts/        durable concepts, protocols, frameworks, and methods
@@ -298,6 +329,7 @@ Folder intent:
 
 - `raw/` keeps source material close to its original form.
 - `assets/` keeps attachments and media files out of note folders.
+- `exports/` keeps disposable generated webpages, such as review dashboards, out of the durable wiki layer.
 - `System/obsiwiki.toml` marks the vault root for future Obsiwiki runs.
 - `System/Schema/purpose.md` tells agents how to judge what is worth preserving.
 - `wiki/` is the durable knowledge layer agents should query and update.
@@ -329,6 +361,7 @@ Obsiwiki 帮你把 Obsidian 里的零散资料、笔记和对话整理成结构�
 - [安装 Skill](#安装-skill)
 - [更新 Skill](#更新-skill)
 - [核心工作流](#核心工作流)
+- [可视化HTML输出](#可视化html输出)
 - [知识库目录结构](#知识库目录结构)
 
 ## 致谢
@@ -348,7 +381,10 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 ├── references/
 │   ├── lint-checklist.md
 │   ├── page-types.md
+│   ├── review-dashboard.md
 │   └── schema.md
+├── templates/
+│   └── review-dashboard.html
 └── starter-vault/
     ├── System/
     │   ├── obsiwiki.toml
@@ -356,6 +392,7 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
     │   └── Schema/
     │       └── purpose.md
     ├── assets/
+    ├── exports/
     ├── raw/
     └── wiki/
 ```
@@ -383,6 +420,7 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 /obsiwiki answer this from the vault: <question>
 /obsiwiki lint this vault.
 /obsiwiki review recent additions to this vault.
+/obsiwiki generate an HTML review dashboard for this vault.
 /obsiwiki generate this week's knowledge base report.
 /obsiwiki set up scheduled maintenance for this vault.
 ```
@@ -395,6 +433,8 @@ Obsiwiki 受到 Andrej Karpathy 的 [LLM Wiki](https://gist.github.com/karpathy/
 Install Obsiwiki for the agent I am currently using. Use this repository: https://github.com/TengShao/Obsiwiki
 
 Inspect the repository and decide which Obsiwiki files are needed for this agent. Read the relevant adapter note under adapters/ from the repository for guidance, but do not install adapters/ locally.
+
+Install `templates/` and `references/review-dashboard.md` when the agent can generate local files. `templates/review-dashboard.html` is an agent-side webpage generation template for review/report dashboards.
 
 Decide where this agent keeps reusable skills, project instructions, commands, plugins, or context. Install the necessary Obsiwiki files there.
 
@@ -424,7 +464,7 @@ Update the existing Obsiwiki installation for the agent I am currently using. Us
 
 Inspect the latest repository and decide which installed Obsiwiki files need refreshing. Read the relevant adapter note under adapters/ from the repository for guidance, but do not install adapters/ locally.
 
-Find the current Obsiwiki skill installation and refresh it from the latest repository version. If any vault-local System/Schema/ files are involved, preserve local customizations.
+Find the current Obsiwiki skill installation and refresh it from the latest repository version, including templates/ when present. If any vault-local System/Schema/ files are involved, preserve local customizations.
 
 After refreshing the skill, compare the latest default schema, value guidance, and support pages with the target vault if it has System/Schema/. Do not overwrite the vault. Report schema/workflow changes separately from value-guidance additions such as System/Schema/purpose.md and support-page additions such as wiki/overview.md and wiki/review.md. If System/Schema/purpose.md is missing, ask whether to initialize one from the starter template or draft one for this vault. If wiki/overview.md or wiki/review.md is missing, scan wiki/index.md, wiki/maps/, wiki/log.md, and recent formal page updates, then ask whether to initialize those support pages. Draft wiki/overview.md as a current-state summary and wiki/review.md as a backlog with issues found during the scan. Ask me whether to merge any suggested vault-local migration.
 
@@ -531,6 +571,8 @@ Report what changed and how to reload the agent.
 6. 对未解决的重复主题、来源缺失、过期 synthesis、价值不明或 graph health 问题，建议写入 `wiki/review.md`。
 7. 如果你希望保存周报或长期摘要，请让 Agent 转入 `capture`，或建议更新 `wiki/syntheses/`，并在写入前确认。
 
+可选网页产物：Agent 可以使用 `templates/review-dashboard.html` 作为网页生成模板，根据 vault 数据生成一次性的中英文交互式 HTML review dashboard。生成结果应放在 `exports/reviews/`，而 `wiki/review.md` 等 Markdown 文件仍是长期真源。
+
 示例：
 
 ```text
@@ -539,6 +581,7 @@ Report what changed and how to reload the agent.
 /obsiwiki review recent additions from this week.
 /obsiwiki review recent additions from this month.
 /obsiwiki review recent additions since 2026-04-01.
+/obsiwiki generate an HTML review dashboard for this vault.
 /obsiwiki generate this week's knowledge base report.
 ```
 
@@ -559,7 +602,7 @@ Report what changed and how to reload the agent.
 建议的定时任务内容：
 
 ```text
-Review recent additions to this vault and lint this vault. Keep the run read-only by default. Summarize recent additions, notable updates, open review items, overview drift, lint issues, graph health issues, and suggested next actions. Propose any durable writes for user confirmation.
+Review recent additions to this vault and lint this vault. Keep the run read-only by default. Summarize recent additions, notable updates, action items that need attention, overview drift, lint issues, graph health issues, and suggested next actions. Propose any durable writes for user confirmation.
 ```
 
 示例：
@@ -569,9 +612,26 @@ Review recent additions to this vault and lint this vault. Keep the run read-onl
 ```
 
 
+## 可视化HTML输出
+
+Obsiwiki 可以为 Agent 提供 review/report 网页生成模板。
+
+当用户要求生成 HTML dashboard、可视化 review、交互式报告或导出的 review 文件时，Agent 使用 `templates/review-dashboard.html` 作为生成模板，替换其中的 `script#review-data` JSON payload，并把自包含 HTML 文件写入 `exports/reviews/`。
+
+生成的网页可以展示：
+
+- 近期 review 或周报摘要
+- 新增和更新页面
+- 主题聚类
+- 需要关注和处理的行动项
+- overview 漂移
+- 重要更新和建议下一步
+
+![Review dashboard 网页示例](templates/dashboard-webpage-sample.png)
+
 ## 知识库目录结构
 
-starter 知识库使用四个主要层次，并在 `System/Schema/` 下保存知识库本地价值判断指南：
+starter 知识库使用五个主要层次，并在 `System/Schema/` 下保存知识库本地价值判断指南：
 
 ```text
 raw/
@@ -585,6 +645,9 @@ assets/
 ├── wiki/            长期复用的知识资产
 ├── projects/        项目相关资产
 └── shared/          跨主题复用的资产
+
+exports/
+└── reviews/         Agent 生成的 HTML review/report 网页
 
 wiki/
 ├── concepts/        稳定概念、协议、框架和方法
@@ -607,6 +670,7 @@ System/
 
 - `raw/` 尽量保留来源材料的原始形态。
 - `assets/` 避免图片、PDF、截图等附件散落在笔记目录里。
+- `exports/` 保存一次性的生成网页，例如 review dashboard，不作为长期 wiki 真源。
 - `System/obsiwiki.toml` 用来标记知识库根目录，方便后续 Obsiwiki 运行识别。
 - `System/Schema/purpose.md` 告诉 Agent 如何判断哪些内容值得沉淀。
 - `wiki/` 是 Agent 应该查询和更新的稳定知识层。

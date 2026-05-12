@@ -8,12 +8,13 @@ aliases: []
 
 # Vault Schema
 
-This vault is maintained in four main areas, with value guidance stored inside the vault-local schema:
+This vault is maintained in five main areas, with value guidance stored inside the vault-local schema:
 
 1. `raw/`: original source material.
 2. `assets/`: binary files, screenshots, PDFs, and reusable visuals.
 3. `wiki/`: durable knowledge pages for agent query, update, and synthesis.
-4. `System/`: vault marker, rules, workflows, page contracts, and vault-level value guidance.
+4. `exports/`: disposable generated review/report artifacts.
+5. `System/`: vault marker, rules, workflows, page contracts, and vault-level value guidance.
 
 ## Vault Identity
 
@@ -33,6 +34,7 @@ This vault is maintained in four main areas, with value guidance stored inside t
 - `assets/wiki/<topic-slug>/`: reusable long-lived knowledge assets.
 - `assets/projects/<project-name>/`: project-specific assets.
 - `assets/shared/`: assets reused across topics.
+- `exports/reviews/`: generated HTML dashboards, weekly reports, and other disposable review artifacts.
 - `System/obsiwiki.toml`: vault identity marker and relative path map.
 - `System/Schema/purpose.md`: value criteria and active themes that guide whether material should be promoted into durable wiki content.
 - `wiki/overview.md`: compressed state of the current knowledge base.
@@ -51,6 +53,7 @@ This vault is maintained in four main areas, with value guidance stored inside t
 - During ingest, source-relevant images, figures, diagrams, screenshots, PDFs, and other attachments should be saved under `assets/raw/<source-slug>/` and embedded or linked from the raw/source note as local vault assets.
 - Captions, alt text, and source URLs should be preserved when available; skipped or unavailable assets should be recorded with a short reason.
 - `wiki/` is the default durable knowledge layer.
+- `exports/` is not a source of truth. Agents may write generated HTML dashboards there when the user explicitly asks for an export/dashboard/report file or confirms the proposed artifact.
 - `System/obsiwiki.toml` identifies the vault root and relative path layout.
 - `System/Schema/purpose.md` should guide value assessment during `ingest`, `capture`, and `review`.
 - `System/Schema/` is the source of truth for workflow rules.

@@ -12,6 +12,8 @@ Point Claude Code at these files:
 - `references/schema.md`
 - `references/page-types.md`
 - `references/lint-checklist.md`
+- `references/review-dashboard.md`
+- `templates/review-dashboard.html`
 - `starter-vault/System/Schema/vault-schema.md`
 - `starter-vault/System/Schema/workflows.md`
 - `starter-vault/System/Schema/page-contracts.md`
@@ -107,6 +109,7 @@ Supported workflows:
 - Use suggest-and-confirm behavior for `capture`.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
 - Keep `review` and weekly reports read-only by default; use the last 7 days unless the user specifies a range, and use `this week` for weekly reports.
+- Use `templates/review-dashboard.html` as the agent-side webpage generation template when the user asks for an HTML dashboard, interactive report, visual review, or exported report file; write generated webpages under `exports/reviews/`.
 - Consult `System/Schema/purpose.md` before promoting material into durable wiki content when present.
 - Use `wiki/review.md` for uncertain value, duplicate, source, stale synthesis, or graph health decisions.
 - For scheduled maintenance, ask whether the user wants recurring review and lint, let them choose the cadence, default to Monday 09:00 in their locale, and keep the job read-only unless they confirm writes.

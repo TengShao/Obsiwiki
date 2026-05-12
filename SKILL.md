@@ -13,6 +13,7 @@ Read these references as needed:
 - `references/schema.md` for directory semantics and write targets
 - `references/page-types.md` for note routing and page expectations
 - `references/lint-checklist.md` for maintenance checks
+- `references/review-dashboard.md` for generating HTML review/report webpages
 
 ## Vault Location
 
@@ -35,9 +36,10 @@ If no single vault can be resolved, ask the user for the vault path before readi
 1. `raw/` stores original text sources.
 2. `assets/` stores binary files, screenshots, PDFs, and reusable visuals.
 3. `wiki/` stores durable knowledge pages.
-4. `System/Schema/purpose.md`, when present, tells agents how to judge what is worth preserving.
-5. `System/Schema/`, when present in the target vault, is the vault-local source of truth for workflows and page contracts.
-6. `Work/Projects/Opinions/Journal/Archive/` store applied outputs and personal writing when the vault uses those folders.
+4. `exports/` stores disposable generated review/report artifacts.
+5. `System/Schema/purpose.md`, when present, tells agents how to judge what is worth preserving.
+6. `System/Schema/`, when present in the target vault, is the vault-local source of truth for workflows and page contracts.
+7. `Work/Projects/Opinions/Journal/Archive/` store applied outputs and personal writing when the vault uses those folders.
 
 ## Schema Precedence
 
@@ -112,6 +114,10 @@ Scheduled maintenance is orchestration around `review` and `lint`, not a separat
 - Propose `wiki/overview.md` updates when the review changes the compressed picture of the knowledge base.
 - Propose or add `wiki/review.md` items for unresolved organization, source, duplicate, stale synthesis, or graph health questions.
 - Keep `review` read-only by default. If the user wants to save a weekly report or durable summary, switch to `capture` or propose a `wiki/syntheses/` update and ask for confirmation before writing.
+- If the user asks for an HTML dashboard, interactive report, visual review, or exported report file, use the installed `templates/review-dashboard.html` as an agent-side webpage generation template and generate a self-contained artifact under `exports/reviews/`.
+- To generate the webpage, copy the template and replace only the `script#review-data` JSON payload with the collected review/lint data. Preserve the template CSS and JavaScript unless the user asks to customize the template.
+- Treat generated HTML as disposable presentation. Markdown files such as `wiki/review.md`, `wiki/overview.md`, and formal `wiki/` pages remain the durable source of truth.
+- Report the generated dashboard path to the user after writing it.
 
 ## Scheduled Maintenance Rules
 
@@ -121,6 +127,7 @@ Scheduled maintenance is orchestration around `review` and `lint`, not a separat
 - Ask whether `review` and `lint` should run as one combined job or as separate jobs.
 - Confirm the target vault path, output destination, and whether the scheduled task may write follow-up changes.
 - Keep scheduled review and scheduled lint read-only by default. The job should propose `capture`, `synthesis`, `overview`, or `wiki/review.md` updates for user confirmation instead of silently writing durable content.
+- If the schedule includes HTML output, write generated dashboards under `exports/reviews/` and keep durable wiki changes separate from disposable report generation.
 - Use the host agent's native scheduler when available; otherwise guide the user through cron or the environment's preferred automation mechanism.
 - Show the final schedule and maintenance prompt before creating or modifying the scheduled task.
 

@@ -109,6 +109,15 @@ Steps:
 
 Do not write to the vault by default. If the user wants to save a weekly report or durable summary, switch to `capture` or propose a `wiki/syntheses/` update and ask for confirmation before writing.
 
+Optional HTML dashboard:
+
+- Use the installed `templates/review-dashboard.html` as an agent-side webpage generation template when the user asks for an HTML dashboard, interactive report, visual review, exported report file, or confirms a proposed dashboard artifact.
+- Generate the artifact under `exports/reviews/`, using a filename such as `YYYY-MM-DD-review-dashboard.html` or `YYYY-MM-DD-weekly-review.html`.
+- Replace only the template's `script#review-data` JSON payload with review/lint data. Keep the generated webpage self-contained.
+- Include the same evidence used in the chat answer: time range, new/updated pages, topic clusters, open review items, overview drift, notable updates, and next actions.
+- Keep Markdown files such as `wiki/review.md` and `wiki/overview.md` as the durable source of truth. Do not infer durable state from a generated HTML artifact.
+- Report the generated file path to the user.
+
 ## Support Page Initialization
 
 Use when the active schema references `wiki/overview.md` or `wiki/review.md`, but one or both support pages are missing.

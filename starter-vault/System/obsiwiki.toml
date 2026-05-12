@@ -9,6 +9,7 @@ vault_role = "default"
 [paths]
 raw = "raw"
 assets = "assets"
+exports = "exports"
 wiki = "wiki"
 schema = "System/Schema"
 agents = "System/Agents"
