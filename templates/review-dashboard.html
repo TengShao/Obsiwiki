@@ -1544,11 +1544,13 @@
     };
 
     const PAGE_CHANGE_BATCH_SIZE = 3;
+    const CLUSTER_BATCH_SIZE = 5;
     let currentLanguage = getInitialLanguage();
     const pageChangeVisible = {
       new: PAGE_CHANGE_BATCH_SIZE,
       updated: PAGE_CHANGE_BATCH_SIZE
     };
+    let clusterVisible = CLUSTER_BATCH_SIZE;
 
     const $ = (selector) => document.querySelector(selector);
     const actionItemsEl = $("#action-items");
@@ -1687,7 +1689,11 @@
         return;
       }
       const max = Math.max(...clusters.map((cluster) => cluster.count), 1);
-      target.innerHTML = clusters.map((cluster) => {
+      const visibleItems = clusters.slice(0, clusterVisible);
+      const remaining = Math.max(clusters.length - visibleItems.length, 0);
+      const nextCount = Math.min(CLUSTER_BATCH_SIZE, remaining);
+      target.innerHTML = `
+        ${visibleItems.map((cluster) => {
         const width = Math.max(6, Math.round((cluster.count / max) * 100));
         return `
           <div class="cluster-bar">
@@ -1696,7 +1702,15 @@
             <span>${escapeHtml(cluster.count)}</span>
           </div>
         `;
-      }).join("");
+      }).join("")}
+        ${remaining > 0 ? `
+          <div class="show-more-row">
+            <button class="show-more-button" type="button" data-cluster-more>
+              ${escapeHtml(showMoreLabel(nextCount))}
+            </button>
+          </div>
+        ` : ""}
+      `;
       updateClusterTooltips();
     }
 
@@ -1791,6 +1805,14 @@
         const current = pageChangeVisible[groupKey] || PAGE_CHANGE_BATCH_SIZE;
         pageChangeVisible[groupKey] = Math.min(current + PAGE_CHANGE_BATCH_SIZE, items.length);
         renderPageChanges();
+      });
+
+      $("#cluster-list").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-cluster-more]");
+        if (!button) return;
+        const clusters = data.clusters || [];
+        clusterVisible = Math.min(clusterVisible + CLUSTER_BATCH_SIZE, clusters.length);
+        renderClusters(clusters);
       });
 
       actionItemsEl.addEventListener("click", (event) => {

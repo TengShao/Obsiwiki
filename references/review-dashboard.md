@@ -44,7 +44,7 @@ Have the agent synthesize `summary` from the actual review content in 20 Chinese
 
 `reviewItems` render in the top-level Action Required module. Use them for items that need attention or follow-up, including items that require a user decision.
 
-Long `pageChanges.new` and `pageChanges.updated` lists are progressively disclosed by the template: each group shows 3 items first, then reveals 3 more items per click.
+Long `pageChanges.new` and `pageChanges.updated` lists are progressively disclosed by the template: each group shows 3 items first, then reveals 3 more items per click. Topic clusters use the same pattern with 5 clusters shown first, then 5 more per click until all clusters are visible.
 
 ```json
 {
