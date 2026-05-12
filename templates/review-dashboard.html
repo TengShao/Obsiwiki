@@ -1583,6 +1583,12 @@
       return text(value, fallback);
     }
 
+    function formatGeneratedAt(value, fallback = "") {
+      return text(value, fallback)
+        .replace(/\s+(?:[A-Za-z_]+\/[A-Za-z_]+|UTC|GMT|[A-Z]{2,5})(?:[+-]\d{1,2}(?::?\d{2})?)?$/, "")
+        .replace(/([T ]\d{2}:\d{2})(?::\d{2})?(?:Z|[+-]\d{2}:?\d{2})$/, "$1");
+    }
+
     function translateValue(group, value, fallback = "") {
       return translations[currentLanguage][group]?.[value] || translations.en[group]?.[value] || text(value, fallback);
     }
@@ -1858,7 +1864,7 @@
       $("#report-title").textContent = localize(data.title, "Review Dashboard Sample");
       $("#report-summary").textContent = localize(data.summary);
       $("#meta-range").textContent = localize(data.range, t("unspecified"));
-      $("#meta-generated").textContent = text(data.generatedAt, t("unknown"));
+      $("#meta-generated").textContent = formatGeneratedAt(data.generatedAt, t("unknown"));
       $("#meta-vault").textContent = text(data.vaultName, t("unknown"));
       $("#footer").textContent = t("footerGenerated").replace("{vault}", text(data.vaultName, t("unknown")));
 
