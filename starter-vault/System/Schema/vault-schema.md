@@ -53,7 +53,7 @@ This vault is maintained in five main areas, with value guidance stored inside t
 - During ingest, source-relevant images, figures, diagrams, screenshots, PDFs, and other attachments should be saved under `assets/raw/<source-slug>/` and embedded or linked from the raw/source note as local vault assets.
 - Captions, alt text, and source URLs should be preserved when available; skipped or unavailable assets should be recorded with a short reason.
 - `wiki/` is the default durable knowledge layer.
-- `exports/` is not a source of truth. Agents may write generated HTML dashboards there when the user explicitly asks for an export/dashboard/report file or confirms the proposed artifact.
+- `exports/` is not a source of truth. Agents may write generated HTML dashboards there when the user asks for an export/dashboard/report file or chooses HTML output before suitable review or lint-report work.
 - `System/obsiwiki.toml` identifies the vault root and relative path layout.
 - `System/Schema/purpose.md` should guide value assessment during `ingest`, `capture`, and `review`.
 - `System/Schema/` is the source of truth for workflow rules.

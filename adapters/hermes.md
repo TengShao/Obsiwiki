@@ -43,7 +43,7 @@ When updating the installed Obsiwiki skill, refresh the skill files first. Then,
 - Report schema/workflow differences separately from value-guidance additions such as `System/Schema/purpose.md` and support-page additions such as `wiki/overview.md` and `wiki/review.md`.
 - If `System/Schema/purpose.md` is missing, ask whether to initialize one from the starter template or draft one for this vault. Do not create it silently.
 - If `wiki/overview.md` or `wiki/review.md` is missing, scan `wiki/index.md`, `wiki/maps/`, `wiki/log.md`, and recent formal page updates, then ask whether to initialize those support pages before depending on them. Draft `wiki/overview.md` as a current-state summary and `wiki/review.md` as a backlog with any duplicate-topic, missing-source, stale-synthesis, unclear-value, or graph-health issues found during the scan.
-- If new workflow behavior exists only in the installed defaults, such as two-stage `ingest`, scheduled maintenance, or graph-health lint, ask the user whether to merge it into the vault-local schema before using it as active vault behavior.
+- If new durable workflow behavior exists only in the installed defaults, such as two-stage `ingest`, scheduled maintenance, or graph-health lint, ask the user whether to merge it into the vault-local schema before using it as active vault behavior. Disposable export semantics such as `exports/reviews/` should be reported as migration suggestions, not blockers for confirmed generated artifacts.
 
 ## Operating Rules
 
@@ -53,7 +53,8 @@ When updating the installed Obsiwiki skill, refresh the skill files first. Then,
 - Use suggest-and-confirm behavior for `capture`.
 - Start `query` from `wiki/index.md` and relevant `wiki/maps/`.
 - Keep `review` and weekly reports read-only by default; use the last 7 days unless the user specifies a range, and use `this week` for weekly reports.
-- Use `templates/review-dashboard.html` as the agent-side webpage generation template when the user asks for an HTML dashboard, interactive report, visual review, or exported report file; write generated webpages under `exports/reviews/`.
+- Before starting manual `review`, weekly report, or review-oriented `lint` follow-up, ask the user to choose the output mode when an HTML dashboard would be useful: Markdown/chat review only, or Markdown/chat review plus HTML dashboard. If they choose both, first complete and deliver the normal Markdown/chat review, then generate the disposable webpage under `exports/reviews/` by default using `templates/review-dashboard.html`.
+- Missing `exports/reviews/` semantics in an older vault-local schema is a migration suggestion, not a blocker for a user-confirmed disposable HTML export. If the directory is missing, ask whether to create it or use another output path.
 - Consult `System/Schema/purpose.md` before promoting material into durable wiki content when present.
 - Use `wiki/overview.md` as the compressed knowledge base state.
 - Use `wiki/review.md` for uncertain value, duplicate, source, stale synthesis, or graph health decisions.
@@ -96,7 +97,7 @@ Maintain this vault through these workflows:
 - query: answer from wiki/index.md, maps, concepts, entities, sources, syntheses
 - lint: find orphan pages, missing sources, duplicates, stale pages, asset issues, and graph health issues
 - review: summarize recent additions, weekly changes, topic clusters, open review items, overview drift, and next actions without writing
-- review dashboard: when requested, use templates/review-dashboard.html to generate a self-contained webpage under exports/reviews/
+- review dashboard: before suitable review/lint report work, ask whether to output Markdown/chat only or Markdown/chat plus HTML; when HTML is chosen, deliver Markdown/chat first, then use templates/review-dashboard.html to generate a self-contained webpage under exports/reviews/
 - scheduled maintenance: guide creation of a recurring review/lint job; default to Monday 09:00 unless the user chooses another schedule
 
 Keep raw sources in raw/, binary assets in assets/, durable knowledge in wiki/, disposable generated webpages in exports/reviews/, value judgment in `System/Schema/purpose.md`, review backlog in wiki/review.md, and workflow rules in the active Obsiwiki schema.

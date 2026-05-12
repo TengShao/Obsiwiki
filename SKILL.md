@@ -1,6 +1,6 @@
 ---
 name: obsiwiki
-version: 0.3.4
+version: 0.3.5
 description: Maintain an Obsidian vault as an agent-agnostic LLM Wiki. Use Obsiwiki when Codex or another agent needs to ingest external links or raw notes into raw/wiki, capture valuable discussion outcomes into formal notes, answer questions from wiki pages, review recent additions or weekly knowledge base changes, guide scheduled review/lint maintenance, maintain index and map pages, manage assets for raw or wiki content, or lint the vault for orphans, duplicate topics, missing links, missing sources, and stale pages.
 ---
 
@@ -47,6 +47,8 @@ Use the installed Obsiwiki `references/` and `starter-vault/System/Schema/` as t
 
 If the target vault contains `System/Schema/`, treat that vault-local schema as the source of truth. Use the installed schema only for comparison, update suggestions, and migrations. Do not silently overwrite vault-local schema customizations.
 
+Disposable generated artifacts are different from durable vault schema. A missing or older vault-local `System/Schema/` entry for `exports/` or `exports/reviews/` should not block an agent-side HTML dashboard export after user confirmation. If the export directory is missing, ask whether to create `exports/reviews/` or use another user-chosen output path, and report any schema migration suggestion separately.
+
 Agent adapters translate the same schema for each agent. They must not fork directory semantics, page contracts, or workflow behavior.
 
 ## Update And Migration Rules
@@ -61,7 +63,8 @@ When updating an installed Obsiwiki skill, refresh the agent skill files first, 
 - If the target vault is missing `wiki/overview.md` or `wiki/review.md`, scan `wiki/index.md`, `wiki/maps/`, `wiki/log.md`, and recent formal page updates, then ask whether to initialize those support pages before depending on them.
 - Initialize `wiki/overview.md` as a current-state summary based on the scan. Initialize `wiki/review.md` as a backlog, adding any duplicate-topic, missing-source, stale-synthesis, unclear-value, or graph-health issues found during the scan.
 - Do not modify other schema or wiki pages during support-page initialization unless the user explicitly confirms those extra writes.
-- If the latest default schema adds workflow behavior such as two-stage `ingest`, scheduled maintenance, or graph-health lint, report that the vault-local schema must opt into it before the behavior is active for that vault.
+- If the latest default schema adds durable workflow behavior such as two-stage `ingest`, scheduled maintenance, or graph-health lint, report that the vault-local schema must opt into it before the behavior is active for that vault.
+- If the latest default schema adds disposable export semantics such as `exports/reviews/` or HTML review dashboards, report the schema gap as a migration suggestion, but do not treat it as a blocker for a user-confirmed generated artifact.
 - Ask the user before merging any schema, value-guidance, or support-page changes into the vault.
 - A skill update is not complete until the agent reports either "no vault-local migration needed" or a reviewable migration proposal.
 
@@ -114,7 +117,10 @@ Scheduled maintenance is orchestration around `review` and `lint`, not a separat
 - Propose `wiki/overview.md` updates when the review changes the compressed picture of the knowledge base.
 - Propose or add `wiki/review.md` items for unresolved organization, source, duplicate, stale synthesis, or graph health questions.
 - Keep `review` read-only by default. If the user wants to save a weekly report or durable summary, switch to `capture` or propose a `wiki/syntheses/` update and ask for confirmation before writing.
-- If the user asks for an HTML dashboard, interactive report, visual review, or exported report file, use the installed `templates/review-dashboard.html` as an agent-side webpage generation template and generate a self-contained artifact under `exports/reviews/`.
+- Before starting manual `review`, weekly report, or review-oriented `lint` follow-up, ask the user to choose the output mode when an HTML dashboard would be useful: Markdown/chat review only, or Markdown/chat review plus HTML dashboard. Do not wait until after the review to ask.
+- If the user chooses Markdown/chat review plus HTML, first complete and deliver the normal Markdown/chat review result and write any confirmed Markdown/report artifact. Then continue with the same collected data to generate the HTML dashboard.
+- If the user asks for or confirms an HTML dashboard, interactive report, visual review, or exported report file, use the installed `templates/review-dashboard.html` as an agent-side webpage generation template and generate a self-contained artifact under `exports/reviews/` by default.
+- If `exports/reviews/` is missing, ask whether to create it or use another output path. This disposable export does not require vault-local schema migration first, but mention any schema mismatch separately.
 - To generate the webpage, copy the template and replace only the `script#review-data` JSON payload with the collected review/lint data. Preserve the template CSS and JavaScript unless the user asks to customize the template.
 - Treat generated HTML as disposable presentation. Markdown files such as `wiki/review.md`, `wiki/overview.md`, and formal `wiki/` pages remain the durable source of truth.
 - Report the generated dashboard path to the user after writing it.

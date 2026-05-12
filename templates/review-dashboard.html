@@ -565,8 +565,98 @@
     }
 
     .action-item {
+      padding: 0;
+    }
+
+    .action-item[data-expanded="true"] {
+      border-color: rgba(94, 106, 210, 0.26);
+      box-shadow: var(--shadow-card), inset 0 0 0 1px rgba(94, 106, 210, 0.16);
+    }
+
+    .action-item[data-expanded="true"]:hover,
+    .action-item[data-expanded="true"]:focus-within {
+      transform: none;
+      border-color: rgba(94, 106, 210, 0.26);
+      background-color: rgba(10, 10, 12, 0.58);
+      box-shadow: var(--shadow-card), inset 0 0 0 1px rgba(94, 106, 210, 0.16);
+    }
+
+    .action-summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      align-items: center;
+      width: 100%;
+      min-height: 0;
+      padding: 14px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+    }
+
+    .action-summary .item-title {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .action-summary:hover {
+      background: transparent;
+    }
+
+    .action-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 72px;
+      min-height: 26px;
+      padding: 0 9px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.035);
+      color: var(--foreground-muted);
+      font-size: 12px;
+      font-weight: 620;
+      line-height: 1;
+    }
+
+    .action-toggle::before {
+      margin-right: 6px;
+      color: var(--accent-bright);
+      content: "+";
+      font-family: var(--font-mono);
+    }
+
+    .action-item[data-expanded="true"] .action-toggle::before {
+      content: "-";
+    }
+
+    .action-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      opacity: 0;
+      transition: grid-template-rows 260ms var(--ease-out), opacity 220ms var(--ease-out);
+    }
+
+    .action-item[data-expanded="true"] .action-content {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+
+    .action-content-inner {
       display: grid;
       gap: 12px;
+      min-height: 0;
+      overflow: hidden;
+      padding: 0 14px;
+      transition: padding-bottom 260ms var(--ease-out);
+    }
+
+    .action-item[data-expanded="true"] .action-content-inner {
+      padding-bottom: 14px;
     }
 
     .action-meta {
@@ -726,7 +816,7 @@
       color: var(--danger);
     }
 
-    details {
+    details:not(.action-details) {
       position: relative;
       z-index: 1;
       margin-top: 12px;
@@ -766,18 +856,53 @@
 
     .cluster-bar {
       display: grid;
-      grid-template-columns: minmax(120px, 170px) minmax(0, 1fr) 38px;
+      grid-template-columns: minmax(230px, 340px) minmax(80px, 1fr) 38px;
       gap: 12px;
       align-items: center;
     }
 
     .cluster-bar strong {
+      position: relative;
       min-width: 0;
       overflow: hidden;
       color: rgba(237, 237, 239, 0.86);
       font-weight: 560;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    .cluster-bar strong.is-truncated:hover {
+      overflow: visible;
+      z-index: 4;
+    }
+
+    .cluster-bar strong.is-truncated::after {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 0;
+      max-width: min(360px, 70vw);
+      padding: 7px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      background: rgba(12, 12, 14, 0.96);
+      box-shadow: var(--shadow-card);
+      color: var(--foreground);
+      content: attr(data-tooltip);
+      font-size: 12px;
+      font-weight: 560;
+      line-height: 1.35;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-4px);
+      transition: opacity 160ms var(--ease-out), transform 160ms var(--ease-out);
+      white-space: normal;
+      width: max-content;
+    }
+
+    .cluster-bar strong.is-truncated:hover::after,
+    .cluster-bar strong.is-truncated:focus-visible::after {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .cluster-bar span {
@@ -956,6 +1081,15 @@
         grid-row: 2;
       }
 
+      .action-summary {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .action-toggle {
+        grid-column: 1 / -1;
+        justify-self: start;
+      }
+
       .action-meta {
         grid-template-columns: 1fr;
       }
@@ -1085,8 +1219,8 @@
     "zh": "Review Dashboard 示例"
   },
   "summary": {
-    "en": "Sample data for a generated review webpage. Replace this payload with vault review, lint, or weekly report results.",
-    "zh": "用于生成 review 网页的示例数据。实际使用时请替换为 vault review、lint 或周报结果。"
+    "en": "Interaction becomes the main thread",
+    "zh": "交互模型成为主线"
   },
   "range": {
     "en": "sample review window",
@@ -1317,6 +1451,7 @@
         noItems: "No items found.",
         noClusters: "No clusters found.",
         evidenceSummary: "Evidence and suggested action",
+        itemDetails: "Details",
         suggestedAction: "Suggested action:",
         relatedPages: "Related pages",
         itemType: "Type",
@@ -1374,6 +1509,7 @@
         noItems: "没有找到条目。",
         noClusters: "没有找到主题簇。",
         evidenceSummary: "证据与建议动作",
+        itemDetails: "详情",
         suggestedAction: "建议动作：",
         relatedPages: "关联页面",
         itemType: "类型",
@@ -1549,12 +1685,30 @@
         const width = Math.max(6, Math.round((cluster.count / max) * 100));
         return `
           <div class="cluster-bar">
-            <strong title="${escapeAttribute(localize(cluster.name))}">${escapeHtml(localize(cluster.name))}</strong>
+            <strong data-cluster-title data-full-title="${escapeAttribute(localize(cluster.name))}">${escapeHtml(localize(cluster.name))}</strong>
             <div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width: ${width}%"></div></div>
             <span>${escapeHtml(cluster.count)}</span>
           </div>
         `;
       }).join("");
+      updateClusterTooltips();
+    }
+
+    function updateClusterTooltips() {
+      $("#cluster-list").querySelectorAll("[data-cluster-title]").forEach((el) => {
+        const isTruncated = el.scrollWidth > el.clientWidth + 1;
+        if (isTruncated) {
+          el.classList.add("is-truncated");
+          el.setAttribute("title", el.dataset.fullTitle);
+          el.setAttribute("data-tooltip", el.dataset.fullTitle);
+          el.setAttribute("tabindex", "0");
+        } else {
+          el.classList.remove("is-truncated");
+          el.removeAttribute("title");
+          el.removeAttribute("data-tooltip");
+          el.removeAttribute("tabindex");
+        }
+      });
     }
 
     function renderReviewItems() {
@@ -1565,42 +1719,48 @@
         return;
       }
 
-      actionItemsEl.innerHTML = filtered.map((item) => {
+      actionItemsEl.innerHTML = filtered.map((item, index) => {
         const severityClass = item.severity === "high" ? "danger" : item.severity === "medium" ? "warn" : "";
+        const itemId = `action-item-${index}`;
         return `
-          <li class="item action-item spotlight" data-type="${escapeAttribute(item.type)}" data-requires-decision="${item.requiresUserDecision === true ? "true" : "false"}">
-            <div class="item-head">
-              <p class="item-title">${escapeHtml(localize(item.title))}</p>
+          <li class="item action-item spotlight" data-action-item data-expanded="false" data-type="${escapeAttribute(item.type)}" data-requires-decision="${item.requiresUserDecision === true ? "true" : "false"}">
+            <button class="action-summary" type="button" aria-expanded="false" aria-controls="${escapeAttribute(itemId)}">
+              <span class="item-title">${escapeHtml(localize(item.title))}</span>
               <span class="pill ${severityClass}">${escapeHtml(translateValue("severity", item.severity, t("normal")))}</span>
-            </div>
-            <div class="action-meta">
-              <div class="action-meta-item">
-                <span class="action-label">${escapeHtml(t("itemType"))}</span>
-                <span class="action-value">${escapeHtml(translateValue("type", item.type, t("other")))}</span>
+              <span class="action-toggle">${escapeHtml(t("itemDetails"))}</span>
+            </button>
+            <div class="action-content" id="${escapeAttribute(itemId)}" aria-hidden="true">
+              <div class="action-content-inner">
+                <div class="action-meta">
+                  <div class="action-meta-item">
+                    <span class="action-label">${escapeHtml(t("itemType"))}</span>
+                    <span class="action-value">${escapeHtml(translateValue("type", item.type, t("other")))}</span>
+                  </div>
+                  <div class="action-meta-item">
+                    <span class="action-label">${escapeHtml(t("itemStatus"))}</span>
+                    <span class="action-value">${escapeHtml(translateValue("status", item.status, "open"))}</span>
+                  </div>
+                  <div class="action-meta-item">
+                    <span class="action-label">${escapeHtml(t("decisionLabel"))}</span>
+                    <span class="action-value">${escapeHtml(item.requiresUserDecision ? t("needsDecision") : t("none"))}</span>
+                  </div>
+                </div>
+                <div class="action-block">
+                  <p class="action-section-title">${escapeHtml(t("relatedPages"))}</p>
+                  ${linkList(item.relatedPages)}
+                </div>
+                <div class="action-block">
+                  <p class="action-section-title">${escapeHtml(t("suggestedAction"))}</p>
+                  <p class="item-body">${escapeHtml(localize(item.suggestedAction, t("none")))}</p>
+                </div>
+                <details>
+                  <summary>${escapeHtml(t("evidenceSummary"))}</summary>
+                  <ul class="evidence">
+                    ${(item.evidence || []).map((line) => `<li>${escapeHtml(localize(line))}</li>`).join("")}
+                  </ul>
+                </details>
               </div>
-              <div class="action-meta-item">
-                <span class="action-label">${escapeHtml(t("itemStatus"))}</span>
-                <span class="action-value">${escapeHtml(translateValue("status", item.status, "open"))}</span>
-              </div>
-              <div class="action-meta-item">
-                <span class="action-label">${escapeHtml(t("decisionLabel"))}</span>
-                <span class="action-value">${escapeHtml(item.requiresUserDecision ? t("needsDecision") : t("none"))}</span>
-              </div>
             </div>
-            <div class="action-block">
-              <p class="action-section-title">${escapeHtml(t("relatedPages"))}</p>
-              ${linkList(item.relatedPages)}
-            </div>
-            <div class="action-block">
-              <p class="action-section-title">${escapeHtml(t("suggestedAction"))}</p>
-              <p class="item-body">${escapeHtml(localize(item.suggestedAction, t("none")))}</p>
-            </div>
-            <details>
-              <summary>${escapeHtml(t("evidenceSummary"))}</summary>
-              <ul class="evidence">
-                ${(item.evidence || []).map((line) => `<li>${escapeHtml(localize(line))}</li>`).join("")}
-              </ul>
-            </details>
           </li>
         `;
       }).join("");
@@ -1625,6 +1785,29 @@
         const current = pageChangeVisible[groupKey] || PAGE_CHANGE_BATCH_SIZE;
         pageChangeVisible[groupKey] = Math.min(current + PAGE_CHANGE_BATCH_SIZE, items.length);
         renderPageChanges();
+      });
+
+      actionItemsEl.addEventListener("click", (event) => {
+        const button = event.target.closest(".action-summary");
+        if (!button) return;
+        const item = button.closest("[data-action-item]");
+        const content = document.getElementById(button.getAttribute("aria-controls"));
+        if (!item || !content) return;
+        const shouldOpen = item.dataset.expanded !== "true";
+
+        actionItemsEl.querySelectorAll("[data-action-item]").forEach((otherItem) => {
+          const otherButton = otherItem.querySelector(".action-summary");
+          const otherContent = otherButton ? document.getElementById(otherButton.getAttribute("aria-controls")) : null;
+          otherItem.dataset.expanded = "false";
+          otherButton?.setAttribute("aria-expanded", "false");
+          otherContent?.setAttribute("aria-hidden", "true");
+        });
+
+        if (shouldOpen) {
+          item.dataset.expanded = "true";
+          button.setAttribute("aria-expanded", "true");
+          content.setAttribute("aria-hidden", "false");
+        }
       });
 
       newPagesCardEl.addEventListener("click", () => showPageChanges("new"));
@@ -1654,6 +1837,7 @@
       if (!reduceMotion) {
         window.addEventListener("scroll", updateHeroParallax, { passive: true });
       }
+      window.addEventListener("resize", updateClusterTooltips);
     }
 
     function renderStaticText() {

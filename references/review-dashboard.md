@@ -2,7 +2,9 @@
 
 `templates/review-dashboard.html` is an agent-side webpage generation template.
 
-Use it when a user asks for an HTML dashboard, interactive report, visual review, exported report file, or confirms a proposed dashboard artifact during `review`, weekly report, or `lint` follow-up work.
+Use it when a user asks for an HTML dashboard, interactive report, visual review, exported report file, or chooses HTML output before `review`, weekly report, or `lint` follow-up work.
+
+Before starting manual `review`, weekly report, or review-oriented `lint` follow-up, agents should ask the user to choose the output mode when an HTML dashboard would be useful: Markdown/chat review only, or Markdown/chat review plus HTML dashboard. If the user chooses both, first complete and deliver the normal Markdown/chat result, then generate and report the HTML artifact path.
 
 ## Output Path
 
@@ -11,6 +13,8 @@ Write generated webpages under:
 ```text
 exports/reviews/
 ```
+
+If `exports/reviews/` is missing, ask whether to create it or use another output path. A missing vault-local schema entry for `exports/reviews/` is a migration suggestion, not a blocker for a user-confirmed disposable artifact.
 
 Recommended filenames:
 
@@ -36,6 +40,8 @@ Do not write generated HTML into `wiki/`. Markdown remains the durable source of
 
 Fields may be plain strings or localized objects such as `{ "en": "...", "zh": "..." }`.
 
+Have the agent synthesize `summary` from the actual review content in 20 Chinese characters or fewer, or a similarly short English phrase. It should express the main theme or direction, not repeat metrics or list every major topic; detailed topic names belong in `clusters`, `notableUpdates`, and `pageChanges`.
+
 `reviewItems` render in the top-level Action Required module. Use them for items that need attention or follow-up, including items that require a user decision.
 
 Long `pageChanges.new` and `pageChanges.updated` lists are progressively disclosed by the template: each group shows 3 items first, then reveals 3 more items per click.
@@ -43,7 +49,7 @@ Long `pageChanges.new` and `pageChanges.updated` lists are progressively disclos
 ```json
 {
   "title": { "en": "Review Dashboard Sample", "zh": "Review Dashboard 示例" },
-  "summary": { "en": "Brief summary", "zh": "简短摘要" },
+  "summary": { "en": "Interaction becomes the main thread", "zh": "交互模型成为主线" },
   "range": { "en": "sample review window", "zh": "示例回顾周期" },
   "generatedAt": "2026-01-01 09:00",
   "vaultName": "Demo Vault",

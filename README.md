@@ -230,7 +230,7 @@ Expected behavior:
 6. Propose `wiki/review.md` items for unresolved duplicate, source, stale synthesis, unclear value, or graph health questions.
 7. If you want to save a weekly report or durable summary, ask the agent to switch to `capture` or propose a `wiki/syntheses/` update and confirm before writing.
 
-Optional generated webpage artifact: agents can use `templates/review-dashboard.html` as an agent-side webpage generation template to produce a disposable, bilingual English/Chinese, Linear-style interactive HTML review dashboard from vault data. Keep Markdown files such as `wiki/review.md` as the durable source of truth.
+Optional generated webpage artifact: before manual review, weekly report, or review-oriented lint follow-up, agents should ask whether you want Markdown/chat review only or Markdown/chat review plus a visual HTML dashboard when the dashboard would be useful. If you choose both, the agent should first complete and deliver the Markdown/chat review, then generate the disposable HTML dashboard from the same vault data. Keep Markdown files such as `wiki/review.md` as the durable source of truth.
 
 Examples:
 
@@ -275,7 +275,9 @@ Example:
 
 Obsiwiki can give agents a webpage template for review and report artifacts.
 
-When a user asks for an HTML dashboard, visual review, interactive report, or exported review file, the agent uses `templates/review-dashboard.html` as a generation template, replaces the embedded `script#review-data` JSON payload, and writes a self-contained HTML file under `exports/reviews/`.
+When a user asks for an HTML dashboard, visual review, interactive report, exported review file, or chooses Markdown/chat review plus HTML before a review/lint report, the agent uses `templates/review-dashboard.html` as a generation template, replaces the embedded `script#review-data` JSON payload, and writes a self-contained HTML file under `exports/reviews/`.
+
+If an older vault-local schema does not mention `exports/reviews/`, the agent should report that as a migration suggestion, but it should not block a user-confirmed disposable HTML export. If the directory is missing, the agent should ask whether to create it or use another output path.
 
 The generated page can show:
 
@@ -571,7 +573,7 @@ Report what changed and how to reload the agent.
 6. 对未解决的重复主题、来源缺失、过期 synthesis、价值不明或 graph health 问题，建议写入 `wiki/review.md`。
 7. 如果你希望保存周报或长期摘要，请让 Agent 转入 `capture`，或建议更新 `wiki/syntheses/`，并在写入前确认。
 
-可选网页产物：Agent 可以使用 `templates/review-dashboard.html` 作为网页生成模板，根据 vault 数据生成一次性的中英文交互式 HTML review dashboard。生成结果应放在 `exports/reviews/`，而 `wiki/review.md` 等 Markdown 文件仍是长期真源。
+可选网页产物：在手动 review、周报或面向 review 的 lint 开始前，如果这次任务适合生成可视化 dashboard，Agent 应先询问你选择“只生成 Markdown/聊天 review”，还是“Markdown/聊天 review + HTML dashboard”。如果选择同时生成，Agent 应先完成并交付 Markdown/聊天 review，再用同一份 vault 数据继续生成一次性的中英文交互式 HTML review dashboard。生成结果应放在 `exports/reviews/`，而 `wiki/review.md` 等 Markdown 文件仍是长期真源。
 
 示例：
 
@@ -616,7 +618,9 @@ Review recent additions to this vault and lint this vault. Keep the run read-onl
 
 Obsiwiki 可以为 Agent 提供 review/report 网页生成模板。
 
-当用户要求生成 HTML dashboard、可视化 review、交互式报告或导出的 review 文件时，Agent 使用 `templates/review-dashboard.html` 作为生成模板，替换其中的 `script#review-data` JSON payload，并把自包含 HTML 文件写入 `exports/reviews/`。
+当用户要求生成 HTML dashboard、可视化 review、交互式报告、导出的 review 文件，或在 review/lint 前选择“Markdown/聊天 review + HTML dashboard”时，Agent 使用 `templates/review-dashboard.html` 作为生成模板，替换其中的 `script#review-data` JSON payload，并把自包含 HTML 文件写入 `exports/reviews/`。
+
+如果旧的知识库本地 schema 还没有写入 `exports/reviews/` 语义，Agent 应把这点作为迁移建议说明，但不应阻止用户已确认的一次性 HTML 导出。如果目录不存在，Agent 应询问是否创建目录或改用其它输出路径。
 
 生成的网页可以展示：
 

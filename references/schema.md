@@ -36,3 +36,4 @@ Key rules:
 - Use `wiki/maps/` to absorb pages into the graph before over-optimizing body links.
 - Use `wiki/review.md` when an issue needs human judgment instead of forced automatic cleanup.
 - Keep generated HTML dashboards and other disposable reports under `exports/reviews/`; do not treat them as durable wiki knowledge or sources of truth.
+- Older vault-local schemas that do not mention `exports/reviews/` should receive a migration suggestion, but this does not block a user-confirmed disposable HTML export.

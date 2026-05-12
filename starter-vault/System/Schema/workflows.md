@@ -111,8 +111,11 @@ Do not write to the vault by default. If the user wants to save a weekly report 
 
 Optional HTML dashboard:
 
-- Use the installed `templates/review-dashboard.html` as an agent-side webpage generation template when the user asks for an HTML dashboard, interactive report, visual review, exported report file, or confirms a proposed dashboard artifact.
-- Generate the artifact under `exports/reviews/`, using a filename such as `YYYY-MM-DD-review-dashboard.html` or `YYYY-MM-DD-weekly-review.html`.
+- Before starting manual `review`, weekly report, or review-oriented `lint` follow-up, ask the user to choose the output mode when an HTML dashboard would be useful: Markdown/chat review only, or Markdown/chat review plus HTML dashboard.
+- If the user chooses Markdown/chat review plus HTML, first complete and deliver the normal Markdown/chat review result and write any confirmed Markdown/report artifact. Then continue with the same collected data to generate the HTML dashboard.
+- Use the installed `templates/review-dashboard.html` as an agent-side webpage generation template when the user asks for or confirms an HTML dashboard, interactive report, visual review, exported report file, or proposed dashboard artifact.
+- Generate the artifact under `exports/reviews/` by default, using a filename such as `YYYY-MM-DD-review-dashboard.html` or `YYYY-MM-DD-weekly-review.html`.
+- If `exports/reviews/` is missing, ask whether to create it or use another output path. Missing disposable export semantics in an older vault-local schema should be reported as a migration suggestion, not treated as a blocker for a confirmed artifact.
 - Replace only the template's `script#review-data` JSON payload with review/lint data. Keep the generated webpage self-contained.
 - Include the same evidence used in the chat answer: time range, new/updated pages, topic clusters, open review items, overview drift, notable updates, and next actions.
 - Keep Markdown files such as `wiki/review.md` and `wiki/overview.md` as the durable source of truth. Do not infer durable state from a generated HTML artifact.
